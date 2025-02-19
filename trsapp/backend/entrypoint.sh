@@ -1,4 +1,5 @@
-# !/bin/bash
+#!/bin/bash
+
 set -e
 
 # Rails固有のserver.pidを削除
