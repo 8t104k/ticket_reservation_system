@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15
+    container_name: trsapp_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: trsapp_development
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  db-gui:
+    image: sosedoff/pgweb
+    container_name: "pgweb"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: trsapp_backend
+    volumes:
+      - ./backend:/app
+      - ./backend/tmp:/app/tmp
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://postgres:password@db:5432/trsapp_development
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: trsapp_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
