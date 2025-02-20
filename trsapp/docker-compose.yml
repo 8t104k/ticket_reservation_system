@@ -23,8 +23,8 @@ services:
       dockerfile: Dockerfile.development
     container_name: trsapp_backend
     volumes:
-      - ./backend:/app
-      - ./backend/tmp:/app/tmp
+      - ./backend:/rails
+      - ./backend/tmp:/rails/tmp
     ports:
       - "3000:3000"
     environment:
