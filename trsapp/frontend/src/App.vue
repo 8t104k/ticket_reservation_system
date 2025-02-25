@@ -1,20 +1,27 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-container>
-        <router-link to="/" class="text-decoration-none">
-          <v-btn variant="text">Home</v-btn>
-        </router-link>
-        <router-link to="/events" class="text-decoration-none">
-          <v-btn variant="text">Events</v-btn>
-        </router-link>
-      </v-container>
+    <!-- ヘッダー -->
+    <v-app-bar app color="primary" dark>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>イベント管理</v-toolbar-title>
+      <v-btn icon>
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-bell</v-icon>
+      </v-btn>
     </v-app-bar>
+
+
 
     <v-main>
       <v-container>
         <router-view></router-view>
       </v-container>
     </v-main>
+    <!-- フッター -->
+    <v-footer app>
+      <span>&copy; {{ new Date().getFullYear() }}</span>
+    </v-footer>
   </v-app>
 </template>

@@ -1,6 +1,17 @@
 <template>
-  <div>
-    <h1 class="text-h4 mb-4">イベント一覧</h1>
+  <v-card>
+    <v-card-title>
+      イベント一覧
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="検索"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <!-- イベント一覧 -->
     <v-progress-circular
       v-if="loading"
       indeterminate
@@ -14,17 +25,19 @@
       >
         <v-card-title>{{ event.event_name }}</v-card-title>
         <v-card-text>
-          <div>開催日: {{ formatDate(event.event_date) }}</div>
-          <v-chip
+          <div>
+            開催日: {{ formatDate(event.event_date) }}
+            <v-chip
             :color="getStatusColor(event.status)"
-            class="mt-2"
-          >
+            >
             {{ getStatusText(event.status) }}
-          </v-chip>
+            </v-chip>
+          </div>
+
         </v-card-text>
       </v-card>
     </div>
-  </div>
+  </v-card>
 </template>
 
 <script>
