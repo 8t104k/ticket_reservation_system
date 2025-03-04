@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import EventList from '../components/EventList.vue'
 import EventDetailView from '../components/EventDetailView.vue'
+import UserProfile from '../components/UserProfile.vue'
 
 const routes = [
   {
@@ -17,6 +18,12 @@ const routes = [
     path: '/events/:token',
     name: 'EventDetail',
     component: EventDetailView,
+    props: true
+  },
+  {
+    path: '/users/:username',
+    name: 'userprofile',
+    component: UserProfile,
     props: true
   }
 ]

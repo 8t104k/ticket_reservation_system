@@ -14,6 +14,10 @@ class Api::V1::UsersController < ApplicationController
       }, status: :unprocessable_entity
     end
   end
+  def show
+    @user = User.find_by!(username: params[:username])
+    render json: @user.as_json(except: [:password_digest])
+  end
   private
   def user_params
     params.require(:user).permit(:username, :email, :password)
