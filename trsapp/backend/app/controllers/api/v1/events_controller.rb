@@ -9,10 +9,8 @@ module Api
       def show
         puts params[:token]
         @event = Event.find_by!(token: params[:token])
-        
         render json: @event
       end
     end
   end
-
 end

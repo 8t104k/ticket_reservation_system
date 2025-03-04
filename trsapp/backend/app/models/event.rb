@@ -1,3 +1,4 @@
 class Event < ApplicationRecord
-include Generatetoken
+  include Generatetoken
+  has_many :reservations, primary_key: :id, foreign_key: :event_id
 end
