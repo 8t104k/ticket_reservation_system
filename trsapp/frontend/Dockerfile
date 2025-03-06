@@ -9,6 +9,8 @@ WORKDIR /app
 COPY package.json yarn.lock /app/
 
 # 依存関係をインストール
+RUN yarn add vuetify@next @mdi/font vite-plugin-vuetify
+RUN yarn add @supabase/supabase-js
 RUN yarn install
 
 # アプリケーションコードをコピー

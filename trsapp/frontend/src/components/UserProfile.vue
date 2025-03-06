@@ -48,7 +48,7 @@ onMounted(async () => {
                     <v-text-field variant="underlined" :value="user.username" prepend-icon="mdi-account" :readonly="true">
                     </v-text-field>
                     <v-list-item-title>表示名</v-list-item-title>
-                    <v-text-field variant="underlined" v-model="user.username" prepend-icon="mdi-account">
+                    <v-text-field variant="underlined" v-model="user.display_name" prepend-icon="mdi-account">
                         <template #append>
                             <v-btn color="primary">変更</v-btn></template>
                     </v-text-field>
