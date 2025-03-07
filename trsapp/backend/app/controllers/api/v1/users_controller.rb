@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+  include JwtAuthenticable
   def create
     @user = User.new(user_params)
     if @user.save

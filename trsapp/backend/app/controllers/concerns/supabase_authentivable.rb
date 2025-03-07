@@ -2,7 +2,7 @@ module SupabaseAuthenticable
   extend ActiveSupport::Concern
 
   included do
-    before_action :authenticate_user!
+    before_action :authenticate_jwt
   end
 
   def current_user
@@ -11,22 +11,15 @@ module SupabaseAuthenticable
 
   private
 
-  def authenticate_user!
-    render json: { error: 'Unauthorized' }, status: :unauthorized unless current_user
-  end
-
-  def find_user
-    token = extract_token_from_header
-    return nil unless token
-
-    payload = Supabase::Auth.verify_jwt(token)
-    return nil unless payload
-
-    user_id = payload.first['sub']
-    User.find_by(supabase_id: user_id)
-  end
-
-  def extract_token_from_header
-    request.headers['Authorization']&.split(' ')&.last
+  def authenticate_jwt
+    header = request.headers['Authorization']
+    header = header.split(' ').last if header
+    
+    begin
+      @decoded = JsonWebToken.decode(header)
+      @current_user = User.find_by(supabase_uid: @decoded[:sub])
+    rescue JWT::DecodeError => e
+      render json: { errors: e.message }, status: :unauthorized
+    end
   end
 end

@@ -1,21 +1,18 @@
 class ApplicationController < ActionController::API
-  before_action :authenticate_request
+  before_action :authenticate_supabase_token
   attr_reader :current_user
 
   private
 
-  def authenticate_request
-    header = request.headers['Authorization']
-    header = header.split(' ').last if header
-
+  def authenticate_supabase_token
+    header = request.headers['Authorization'].split(' ').last
+    # header = header.split(' ').last if header
     begin
-      @decoded = JsonWebToken.decode(header)
-      puts @decoded[:username]
-      @current_user = User.find_by!(username: @decoded[:username])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: {errors: e.message }, status: :unauthorized
+      # Supabase JWTを検証
+      decoded = JsonWebToken.decode(header)
+      @current_user = User.find_by(supabase_uid: decoded[:sub])
     rescue JWT::DecodeError => e
-      render json: {errors: e.message }, status: :unauthorized
+      render json: { errors: e.message }, status: :unauthorized
     end
   end
 end
