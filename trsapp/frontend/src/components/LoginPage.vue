@@ -70,5 +70,8 @@ class="mx-auto pa-12 pb-8"
             ログイン
         </v-btn>
     </v-form>
+    <v-card-text class="text-center">
+        <router-link to="/signup">新規登録はこちら</router-link>
+    </v-card-text>
 </v-card>
 </template>
