@@ -17,7 +17,17 @@ const authStore = useAuthStore()
 const handleSignUp = async() =>{
     try{
         loading.true
-        await authStore.signUp(email.value,username.value,passwordRef.value)
+        await authStore.signUp(email.value,passwordRef.value,username.value)
+    } catch(error){
+        console.error(error)
+    } finally {
+        loading.value = false
+    }
+}
+const supabaseTest = async() =>{
+    try{
+        loading.true
+        await authStore.testSupabaseConnection()
     } catch(error){
         console.error(error)
     } finally {
@@ -114,6 +124,16 @@ class="mx-auto"
             :loading="loading"
             @click.prevent="handleSignUp">
             登録する
+        </v-btn>
+        <v-btn
+            color="primary"
+            class="mb-8"
+            size="large"
+            variant="outlined"
+            block type="submit"
+            :loading="loading"
+            @click.prevent="supabaseTest">
+            テスト
         </v-btn>
     </v-form>
     <v-card-text class="text-center">

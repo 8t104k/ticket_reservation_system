@@ -29,19 +29,22 @@ export const useAuthStore = defineStore('auth',{
             }
           },
         
-        async signUp(email,username,password){
+        async signUp(email,password,username){
             try{
-                console.log("サインアップ実行", {email,password,username})
+
                 // supabaseの認証APIになげる
-                const {data, error} = await supabase.auth.signUp({
+                const request_data = {
                     email: email,
-                    password: password,
-                    options: {
+                    password: password
+                    ,options: {
                         data: {
                             username
                             }
                         }
-                    });
+                    
+                }
+                console.log("サインアップ実行", request_data)
+                const {data, error} = await supabase.auth.signUp(request_data);
 
                 if(error) throw error;
                 //新規登録成功
