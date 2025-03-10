@@ -6,9 +6,10 @@ import LoginPage from '../components/LoginPage.vue'
 import { supabase } from '../lib/supabase'
 import UserRegister from '../components/UserRegister.vue'
 import MailConfirm from '../components/MailConfirm.vue'
+import UserDashboard from '../components/UserDashboard.vue'
 
 // 認証が不要なパスのリスト
-const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirm']
+const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirm','/dashboard']
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/confirmation',
     name: 'confirmation',
     component: MailConfirm
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: UserDashboard
   },
   {
     path: '/events',

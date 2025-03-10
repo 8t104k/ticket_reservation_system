@@ -19,7 +19,7 @@ import GlobalSnackbar from './components/GlobalSnackbar.vue';
 
 
     <v-main>
-      <v-container>
+      <v-container fluid>
         <router-view />
       </v-container>
     </v-main>
