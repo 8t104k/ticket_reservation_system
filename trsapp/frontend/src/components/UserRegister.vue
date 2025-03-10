@@ -13,6 +13,7 @@ const confirmPassword = ref('')
 const visible = ref(false)
 const loading = ref(false)
 
+//サインアップ
 const authStore = useAuthStore()
 const handleSignUp = async() =>{
     try{
@@ -24,29 +25,8 @@ const handleSignUp = async() =>{
         loading.value = false
     }
 }
-const supabaseTest = async() =>{
-    try{
-        loading.true
-        await authStore.testSupabaseConnection()
-    } catch(error){
-        console.error(error)
-    } finally {
-        loading.value = false
-    }
-}
 
-const emailConfirmationDialog = ref(false)
-// メール確認ダイアログを開く
-const openEmailConfirmationDialog = () => {
-  emailConfirmationDialog.value = true
-}
-//メール確認ダイアログが閉じられたら、ログイン画面に遷移する
-watch(emailConfirmationDialog,newDialog => {
-    if(!newDialog){
-        router.push('/login')
-    }
-})
-
+//メールアドレスをUsernameにしてくれる
 watch(email,newEmail => {
     if(newEmail){
         username.value = newEmail.split('@')[0]
@@ -125,16 +105,6 @@ class="mx-auto"
             @click.prevent="handleSignUp">
             登録する
         </v-btn>
-        <v-btn
-            color="primary"
-            class="mb-8"
-            size="large"
-            variant="outlined"
-            block type="submit"
-            :loading="loading"
-            @click.prevent="supabaseTest">
-            テスト
-        </v-btn>
     </v-form>
     <v-card-text class="text-center">
         <router-link to="/login">既にアカウントをお持ちの方はこちら</router-link>
@@ -143,28 +113,4 @@ class="mx-auto"
     </v-container>
 
 </v-card>
-
-<v-dialog v-model="emailConfirmationDialog">
-    <v-container>
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6">
-        <v-card class="elevation-12">
-          <v-card-title class="text-center">
-            メール確認のお願い
-          </v-card-title>
-          <v-card-text class="text-center">
-            <v-icon size="64" color="primary" class="mb-4">mdi-email-check</v-icon>
-            <p>登録いただいたメールアドレスに確認メールを送信しました！</p>
-            <p>メール内のリンクをクリックして、登録を完了させてください。</p>
-          </v-card-text>
-          <v-card-actions class="justify-center">
-            <v-btn color="primary" to="/login">
-              ログイン画面に戻る
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-</v-dialog>
 </template>

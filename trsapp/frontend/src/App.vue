@@ -1,3 +1,7 @@
+<script setup>
+import GlobalSnackbar from './components/GlobalSnackbar.vue';
+</script>
+
 <template>
   <v-app>
     <!-- ヘッダー -->
@@ -16,12 +20,14 @@
 
     <v-main>
       <v-container>
-        <router-view></router-view>
+        <router-view />
       </v-container>
     </v-main>
     <!-- フッター -->
     <v-footer app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <!-- メッセージ表示スナックバー -->
+    <GlobalSnackbar />
   </v-app>
 </template>

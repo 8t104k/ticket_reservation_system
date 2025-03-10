@@ -1,9 +1,11 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
-import { supabase } from '../lib/supabase'
+import { useAuthStore } from '../stores/auth'
+import { useSnackbarStore } from '../stores/snackbar'
 
 const route = useRoute()
+const snackbar = useSnackbarStore()
 
 const email = ref()
 const password = ref()
@@ -11,22 +13,21 @@ const visible = ref(false)
 const loading = ref(false)
 const isLogin = ref(true)
 
+const authStore = useAuthStore();
 const handleSubmit = async()=> {
     loading.value = true
     try {
-        if(isLogin.value) {
+        loading.value = true
         //ログイン処理
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email.value,
-            password: password.value
-        })
-        if (error) throw error
-        route.push('/UserProfile')
-    }
+        await authStore.login(email.value,password.value)
+        console.log('login success')
+        snackbar.showMessage('ログインしました！','success')
     } catch(error) {
-        alert(error.message)
+        console.log('login false')
+        snackbar.showMessage('ログインに失敗しました','error')
     } finally {
         loading.value = false
+
     }
 }
 

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { supabase } from '../lib/supabase'
 import router from '../router';
 
@@ -45,7 +45,6 @@ export const useAuthStore = defineStore('auth',{
                 }
                 console.log("サインアップ実行", request_data)
                 const {data, error} = await supabase.auth.signUp(request_data);
-
                 if(error) throw error;
                 //新規登録成功
                 this.user = data.user;
@@ -60,16 +59,22 @@ export const useAuthStore = defineStore('auth',{
         },
         async login(email,password){
             try{
-                const user = await supabase.auth.signInWithPassword(email,password);
+                // supabaseの認証APIになげる
+                const request_data = {
+                    email: email,
+                    password: password
+                }
+                const {user, error} = await supabase.auth.signInWithPassword(request_data);
+                if(error) throw error;
                 //更新
                 this.user = user;
                 //
                 localStorage.setItem('user',JSON.stringify(user));
                 //redirect
-                router.push(this.returnUrl || '/')
+                //router.push(this.returnUrl || '/userprofile')
             } catch(err) {
                 //エラー処理
-                console.error('ログイン:', err.message)
+                console.log('ログイン:', err.message)
                 throw err
             }
         },
