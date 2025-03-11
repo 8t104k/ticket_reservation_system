@@ -12,6 +12,13 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "login", to: "auth#login"
       get "user_profile", to: "auth#user_profile"
+      resources :users, params: :username
+      resources :profiles, param: :username do
+        collection do
+          get 'by_username/:username', to: 'profiles#show_by_username'
+          
+        end
+      end
       resources :events, param: :token do
         resources :reservations, param: :token
       end

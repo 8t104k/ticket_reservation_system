@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  before_action :authenticate_supabase_token
+  #before_action :authenticate_supabase_token
   attr_reader :current_user
 
   private
