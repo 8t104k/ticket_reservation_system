@@ -9,5 +9,8 @@ export const ENDPOINTS = {
     },
     RESERVATIONS: {
       DETAIL: (id) => `/reservations/${id}`
-    }
+    },
+    USERS: {
+      DETAIL: (token) => `/users/${username}`
+    },
   }

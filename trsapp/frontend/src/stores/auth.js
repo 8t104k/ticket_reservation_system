@@ -12,7 +12,6 @@ export const useAuthStore = defineStore('auth',{
     actions: {
         async testSupabaseConnection() {
             try {
-              // 単純なテスト - 例えばバージョン情報の取得など
               const { data, error } = await supabase.from('_supabase_version')
                 .select('*').limit(1);
               
