@@ -1,6 +1,7 @@
 // composables/useEvents.js
 import { ref } from 'vue'
 import axios from 'axios'
+import { supabase } from '../lib/supabase'
 
 /**
  * イベント一覧を取得・管理するためのComposable
@@ -21,9 +22,15 @@ export function useEvents() {
     loading.value = true
     error.value = false
     errorMessage.value = ''
+    const token = (await supabase.auth.getSession()).data.session?.access_token
     
     try {
-      const response = await axios.get('http://localhost:3000/api/v1/events')
+      const response = await axios.get('http://localhost:3000/api/v1/events',{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+      )
       events.value = response.data
       return response.data
     } catch (err) {

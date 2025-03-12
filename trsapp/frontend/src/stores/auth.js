@@ -6,28 +6,8 @@ import router from '../router';
 export const useAuthStore = defineStore('auth',{
     state:() =>({
         //
-        user: JSON.parse(localStorage.getItem('user')),
-        returnUrl: null
     }),
     actions: {
-        async testSupabaseConnection() {
-            try {
-              const { data, error } = await supabase.from('_supabase_version')
-                .select('*').limit(1);
-              
-              if (error) {
-                console.error('Supabase接続テストエラー:', error);
-                return { success: false, error };
-              }
-              
-              console.log('Supabase接続テスト成功:', data);
-              return { success: true, data };
-            } catch (err) {
-              console.error('Supabase接続例外:', err);
-              return { success: false, error: err };
-            }
-          },
-        
         async signUp(email,password,username){
             try{
 
@@ -44,10 +24,9 @@ export const useAuthStore = defineStore('auth',{
                 }
                 console.log("サインアップ実行", request_data)
                 const {data, error} = await supabase.auth.signUp(request_data);
+                //成功したら自動的にセッションが保存される
                 if(error) throw error;
                 //新規登録成功
-                this.user = data.user;
-                localStorage.setItem('user',JSON.stringify(data.user))
                 //リダイレクト
                 router.push(this.returnUrl || '/confirmation')
             } catch(err) {
@@ -63,12 +42,9 @@ export const useAuthStore = defineStore('auth',{
                     email: email,
                     password: password
                 }
-                const {user, error} = await supabase.auth.signInWithPassword(request_data);
+                const {data, error} = await supabase.auth.signInWithPassword(request_data);
+                //セッションは自動的に保存
                 if(error) throw error;
-                //更新
-                this.user = user;
-                //
-                localStorage.setItem('user',JSON.stringify(user));
                 //redirect
                 //router.push(this.returnUrl || '/userprofile')
             } catch(err) {

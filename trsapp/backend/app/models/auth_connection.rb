@@ -1,0 +1,2 @@
+class AuthConnection < ApplicationRecord
+end

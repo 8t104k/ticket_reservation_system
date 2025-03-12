@@ -1,8 +1,7 @@
 # app/models/user.rb
 class Profile < Flexirest::Base
   request_body_type :json
-  perform_caching false
-  base_url ENV["SUPABASE_URL"]
+  base_url "#{ENV["SUPABASE_URL"]}/rest/v1"
 
   before_request do |name, request|
     request.headers["apikey"] = ENV["SUPABASE_SERVICE_ROLE_KEY"]
@@ -11,8 +10,8 @@ class Profile < Flexirest::Base
   end
 
   get :all, "rest/v1/profiles"
-  get :find, "/profile/:username"
-  get :find_by_username, "/rest/v1/profiles?username=eq.:username"
+  get :find, "/profiles?id=eq.:id"
+  get :find_by_username, "/profiles?username=eq.:username"
   put :save, "/profile/:username"
   post :create, "/profile"
   delete :remove, "/profile/:username"

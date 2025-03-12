@@ -27,7 +27,6 @@ const handleSubmit = async()=> {
         snackbar.showMessage('ログインに失敗しました','error')
     } finally {
         loading.value = false
-
     }
 }
 

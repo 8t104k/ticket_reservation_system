@@ -1,18 +1,30 @@
 class ApplicationController < ActionController::API
-  #before_action :authenticate_supabase_token
+  before_action :authenticate_supabase_token
   attr_reader :current_user
 
   private
 
   def authenticate_supabase_token
-    header = request.headers['Authorization'].split(' ').last
-    # header = header.split(' ').last if header
+    
+    header = request.headers['Authorization']&.split(' ')&.last
+    raise StandardError, '認証ヘッダーがありません' if header.nil?
+
     begin
       # Supabase JWTを検証
-      decoded = JsonWebToken.decode(header)
-      @current_user = User.find_by(supabase_uid: decoded[:sub])
-    rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: :unauthorized
+      decoded = JWT.decode(
+        header,
+        ENV["SUPABASE_JWT_SECRET"],
+        true
+      )
+      payload = decoded[0]
+      @current_user = AuthConnection&.find_by(id: payload["sub"])
+      if @current_user.nil?
+        @current_user = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
+        @current_user.save
+      end
     end
+    
+  rescue JWT::DecodeError, StandardError => e
+    render json: { error: e.message }, status: :unauthorized
   end
 end
