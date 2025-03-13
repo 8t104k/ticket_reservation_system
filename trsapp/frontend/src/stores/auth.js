@@ -6,6 +6,7 @@ import router from '../router';
 export const useAuthStore = defineStore('auth',{
     state:() =>({
         //
+        session: null
     }),
     actions: {
         async signUp(email,password,username){
@@ -24,7 +25,8 @@ export const useAuthStore = defineStore('auth',{
                 }
                 console.log("サインアップ実行", request_data)
                 const {data, error} = await supabase.auth.signUp(request_data);
-                //成功したら自動的にセッションが保存される
+                this.session = data.session
+
                 if(error) throw error;
                 //新規登録成功
                 //リダイレクト
@@ -43,7 +45,8 @@ export const useAuthStore = defineStore('auth',{
                     password: password
                 }
                 const {data, error} = await supabase.auth.signInWithPassword(request_data);
-                //セッションは自動的に保存
+                this.session = data.session
+                
                 if(error) throw error;
                 //redirect
                 //router.push(this.returnUrl || '/userprofile')

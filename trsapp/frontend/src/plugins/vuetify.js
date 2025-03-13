@@ -6,6 +6,7 @@ Vue.use(Vuetify)
 export default new Vuetify({
   theme: {
     themes: {
+      defaultTheme: 'light',
       light: {
         primary: '#FF9800',    // オレンジ 500 (メイン)
         secondary: '#FFCC80',  // オレンジ 200 (ライトミディアム)

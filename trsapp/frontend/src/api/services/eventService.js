@@ -4,30 +4,30 @@ import { ENDPOINTS } from '../endpoints'
 
 export const eventService = {
   // イベント情報を取得
-  getEvent(token) {
-    return apiClient.get(ENDPOINTS.EVENTS.DETAIL(token))
+  getEvent(eventToken) {
+    return apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
   },
   
   // イベント情報を更新
-  updateEvent(token, eventData) {
-    return apiClient.put(ENDPOINTS.EVENTS.DETAIL(token), eventData)
-  },
+  //updateEvent(eventToken, eventData) {
+  //  return apiClient.put(ENDPOINTS.EVENTS.DETAIL(eventToken), eventData)
+  //},
   
   // イベントの予約一覧を取得
-  getEventReservations(token) {
-    return apiClient.get(ENDPOINTS.EVENTS.RESERVATIONS(token))
+  getEventReservations(eventToken) {
+    return apiClient(authToken).get(ENDPOINTS.EVENTS.RESERVATIONS(eventToken))
   },
   
   // イベントの共演者一覧を取得
-  getEventCollaborators(token) {
-    return apiClient.get(ENDPOINTS.EVENTS.COLLABORATORS(token))
+  getEventCollaborators(eventToken) {
+    return apiClient(authToken).get(ENDPOINTS.EVENTS.COLLABORATORS(eventToken))
   },
   
   // イベントデータをエクスポート
-  exportEventData(token, format, options = {}) {
-    return apiClient.get(ENDPOINTS.EVENTS.EXPORT(token, format), {
-      params: options,
-      responseType: 'blob'
-    })
-  }
+  //exportEventData(eventToken, format, options = {}) {
+  //  return apiClient.get(ENDPOINTS.EVENTS.EXPORT(eventToken, format), {
+  //    params: options,
+  //    responseType: 'blob'
+  //  })
+  //}
 }

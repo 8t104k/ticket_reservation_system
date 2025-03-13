@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
         true
       )
       payload = decoded[0]
-      @current_user = AuthConnection&.find_by(id: payload["sub"])
+      @current_user = AuthConnection&.find_by(user_id: payload["sub"])
       if @current_user.nil?
         @current_user = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
         @current_user.save

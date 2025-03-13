@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { supabase } from '../lib/supabase'
 import { useValidationRules } from '../composables/useValidationRules'
 import { useAuthStore } from '../stores/auth'
 const route = useRoute()

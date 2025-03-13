@@ -1,5 +1,7 @@
 <script setup>
 import GlobalSnackbar from './components/GlobalSnackbar.vue';
+import { useRoute } from 'vue-router'
+import router from './router';
 </script>
 
 <template>
@@ -16,17 +18,22 @@ import GlobalSnackbar from './components/GlobalSnackbar.vue';
       </v-btn>
     </v-app-bar>
 
-
-
+    <!-- メイン -->
     <v-main>
       <v-container fluid>
+        <div class="d-flex">
+          <v-btn @click="(router.push('/dashboard'))"></v-btn>
+          <v-btn @click="(router.push('events'))"></v-btn>
+        </div>
         <router-view />
       </v-container>
     </v-main>
+
     <!-- フッター -->
     <v-footer app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+
     <!-- メッセージ表示スナックバー -->
     <GlobalSnackbar />
   </v-app>

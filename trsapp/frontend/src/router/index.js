@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import EventList from '../components/EventList.vue'
 import EventDetailView from '../components/EventDetailView.vue'
-import UserProfile from '../components/UserProfile.vue'
-import LoginPage from '../components/LoginPage.vue'
+
+import Dashboard from '../views/DashboardView.vue'
+import LoginPage from '../views/UserLoginView.vue'
+
 import { supabase } from '../lib/supabase'
-import UserRegister from '../components/UserRegister.vue'
+import UserRegister from '../views/UserRegisterView.vue'
 import MailConfirm from '../components/MailConfirm.vue'
-import UserDashboard from '../components/UserDashboard.vue'
 
 // 認証が不要なパスのリスト
-const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirm','/dashboard']
+const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirmation']
 
 const routes = [
   {
@@ -35,7 +36,7 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: UserDashboard
+    component: Dashboard
   },
   {
     path: '/events',
@@ -48,12 +49,6 @@ const routes = [
     component: EventDetailView,
     props: true
   },
-  {
-    path: '/:username',
-    name: 'userprofile',
-    component: UserProfile,
-    props: true
-  }
 ]
 
 const router = createRouter({
