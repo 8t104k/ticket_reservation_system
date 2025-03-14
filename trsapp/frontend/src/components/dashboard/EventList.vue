@@ -146,7 +146,7 @@ function selectComponent(compName){
           class="my-2"
           variant="outlined"
           rounded="xl"
-          @click="selectComponent('detail')"
+          @click="selectComponent('detail'), toEventDetail(event.token)"
           >
           <div class="d-flex align-center justify-space-between">
             <div class="ma-2 overflow-x-hidden">
