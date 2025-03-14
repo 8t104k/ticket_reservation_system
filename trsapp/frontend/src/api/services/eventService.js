@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 
 export const eventService = {
   // イベント情報を取得
-  async getEvent(eventToken) {
+  async getEventDetails(eventToken) {
     //const authToken = localStorage.getItem("session")
     const {data} = await supabase.auth.getSession()
     const authToken = data.session.access_token

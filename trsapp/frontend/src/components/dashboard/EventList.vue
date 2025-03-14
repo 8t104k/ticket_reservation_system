@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useFormatters } from '../../composables/useFormatters';
-import { eventService} from '../../api';
+import { useEventStore } from '../../stores/event';
 
 const testEvents = ref([
  {
@@ -105,10 +105,11 @@ const testEvents = ref([
  }]
 )
 const format = useFormatters();
+const eventStore = useEventStore();
 
-function toEventDetail(eventToken){
-    eventService.getEvent(eventToken)
-}
+//function toEventDetail(eventToken){
+//    eventService.getEvent(eventToken)
+//}
 
 const emit = defineEmits(['toDashboard'])
 
@@ -116,6 +117,10 @@ function selectComponent(compName){
     emit('toDashboard', compName);
 }
 
+//pania
+async function toEventDetail(eventToken){
+    await eventStore.getEventDetails(eventToken);
+}
 </script>
 
 <template>
