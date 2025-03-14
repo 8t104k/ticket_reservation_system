@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 
 export const useEventStore = defineStore('event',{
     state: () => ({
-        event_details: null
+        details: null
     }),
     actions: {
         async getEventDetails(eventToken){
@@ -15,9 +15,9 @@ export const useEventStore = defineStore('event',{
                 const {data} = await supabase.auth.getSession()
                 const authToken = data.session.access_token
                 //イベントデータを取得
-                const details = await apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
+                const response = await apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
                 //ストアに保存
-                this.event_details = details.data
+                this.details = response.data
             } catch(err){
                 throw err
             };

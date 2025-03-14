@@ -21,10 +21,6 @@ import router from './router';
     <!-- メイン -->
     <v-main>
       <v-container fluid>
-        <div class="d-flex">
-          <v-btn @click="(router.push('/dashboard'))"></v-btn>
-          <v-btn @click="(router.push('events'))"></v-btn>
-        </div>
         <router-view />
       </v-container>
     </v-main>

@@ -33,11 +33,11 @@ const eventStore = useEventStore();
 </script>
 
 <template>
-  <!-- デバッグよう -->
+  <!-- デバッグよう 
   <v-btn @click="switchView">テスト</v-btn>
   <div>{{ childComponent == 'list' }}</div>
   <div >子コンポーネント：{{ childComponent }}</div>
-  <div> event store: {{ eventStore.event_details }}</div>
+  <div> event store: {{ eventStore.details }}</div> -->
 
   <Transition :name="childComponent.transition" mode="out-in">
     <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
