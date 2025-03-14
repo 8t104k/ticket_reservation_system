@@ -2,10 +2,10 @@
 import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { useSnackbarStore } from '../stores/snackbar'
+import { useUiStore } from '../stores/uiSetting'
 
 const route = useRoute()
-const snackbar = useSnackbarStore()
+const ui = useUiStore()
 
 const email = ref()
 const password = ref()
@@ -21,10 +21,10 @@ const handleSubmit = async()=> {
         //ログイン処理
         await authStore.login(email.value,password.value)
         console.log('login success')
-        snackbar.showMessage('ログインしました！','success')
+        ui.snackbar.showMessage('ログインしました！','success')
     } catch(error) {
         console.log('login false')
-        snackbar.showMessage('ログインに失敗しました','error')
+        ui.snackbar.showMessage('ログインに失敗しました','error')
     } finally {
         loading.value = false
     }

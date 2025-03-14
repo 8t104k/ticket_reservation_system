@@ -1,7 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { useFormatters } from '../../composables/useFormatters';
-import { useEventStore } from '../../stores/event';
+import { ref, onMounted } from 'vue'
+import { useEventStore } from '../stores/event';
+import { useUiStore } from '../stores/uiSetting';
+import { useFormatters } from '../composables/useFormatters';
+import router from '../router';
 
 const testEvents = ref([
  {
@@ -106,17 +108,13 @@ const testEvents = ref([
 )
 const format = useFormatters();
 const eventStore = useEventStore();
+const uiStore = useUiStore();
 
-const emit = defineEmits(['toDashboard'])
-
-function selectComponent(compName){
-    emit('toDashboard', compName);
-}
-
-//pania
 async function toEventDetail(eventToken){
     await eventStore.getEventDetails(eventToken);
+    router.push({name: 'EventDetail', params: {token: eventToken}})
 }
+
 </script>
 
 <template>
@@ -157,7 +155,7 @@ async function toEventDetail(eventToken){
           class="my-2"
           variant="outlined"
           rounded="xl"
-          @click="selectComponent('detail'), toEventDetail(event.token)"
+          @click="toEventDetail(event.token)"
           >
           <div class="d-flex align-center justify-space-between">
             <div class="ma-2 overflow-x-hidden">
@@ -182,5 +180,16 @@ async function toEventDetail(eventToken){
   </v-col>
 </v-row>
 
+
+  <!-- デバッグよう 
+  <v-btn @click="switchView">テスト</v-btn>
+  <div>{{ childComponent == 'list' }}</div>
+  <div >子コンポーネント：{{ childComponent }}</div>
+  <div> event store: {{ eventStore.details }}</div> 
+
+  <Transition :name="childComponent.transition" mode="out-in">
+    <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
+    <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
+  </Transition>-->
 
 </template>

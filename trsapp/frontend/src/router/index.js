@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { supabase } from '../lib/supabase'
 import EventList from '../components/EventList.vue'
 import EventDetailView from '../components/EventDetailView.vue'
+import MyEventListsView from '../components/MyEventListsView.vue'
+import LoginPage from '../components/UserLoginView.vue'
 
-import Dashboard from '../views/DashboardView.vue'
-import LoginPage from '../views/UserLoginView.vue'
-
-import { supabase } from '../lib/supabase'
-import UserRegister from '../views/UserRegisterView.vue'
+import UserRegister from '../components/UserRegisterView.vue'
 import MailConfirm from '../components/MailConfirm.vue'
 
 // 認証が不要なパスのリスト
@@ -34,19 +33,21 @@ const routes = [
     component: MailConfirm
   },
   {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard
-  },
-  {
     path: '/events',
     name: 'events',
+    component: MyEventListsView,
+    meta: {transition: 'slide'}
+  },
+  {
+    path: '/allevents',
+    name: 'allevents',
     component: EventList
   },
   {
     path: '/events/:token',
     name: 'EventDetail',
     component: EventDetailView,
+    meta: {transition: 'r-slide'},
     props: true
   },
 ]

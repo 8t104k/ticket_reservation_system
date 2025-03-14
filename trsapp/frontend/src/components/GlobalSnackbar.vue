@@ -1,6 +1,6 @@
 <script setup>
-import { useSnackbarStore } from '../stores/snackbar';
-const store = useSnackbarStore()
+import { useUiStore } from '../stores/uiSetting';
+const store = useUiStore()
 </script>
 <template>
 <v-snackbar
@@ -11,7 +11,7 @@ const store = useSnackbarStore()
 >
     {{ store.message }}
     <template v-slot:actions>
-        <v-btn variant="text" icon="mdi-close" @click="store.clearMessage()"></v-btn>
+        <v-btn variant="text" icon="mdi-close" @click="store.snackbar.clearMessage()"></v-btn>
     </template>
 </v-snackbar>
 </template>

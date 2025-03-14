@@ -1,7 +1,14 @@
 <script setup>
+import { computed } from 'vue';
 import GlobalSnackbar from './components/GlobalSnackbar.vue';
-import { useRoute } from 'vue-router'
 import router from './router';
+import { useRoute } from 'vue-router'
+import { useEventStore } from './stores/event';
+import { useUiStore } from './stores/uiSetting';
+
+const route = useRoute();
+const transitionType = computed(() => route.meta.transition || 'slide')
+
 </script>
 
 <template>
@@ -21,7 +28,11 @@ import router from './router';
     <!-- メイン -->
     <v-main>
       <v-container fluid>
-        <router-view />
+        <router-view v-slot="{ Component }">
+            <Transition :name="transitionType" mode="out-in">
+              <component :is="Component"/>
+            </Transition>
+          </router-view>
       </v-container>
     </v-main>
 
@@ -34,3 +45,35 @@ import router from './router';
     <GlobalSnackbar />
   </v-app>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%); /* 右から入ってくる */
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateX(100%); /* 左に消えていく */
+  opacity: 0;
+}
+
+.r-slide-enter-active,
+.r-slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.r-slide-enter-from {
+  transform: translateX(100%); /* 左から入ってくる */
+  opacity: 0;
+}
+
+.r-slide-leave-to {
+  transform: translateX(-100%); /* 右に消えていく */
+  opacity: 0;
+}
+</style>
