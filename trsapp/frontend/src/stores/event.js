@@ -19,6 +19,7 @@ export const useEventStore = defineStore('event',{
                 //ストアに保存
                 this.details = response.data
             } catch(err){
+                console.log('getEventDetailsエラー')
                 throw err
             };
         },

@@ -111,8 +111,8 @@ const eventStore = useEventStore();
 const uiStore = useUiStore();
 
 async function toEventDetail(eventToken){
-    await eventStore.getEventDetails(eventToken);
-    router.push({name: 'EventDetail', params: {token: eventToken}})
+  router.push({name: 'EventDetail', params: {token: eventToken}})
+  await eventStore.getEventDetails(eventToken);
 }
 
 </script>
@@ -121,13 +121,13 @@ async function toEventDetail(eventToken){
 <v-row>
   <v-col cols="12" md="2">
     <v-row>
-        <v-col cols="12" md="6" sm="6">
+        <v-col cols="6" md="12">
             <v-card class="d-flex align-center mb-4">
                 <v-icon left class="ml-4">mdi-email-fast-outline</v-icon>
                 <v-card-title class="">申請</v-card-title>
             </v-card>
         </v-col>
-        <v-col cols="12" md="6" sm="6">
+        <v-col cols="6" md="12">
             <v-card class="d-flex align-center mb-4">
                 <v-icon left class="ml-4">mdi-chat-processing-outline</v-icon>
                 <v-card-title class="d-flex align-center">アクティビティ</v-card-title>
@@ -143,7 +143,14 @@ async function toEventDetail(eventToken){
             <v-icon left class="ml-4">mdi-flag-outline</v-icon>
             <v-card-title class="text-h6">参加イベント</v-card-title>
         </div>
-        <v-btn class="mx-4" prepend-icon="mdi-plus-outline" variant="tonal" color="primary">イベント作成</v-btn>
+        <v-btn
+          class="mx-4"
+          prepend-icon="mdi-plus-thick"
+          variant="tonal"
+          color="primary"
+          >
+            イベント作成
+          </v-btn>
       </div>
 
       <!--イベント表示カード-->

@@ -28,11 +28,16 @@ const transitionType = computed(() => route.meta.transition || 'slide')
     <!-- メイン -->
     <v-main>
       <v-container fluid>
-        <router-view v-slot="{ Component }">
+        <Transition :name="transitionType" mode="out-in">
+          <router-view />
+          </Transition>
+        <!--
+          <router-view v-slot="{ Component }">
             <Transition :name="transitionType" mode="out-in">
               <component :is="Component"/>
             </Transition>
           </router-view>
+          -->
       </v-container>
     </v-main>
 
