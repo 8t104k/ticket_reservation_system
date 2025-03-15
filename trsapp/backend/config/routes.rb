@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       end
       resources :events, param: :token do
         resources :reservations, param: :token
+        resources :collaborators
       end
     end
   end

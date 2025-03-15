@@ -2,8 +2,13 @@ module Api
   module V1
     class Api::V1::EventsController < ApplicationController
       def index
-        events = Event.all
-        render json: events
+        if @current_user.nil?
+          # エラーを返す
+        else
+          @collaborator = Collaborator.find_by!(auth_connection_id: @current_user.id)
+          @events = @collaborator.events
+          render json: @events
+        end
       end
 
       def show

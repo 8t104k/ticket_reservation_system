@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_15_063013) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_15_081706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,13 +24,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_15_063013) do
 
   create_table "collaborators", force: :cascade do |t|
     t.bigint "event_id", null: false
-    t.uuid "user_id", null: false
     t.string "role"
     t.string "access_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "auth_connection_id"
+    t.index ["auth_connection_id"], name: "index_collaborators_on_auth_connection_id"
     t.index ["event_id"], name: "index_collaborators_on_event_id"
-    t.index ["user_id"], name: "index_collaborators_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -57,7 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_15_063013) do
     t.index ["event_id"], name: "index_reservations_on_event_id"
   end
 
-  add_foreign_key "collaborators", "auth_connections", column: "user_id", primary_key: "user_id"
+  add_foreign_key "collaborators", "auth_connections"
   add_foreign_key "collaborators", "events"
   add_foreign_key "reservations", "events"
 end
