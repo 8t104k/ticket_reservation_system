@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  event: one
+  user_id: 
+  role: MyString
+  access_status: MyString
+
+two:
+  event: two
+  user_id: 
+  role: MyString
+  access_status: MyString
