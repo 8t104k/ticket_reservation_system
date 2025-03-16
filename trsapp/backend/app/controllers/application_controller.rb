@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :authenticate_supabase_token
-  attr_reader :current_user
+  attr_reader :current_connection, :current_user
 
   private
 
@@ -8,6 +8,9 @@ class ApplicationController < ActionController::API
     
     header = request.headers['Authorization']&.split(' ')&.last
     raise StandardError, '認証ヘッダーがありません' if header.nil?
+
+    retries = 0
+    max_retries = 3
 
     begin
       # Supabase JWTを検証
@@ -17,10 +20,18 @@ class ApplicationController < ActionController::API
         true
       )
       payload = decoded[0]
-      @current_user = AuthConnection&.find_by(user_id: payload["sub"])
-      if @current_user.nil?
-        @current_user = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
-        @current_user.save
+      @current_connection = AuthConnection&.find_by(user_id: payload["sub"])
+      @current_user = Profile.find_by(user_id: payload["sub"])
+
+#      if @current_user.nil? && retries < max_retries
+#        retries += 1
+#        sleep(0.5 * retries)
+#        retry
+#      end
+
+      if @current_connection.nil?
+        @current_connection = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
+        @current_connection.save
       end
     end
     
