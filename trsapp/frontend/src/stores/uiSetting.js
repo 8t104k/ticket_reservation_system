@@ -15,7 +15,6 @@ export const useUiStore = defineStore('snackbar',{
     }),
     actions: {
         showMessage(message,color) {
-            console.log(message,color)
             this.snackbar.message = message
             this.snackbar.color = color
             this.snackbar.timeout = 3000

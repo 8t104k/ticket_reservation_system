@@ -22,6 +22,7 @@ const handleSubmit = async()=> {
         await authStore.login(email.value,password.value)
         console.log('login success')
         ui.showMessage('ログインしました！','success')
+        router.push({name: 'events'})
     } catch(error) {
         console.log('login false')
         ui.showMessage('ログインに失敗しました','error')
@@ -73,5 +74,13 @@ class="mx-auto pa-12 pb-8"
     <v-card-text class="text-center">
         <router-link to="/signup">新規登録はこちら</router-link>
     </v-card-text>
+    <v-btn
+        color="primary"
+        class="mb-8"
+        size="large"
+        @click="authStore.logout()"
+        :loading="loading">
+        ログアウト
+    </v-btn>
 </v-card>
 </template>

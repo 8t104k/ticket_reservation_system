@@ -2,13 +2,18 @@ import { defineStore } from 'pinia'
 import { ref, computed, inject } from 'vue'
 import { supabase } from '../lib/supabase'
 import router from '../router';
+import { useUiStore } from './uiSetting';
+
+
 
 export const useAuthStore = defineStore('auth',{
+    
     state:() =>({
         //
         session: null
     }),
     actions: {
+
         async signUp(email,password,username){
             try{
 
@@ -56,9 +61,18 @@ export const useAuthStore = defineStore('auth',{
                 throw err
             }
         },
-        logout(){
-            this.user = null;
-            router.push('login')
+        async logout(){
+            try{
+                const { error } = await supabase.auth.signOut();
+                this.session = null;
+                console.log("成功",error)
+                useUiStore().showMessage("ログアウトしました","success")
+                router.push('login');
+            }catch(error){
+                console.log("失敗",error);
+                useUiStore().showMessage("ログアウトに失敗しました","error")
+                throw error
+            }
         }
     }
 });
