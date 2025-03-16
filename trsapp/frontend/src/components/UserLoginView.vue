@@ -21,10 +21,10 @@ const handleSubmit = async()=> {
         //ログイン処理
         await authStore.login(email.value,password.value)
         console.log('login success')
-        ui.snackbar.showMessage('ログインしました！','success')
+        ui.showMessage('ログインしました！','success')
     } catch(error) {
         console.log('login false')
-        ui.snackbar.showMessage('ログインに失敗しました','error')
+        ui.showMessage('ログインに失敗しました','error')
     } finally {
         loading.value = false
     }

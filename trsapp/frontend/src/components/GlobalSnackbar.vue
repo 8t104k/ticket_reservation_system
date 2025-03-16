@@ -4,12 +4,12 @@ const store = useUiStore()
 </script>
 <template>
 <v-snackbar
-    v-model="store.show"
-    :color="store.color"
+    v-model="store.snackbar.show"
+    :color="store.snackbar.color"
     timeout=3000
     location="top"
 >
-    {{ store.message }}
+    {{ store.snackbar.message }}
     <template v-slot:actions>
         <v-btn variant="text" icon="mdi-close" @click="store.snackbar.clearMessage()"></v-btn>
     </template>
