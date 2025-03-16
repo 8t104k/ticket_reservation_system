@@ -11,7 +11,7 @@ const store = useUiStore()
 >
     {{ store.snackbar.message }}
     <template v-slot:actions>
-        <v-btn variant="text" icon="mdi-close" @click="store.snackbar.clearMessage()"></v-btn>
+        <v-btn variant="text" icon="mdi-close" @click="store.clearMessage()"></v-btn>
     </template>
 </v-snackbar>
 </template>
