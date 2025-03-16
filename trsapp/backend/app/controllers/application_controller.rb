@@ -9,8 +9,8 @@ class ApplicationController < ActionController::API
     header = request.headers['Authorization']&.split(' ')&.last
     raise StandardError, '認証ヘッダーがありません' if header.nil?
 
-    retries = 0
-    max_retries = 3
+    #retries = 0
+    #max_retries = 3
 
     begin
       # Supabase JWTを検証

@@ -12,7 +12,7 @@ const event = useEventStore();
 const format = useFormatters();
 const ui = useUiStore();
 const route = useRoute();
-const loading = ref(true)
+const loading = ref(true);
 //マウント時の処理
 onMounted(async() => {
     loading.value = true;
