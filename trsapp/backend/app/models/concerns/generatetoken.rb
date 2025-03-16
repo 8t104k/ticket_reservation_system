@@ -17,5 +17,4 @@ module Generatetoken
       break random_token unless self.class.exists?(token: random_token)
     end
   end
-  
 end
