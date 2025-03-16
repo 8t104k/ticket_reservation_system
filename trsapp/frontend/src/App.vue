@@ -24,20 +24,21 @@ const transitionType = computed(() => route.meta.transition || 'slide')
         <v-icon>mdi-bell</v-icon>
       </v-btn>
     </v-app-bar>
+    
 
     <!-- メイン -->
     <v-main>
       <v-container fluid>
-        <Transition :name="transitionType" mode="out-in">
-          <router-view />
-          </Transition>
         <!--
-          <router-view v-slot="{ Component }">
-            <Transition :name="transitionType" mode="out-in">
-              <component :is="Component"/>
+          <Transition :name="transitionType" mode="out-in">
+            <router-view />
+            </Transition>
+          -->
+          <router-view v-slot="{ Component, route }">
+            <Transition :name="transitionType">
+              <component :is="Component" :key="route.fullPath" />
             </Transition>
           </router-view>
-          -->
       </v-container>
     </v-main>
 
@@ -54,7 +55,7 @@ const transitionType = computed(() => route.meta.transition || 'slide')
 <style scoped>
 .slide-enter-active,
 .slide-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.4s ease;
 }
 
 .slide-enter-from {

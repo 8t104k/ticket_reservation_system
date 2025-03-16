@@ -15,6 +15,7 @@ const route = useRoute();
 const loading = ref(true);
 //マウント時の処理
 onMounted(async() => {
+    console.log('イベント詳細がマウントされました！')
     loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
