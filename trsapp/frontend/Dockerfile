@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json yarn.lock /app/
 
 # 依存関係をインストール
-RUN yarn add vuetify@next @mdi/font vite-plugin-vuetify @supabase/supabase-js pinia && \
+RUN yarn add vuetify@next @mdi/font vite-plugin-vuetify @supabase/supabase-js pinia @vuelidate/core @vuelidate/validators && \
     yarn install
 
 # アプリケーションコードをコピー

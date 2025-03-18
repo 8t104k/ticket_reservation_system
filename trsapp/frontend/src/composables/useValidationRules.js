@@ -17,10 +17,16 @@ export function useValidationRules(){
             v => v === passwordRef.value || 'パスワードが一致しません',
             ]
     )
+
+    const validateRules = {
+        required: v => !!v || '必須項目です',
+    }
+
     return {
         emailRules,
         passwordRules,
         confirmPasswordRules,
-        passwordRef
+        passwordRef,
+        validateRules
     }
 }

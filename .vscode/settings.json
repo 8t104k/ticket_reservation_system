@@ -4,6 +4,7 @@
         "Flexirest",
         "materialdesignicons",
         "supabase",
+        "Vuelidate",
         "Vuetify"
     ]
 }

@@ -4,7 +4,7 @@ import { useEventStore } from '../stores/event';
 import { useUiStore } from '../stores/uiSetting';
 import { useFormatters } from '../composables/useFormatters';
 import router from '../router';
-import NewEventDialog from './dialog/NewEventDialog.vue';
+import Dialog from './dialog/Dialog.vue';
 
 const format = useFormatters();
 const eventStore = useEventStore();
@@ -123,6 +123,6 @@ function openNewEventDialog(){
     <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
   </Transition>-->
   <v-dialog v-model="newEventDialogStatus">
-    <NewEventDialog />
+    <Dialog dialog="newEvent" />
   </v-dialog>
 </template>
