@@ -29,7 +29,7 @@ export const apiClient = (token = null) => {
 //エンドポイント定義
 export const ENDPOINTS = {
   EVENTS: {
-    MyEvents: '/events',
+    BASE: '/events',
     DETAIL: (token) => `/events/${token}`,
     RESERVATIONS: (token) => `/events/${token}/reservations`,
     COLLABORATORS: (token) => `/events/${token}/collaborators`,

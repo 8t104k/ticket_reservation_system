@@ -1,6 +1,7 @@
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useUiStore = defineStore('snackbar',{
+export const useUiStore = defineStore('ui',{
     state: () => ({
         snackbar:{
             show: false,
@@ -30,3 +31,20 @@ export const useUiStore = defineStore('snackbar',{
 }
 
 )
+
+export const useDialogStore = defineStore('dialog',{
+    state: () => ({
+        show: ref(false)
+    }),
+    actions: {
+        showDialog(){
+            this.show = true
+        },
+        clearDialog(){
+            this.show = false
+        }
+    }
+}
+
+)
+

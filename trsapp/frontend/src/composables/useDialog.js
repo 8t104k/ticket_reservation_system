@@ -1,6 +1,10 @@
 import { useValidationRules } from './useValidationRules';
+import { useEventStore } from '../stores/event';
+import { useDialogStore } from '../stores/uiSetting';
+import router from '../router';
 
 const {validateRules} = useValidationRules();
+//const event = useEventStore();
 
 export const dialogTypes = {
     newEvent: {
@@ -17,8 +21,19 @@ export const dialogTypes = {
                 validators: [validateRules.required]
                 }
             },
-        submit: function(formEvent){
-            console.log(formEvent.eventName,formEvent.eventDate)
+        submit: async(formEvent) => {
+            const event = useEventStore()
+            const dialog = useDialogStore()
+            try {
+                //新規イベントをポスト
+                await event.createEvent(formEvent.eventName,formEvent.eventDate)
+                //ダイアログを消す
+                dialog.clearDialog();
+                //新規イベント詳細に遷移
+                router.push({name: 'EventDetail', params: {token: event.details.token}})
+            }catch(err){
+                console.log("イベント作成エラー")
+            }
             }
         },
     editEvent: {

@@ -1,6 +1,6 @@
 // api/services/eventService.js - イベント関連API
 import apiClient from '../client'
-import { ENDPOINTS } from '../endpoints'
+import { ENDPOINTS } from '../old/endpoints'
 import { supabase } from '../../lib/supabase'
 
 export const eventService = {
@@ -10,6 +10,13 @@ export const eventService = {
     const {data} = await supabase.auth.getSession()
     const authToken = data.session.access_token
     return apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
+  },
+
+  // create event
+  async createEvent(eventName,eventDate) {
+    const {data} = await supabase.auth.getSession()
+    const authToken = data.session.access_token
+    return apiClient(authToken).post(ENDPOINTS.EVENTS.NEW(eventName,eventDate))
   },
   
   // イベント情報を更新

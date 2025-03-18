@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useEventStore } from '../stores/event';
-import { useUiStore } from '../stores/uiSetting';
+import { useUiStore, useDialogStore } from '../stores/uiSetting';
 import { useFormatters } from '../composables/useFormatters';
 import router from '../router';
 import Dialog from './dialog/Dialog.vue';
 
 const format = useFormatters();
 const eventStore = useEventStore();
-const uiStore = useUiStore();
+const dialogStore = useDialogStore();
 const loading = ref(true);
 
 //マウント時の処理
@@ -23,20 +23,10 @@ onMounted(async() => {
     }
 })
 
-//ダイアログの表示状態
-const newEventDialogStatus = ref(false)
-
-
 async function toEventDetail(eventToken){
   router.push({name: 'EventDetail', params: {token: eventToken}})
   await eventStore.getEventDetails(eventToken);
 }
-
-function openNewEventDialog(){
-  newEventDialogStatus.value = !newEventDialogStatus.value;
-}
-
-
 
 </script>
 
@@ -71,7 +61,7 @@ function openNewEventDialog(){
           prepend-icon="mdi-plus-thick"
           variant="tonal"
           color="primary"
-          @click="openNewEventDialog"
+          @click="dialogStore.showDialog()"
           >
             イベント作成
           </v-btn>
@@ -122,7 +112,7 @@ function openNewEventDialog(){
     <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
     <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
   </Transition>-->
-  <v-dialog v-model="newEventDialogStatus">
+  <v-dialog v-model="dialogStore.show">
     <Dialog dialog="newEvent" />
   </v-dialog>
 </template>

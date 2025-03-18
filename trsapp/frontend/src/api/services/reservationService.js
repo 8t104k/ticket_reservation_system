@@ -1,6 +1,6 @@
 // api/services/reservationService.js - 予約関連API
 import apiClient from '../client'
-import { ENDPOINTS } from '../endpoints'
+import { ENDPOINTS } from '../old/endpoints'
 
 export const reservationService = {
   // 新規予約を作成
