@@ -1,6 +1,5 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { useVuelidate } from '@vuelidate/core'
 import { dialogTypes } from '../../composables/useDialog';
 import { useValidationRules } from '../../composables/useValidationRules';
 
@@ -15,6 +14,18 @@ const formValues = reactive({});
 for (const key in currentParams) {
   formValues[key] = '';
 }
+
+//バリデーション確認のオブジェクト
+const formValidates = reactive({});
+// 初期値の設定
+for (const key in currentParams) {
+    formValidates[key] = computed(() => {
+        const results = currentParams[key].validators.map(func => func(formValues[key]))
+        return results.every((r) => r == true || false)
+        //return currentParams[key].validators.map(func => func(formValues[key]))
+    })
+}
+
 
 </script>
 <template>
@@ -33,6 +44,7 @@ for (const key in currentParams) {
         :rules="config.validators"
         ></v-text-field>
     </v-form>
+    <div>{{ formValidates }}</div>
     <v-btn
     color="primary"
     class="mb-8"
@@ -40,9 +52,6 @@ for (const key in currentParams) {
     block type="submit"
     @click="currentDialog.submit(formValues)"
     >登録する</v-btn>
-    <div>{{ currentParams }}</div>
-    <br>
-    <div>{{ validateRules }}</div>
 </v-card>
 
 </template>

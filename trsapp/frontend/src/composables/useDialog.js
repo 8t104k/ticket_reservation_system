@@ -5,6 +5,11 @@ import router from '../router';
 
 const {validateRules} = useValidationRules();
 //const event = useEventStore();
+const checkAllValidations = (validationResult) => {
+    return Object.values(validationResult).every(validation => 
+        validation[validation.length - 1] === true
+    )
+}
 
 export const dialogTypes = {
     newEvent: {
@@ -13,7 +18,7 @@ export const dialogTypes = {
             eventName:{
                 label:"イベント名",
                 type: "text",
-                validators:  [validateRules.required]
+                validators:  [validateRules.required, validateRules.alphabetOnly]
                 },
             eventDate: {
                 label:"開催日",
@@ -24,9 +29,25 @@ export const dialogTypes = {
         submit: async(formEvent) => {
             const event = useEventStore()
             const dialog = useDialogStore()
+            
+            console.log("作成")
+            //バリデーションチェック
+            //バリデーション確認のオブジェクト
+            const formValidates = {};
+            // 初期値の設定
+            for (const key in dialogTypes.newEvent.params) {
+                formValidates[key] = dialogTypes.newEvent.params[key].validators.map(func => func(formEvent[key]))
+            }
+            //console.log(formValidates)
+            //チェック
+            if(!checkAllValidations(formValidates)) {
+                console.log("バリデーション失敗")
+                return
+            }
+
             try {
                 //新規イベントをポスト
-                //await event.createEvent(formEvent.eventName,formEvent.eventDate)
+                await event.createEvent(formEvent.eventName,formEvent.eventDate)
                 //ダイアログを消す
                 dialog.clearDialog();
                 //新規イベント詳細に遷移
