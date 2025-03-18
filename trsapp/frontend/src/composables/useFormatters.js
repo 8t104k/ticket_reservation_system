@@ -20,18 +20,18 @@ export function useFormatters() {
   
     const getStatusText = (status) => {
       const statusMap = {
-        0: '準備中',
-        1: '開催中',
-        2: '終了'
+        draft: '準備中',
+        open: '公開中',
+        close: '公開終了'
       }
       return statusMap[status] || '不明'
     }
   
     const getStatusColor = (status) => {
       const colorMap = {
-        0: 'orange',
-        1: 'green',
-        2: 'grey'
+        "draft": 'orange',
+        "open": 'green',
+        "close": 'grey'
       }
       return colorMap[status] || 'black'
     }

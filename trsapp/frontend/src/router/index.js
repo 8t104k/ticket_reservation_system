@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { supabase } from '../lib/supabase'
-import EventList from '../components/EventList.vue'
 import EventDetailView from '../components/EventDetailView.vue'
 import MyEventListsView from '../components/MyEventListsView.vue'
 import LoginPage from '../components/UserLoginView.vue'
@@ -37,11 +36,6 @@ const routes = [
     name: 'events',
     component: MyEventListsView,
     meta: {transition: 'slide'}
-  },
-  {
-    path: '/allevents',
-    name: 'allevents',
-    component: EventList
   },
   {
     path: '/events/:token',
