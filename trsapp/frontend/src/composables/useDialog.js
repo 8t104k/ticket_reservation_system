@@ -26,11 +26,11 @@ export const dialogTypes = {
             const dialog = useDialogStore()
             try {
                 //新規イベントをポスト
-                await event.createEvent(formEvent.eventName,formEvent.eventDate)
+                //await event.createEvent(formEvent.eventName,formEvent.eventDate)
                 //ダイアログを消す
                 dialog.clearDialog();
                 //新規イベント詳細に遷移
-                router.push({name: 'EventDetail', params: {token: event.details.token}})
+                router.replace({name: 'EventDetail', params: {token: event.details.token}})
             }catch(err){
                 console.log("イベント作成エラー")
             }

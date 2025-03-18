@@ -35,7 +35,7 @@ export const useAuthStore = defineStore('auth',{
                 if(error) throw error;
                 //新規登録成功
                 //リダイレクト
-                router.push(this.returnUrl || '/confirmation')
+                router.push({name: "confirmation"})
             } catch(err) {
                 //エラー処理
                 console.error('新規登録エラー:', err.message)
@@ -51,7 +51,12 @@ export const useAuthStore = defineStore('auth',{
                 }
                 const {data, error} = await supabase.auth.signInWithPassword(request_data);
                 if(error) throw error;
+                
+                //セッションに追加
                 this.session = data.session;
+                //イベントページに遷移
+                router.replace({name: "events"});
+
             } catch(err) {
                 //エラー処理
                 console.log('ログインエラー', err.message)
@@ -64,7 +69,7 @@ export const useAuthStore = defineStore('auth',{
                 this.session = null;
                 console.log("成功",error)
                 useUiStore().showMessage("ログアウトしました","success")
-                router.push('login');
+                router.replace({name: "login"});
             }catch(error){
                 console.log("失敗",error);
                 useUiStore().showMessage("ログアウトに失敗しました","error")
