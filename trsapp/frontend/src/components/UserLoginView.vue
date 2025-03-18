@@ -3,7 +3,7 @@ import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useUiStore } from '../stores/uiSetting'
-
+import router from '../router'
 const route = useRoute()
 const ui = useUiStore()
 
@@ -17,12 +17,11 @@ const authStore = useAuthStore();
 const handleSubmit = async()=> {
     loading.value = true
     try {
-        loading.value = true
         //ログイン処理
         await authStore.login(email.value,password.value)
         console.log('login success')
         ui.showMessage('ログインしました！','success')
-        router.push({name: 'events'})
+        await router.push({name: 'events'})
     } catch(error) {
         console.log('login false')
         ui.showMessage('ログインに失敗しました','error')

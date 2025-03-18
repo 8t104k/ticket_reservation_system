@@ -19,7 +19,8 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginPage
+    component: LoginPage,
+    meta: {transition: 'slide'}
   },
   {
     path: '/signup',

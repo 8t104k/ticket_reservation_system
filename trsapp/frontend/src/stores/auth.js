@@ -50,14 +50,11 @@ export const useAuthStore = defineStore('auth',{
                     password: password
                 }
                 const {data, error} = await supabase.auth.signInWithPassword(request_data);
-                this.session = data.session
-                
                 if(error) throw error;
-                //redirect
-                //router.push(this.returnUrl || '/userprofile')
+                this.session = data.session;
             } catch(err) {
                 //エラー処理
-                console.log('ログイン:', err.message)
+                console.log('ログインエラー', err.message)
                 throw err
             }
         },
