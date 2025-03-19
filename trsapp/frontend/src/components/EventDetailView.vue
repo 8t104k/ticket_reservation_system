@@ -3,19 +3,21 @@ import { ref, onMounted, computed } from 'vue'
 import router from '../router';
 import { useFormatters } from '../composables/useFormatters';
 import { useEventStore } from '../stores/event';
-import { useUiStore } from '../stores/uiSetting';
+import { useUiStore, useDialogStore } from '../stores/uiSetting';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
+import Dialog from './dialog/Dialog.vue';
 
 const event = useEventStore();
+const dialogStore = useDialogStore();
 const format = useFormatters();
 const ui = useUiStore();
 const route = useRoute();
 const loading = ref(true);
+
 //マウント時の処理
 onMounted(async() => {
-    console.log('イベント詳細がマウントされました！')
     loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
@@ -30,7 +32,7 @@ const backList = () => {router.push({name:'events'})}
 const activeTab = ref('1')
 const search = ref('')
 const collaboratorSearch = ref('')
-
+const editEventDialog = "editEvent"
 
 </script>
 <template>
@@ -46,8 +48,12 @@ const collaboratorSearch = ref('')
     >一覧に戻る</v-btn>
     <v-card-title class="d-flex justify-space-between">
         イベント情報
-        <v-btn color="primary" small>
-        <v-icon left>mdi-pencil</v-icon>編集
+        <v-btn
+            color="primary"
+            small
+            @click="dialogStore.showDialog(editEventDialog)"
+            >
+            <v-icon left>mdi-pencil</v-icon>編集
         </v-btn>
     </v-card-title>
     <div v-if="loading">
@@ -77,7 +83,7 @@ const collaboratorSearch = ref('')
                     <div class="text-subtitle-1 font-weight-bold">開催日</div>
                     <div>
                         <v-icon small class="mr-1">mdi-calendar</v-icon>
-                        {{ format.formatDate(event.details.event_date) }}
+                        {{ event.details.event_date }}
                     </div>
                 </v-col>
 
@@ -135,6 +141,10 @@ const collaboratorSearch = ref('')
         </v-card-text>
     </div>
 </v-card>
+
+<v-dialog v-model="dialogStore.dialogs[editEventDialog].show">
+    <Dialog :dialog="editEventDialog" :store="event.details"/>
+  </v-dialog>
 <!--
 -->
 </template>

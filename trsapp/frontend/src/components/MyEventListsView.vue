@@ -61,7 +61,7 @@ async function toEventDetail(eventToken){
           prepend-icon="mdi-plus-thick"
           variant="tonal"
           color="primary"
-          @click="dialogStore.showDialog()"
+          @click="dialogStore.showDialog('newEvent')"
           >
             イベント作成
           </v-btn>
@@ -112,7 +112,7 @@ async function toEventDetail(eventToken){
     <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
     <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
   </Transition>-->
-  <v-dialog v-model="dialogStore.show">
+  <v-dialog v-model="dialogStore.dialogs['newEvent'].show">
     <Dialog dialog="newEvent" />
   </v-dialog>
 </template>

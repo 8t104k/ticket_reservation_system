@@ -34,14 +34,18 @@ export const useUiStore = defineStore('ui',{
 
 export const useDialogStore = defineStore('dialog',{
     state: () => ({
-        show: ref(false)
+        dialogs: {
+            newEvent: {show: false},
+            editEvent: {show: false}
+        }
     }),
     actions: {
-        showDialog(){
-            this.show = true
+        showDialog(key){
+            console.log(key)
+            this.dialogs[key].show = true;
         },
-        clearDialog(){
-            this.show = false
+        clearDialog(key){
+            this.dialogs[key].show = false;
         }
     }
 }

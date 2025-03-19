@@ -1,18 +1,17 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { dialogTypes } from '../../composables/useDialog';
-import { useValidationRules } from '../../composables/useValidationRules';
 
-const props = defineProps(['dialog'])
+const props = defineProps(['dialog','store'])
 const currentDialog = dialogTypes[props.dialog] || {};
 const currentParams = currentDialog.params || {};
-const {validateRules} = useValidationRules();
 
 // フォームの値を管理するためのオブジェクト
 const formValues = reactive({});
 // 初期値の設定
 for (const key in currentParams) {
-  formValues[key] = '';
+    console.log(props.store[key])
+    formValues[key] = props.store ? props.store[key] : "";
 }
 
 //バリデーション確認のオブジェクト
@@ -42,9 +41,11 @@ for (const key in currentParams) {
         v-model="formValues[param]"
         :type="config.type"
         :rules="config.validators"
-        ></v-text-field>
+        >
+    {{  }}
+    </v-text-field>
     </v-form>
-    <div>{{ formValidates }}</div>
+    <div>{{ props.store }}</div>
     <v-btn
     color="primary"
     class="mb-8"

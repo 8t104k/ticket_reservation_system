@@ -56,6 +56,7 @@ export const useEventStore = defineStore('event',{
                 throw err
             };
         },
+        
     }
 
 })
