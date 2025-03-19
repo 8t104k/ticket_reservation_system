@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_16_201426) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_19_122211) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_16_201426) do
 
   create_table "events", force: :cascade do |t|
     t.string "event_name"
-    t.datetime "event_date"
+    t.date "event_date"
     t.integer "status"
     t.string "token"
     t.datetime "created_at", null: false

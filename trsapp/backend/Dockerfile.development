@@ -49,6 +49,7 @@ RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails /rails && \
     chmod +x /rails/bin/* && \
     echo 'export PATH="/rails/bin:$PATH"' >> /home/rails/.bashrcUSER rails:rails
+USER rails:rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
