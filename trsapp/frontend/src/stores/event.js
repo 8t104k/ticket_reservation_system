@@ -56,7 +56,20 @@ export const useEventStore = defineStore('event',{
                 throw err
             };
         },
-        
+        async updateEvent(eventToken,eventParams){
+            try{
+                //認証情報取得
+                const {data} = await supabase.auth.getSession()
+                const authToken = data.session.access_token
+                //イベントデータを作成
+                const response = await apiClient(authToken).patch(ENDPOINTS.EVENTS.UPDATE(eventToken),eventParams)
+                //ストアに保存
+                this.details = response.data
+            } catch(err){
+                console.log('getEventDetailsエラー')
+                throw err
+            };
+        }
     }
 
 })

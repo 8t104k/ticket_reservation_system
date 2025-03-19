@@ -31,6 +31,7 @@ export const ENDPOINTS = {
   EVENTS: {
     BASE: '/events',
     DETAIL: (token) => `/events/${token}`,
+    UPDATE: (token) => `/events/${token}`,
     RESERVATIONS: (token) => `/events/${token}/reservations`,
     COLLABORATORS: (token) => `/events/${token}/collaborators`,
     EXPORT: (token, format) => `/events/${token}/export?format=${format}`

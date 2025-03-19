@@ -10,7 +10,6 @@ const currentParams = currentDialog.params || {};
 const formValues = reactive({});
 // 初期値の設定
 for (const key in currentParams) {
-    console.log(props.store[key])
     formValues[key] = props.store ? props.store[key] : "";
 }
 
@@ -42,7 +41,6 @@ for (const key in currentParams) {
         :type="config.type"
         :rules="config.validators"
         >
-    {{  }}
     </v-text-field>
     </v-form>
     <div>{{ props.store }}</div>
