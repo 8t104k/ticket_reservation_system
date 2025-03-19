@@ -1,4 +1,5 @@
 class Api::V1::EventsController < ApplicationController
+  before_action :set_event, only: [:show, :update]
   def index
     if @current_user.nil?
       render json: { error: "認証が必要です" }, status: :unauthorized
@@ -15,8 +16,7 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def show
-    puts params[:token]
-    @event = Event.find_by!(token: params[:token])
+    # @event = Event.find_by!(token: params[:token])
     render json: @event
   end
 
@@ -35,20 +35,35 @@ class Api::V1::EventsController < ApplicationController
       @collaborators.save!
     end
     render json: @event
-  rescue => e
-      Rails.logger.error("イベント作成エラー: #{e.message}")
-      render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
+    rescue => e
+        Rails.logger.error("イベント作成エラー: #{e.message}")
+        render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
+  end
+
+  def edit
+    @event = Event.find_by!(token: params[:token])
+    render json: @event
   end
 
   def update
-    
+    Event.transaction do
+      @event.update(event_params)
+      render json: @event
+    end
+    rescue => e
+      Rails.logger.error("イベント更新エラー: #{e.message}")
+      render json: { error: "イベント更新中にエラーが発生しました" }, status: :internal_server_error
   end
 
   def destroy
     
   end
 
+  private
   def event_params
-    params.require(:event).permit(:event_name, :event_date)
+    params.require(:event).permit(:event_name, :event_date, :status, :location)
+  end
+  def set_event
+    @event = Event.find_by!(token: params[:token])
   end
 end

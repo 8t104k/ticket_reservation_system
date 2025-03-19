@@ -13,7 +13,6 @@ class ApplicationController < ActionController::API
     #max_retries = 3
 
     begin
-      puts header
       # Supabase JWTを検証
       decoded = JWT.decode(
         header,
