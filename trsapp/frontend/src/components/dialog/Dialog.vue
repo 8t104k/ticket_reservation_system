@@ -1,10 +1,17 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { dialogTypes } from '../../composables/useDialog';
+import { eventParams } from '../../composables/useParams';
 
 const props = defineProps(['dialog','store'])
 const currentDialog = dialogTypes[props.dialog] || {};
-const currentParams = currentDialog.params || {};
+
+//入力するパラメータ
+const currentParams = {};
+// 初期値の設定
+for (const value of currentDialog.params) {
+    currentParams[value] = eventParams[value];
+}
 
 // フォームの値を管理するためのオブジェクト
 const formValues = reactive({});
@@ -12,18 +19,6 @@ const formValues = reactive({});
 for (const key in currentParams) {
     formValues[key] = props.store ? props.store[key] : "";
 }
-
-//バリデーション確認のオブジェクト
-const formValidates = reactive({});
-// 初期値の設定
-for (const key in currentParams) {
-    formValidates[key] = computed(() => {
-        const results = currentParams[key].validators.map(func => func(formValues[key]))
-        return results.every((r) => r == true || false)
-        //return currentParams[key].validators.map(func => func(formValues[key]))
-    })
-}
-
 
 </script>
 <template>
@@ -43,7 +38,7 @@ for (const key in currentParams) {
         >
     </v-text-field>
     </v-form>
-    <div>{{ props.store }}</div>
+    <div>{{ currentParams }}</div>
     <v-btn
     color="primary"
     class="mb-8"
