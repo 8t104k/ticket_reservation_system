@@ -10,10 +10,11 @@ import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
 import Dialog from './dialog/Dialog.vue';
 
-const event = useEventStore();
+//const event = useEventStore();
 const stores = {
     event: useEventStore(),
     reservation: useReservationStore(),
+    dialog: useDialogStore(),
 }
 const dialogStore = useDialogStore();
 const format = useFormatters();
@@ -25,7 +26,7 @@ const loading = ref(true);
 onMounted(async() => {
     loading.value = true;
     try {
-        await event.getEventDetails(route.params.token);
+        await stores.event.getEventDetails(route.params.token);
         await stores.reservation.getReservations(route.params.token);
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
@@ -38,7 +39,10 @@ const backList = () => {router.push({name:'events'})}
 const activeTab = ref('1')
 const search = ref('')
 const collaboratorSearch = ref('')
+
+//ダイアログ周り
 const editEventDialog = "editEvent"
+const eventParams = "eventParams"
 
 </script>
 <template>
@@ -65,22 +69,22 @@ const editEventDialog = "editEvent"
     <div v-if="loading">
         <v-progress-linear color="primary" indeterminate></v-progress-linear>
     </div>
-    <div v-else-if="event.details">
+    <div v-else-if="stores.event.details">
         <v-card-text>
             <!--イベント情報-->
             <v-row class="mb-4">
                 <v-col cols="12" class="d-flex justify-space-evenly align-center">
                     <div>
                         <div class="text-subtitle-1 font-weight-bold">イベント名</div>
-                        <div>{{ event.details.event_name }}</div>
+                        <div>{{ stores.event.details.event_name }}</div>
                     </div>
                     <div>
                         <v-chip
-                        :color="format.getStatusColor(event.details.status)"
+                        :color="format.getStatusColor(stores.event.details.status)"
                         text-color="white"
                         small
                         >
-                            {{ format.getStatusText(event.details.status) }}
+                            {{ format.getStatusText(stores.event.details.status) }}
                         </v-chip>
                     </div>
                 </v-col>
@@ -89,7 +93,7 @@ const editEventDialog = "editEvent"
                     <div class="text-subtitle-1 font-weight-bold">開催日</div>
                     <div>
                         <v-icon small class="mr-1">mdi-calendar</v-icon>
-                        {{ event.details.event_date }}
+                        {{ stores.event.details.event_date }}
                     </div>
                 </v-col>
 
@@ -97,7 +101,7 @@ const editEventDialog = "editEvent"
                     <div class="text-subtitle-1 font-weight-bold">開始時刻</div>
                     <div>
                         <v-icon small class="mr-1">mdi-clock-time-five</v-icon>
-                        {{ event.details.event_date }}
+                        {{ stores.event.details.event_date }}
                     </div>
                 </v-col>
                 <v-col cols="6" md="2">
@@ -108,7 +112,7 @@ const editEventDialog = "editEvent"
                     <div class="text-subtitle-1 font-weight-bold">場所</div>
                     <div>
                         <v-icon small class="mr-1">mdi-map-marker</v-icon>
-                        {{ event.details.location || '-' }}
+                        {{ stores.event.details.location || '-' }}
                     </div>
                 </v-col>
             </v-row>
@@ -149,8 +153,8 @@ const editEventDialog = "editEvent"
 </v-card>
 
 <v-dialog v-model="dialogStore.dialogs[editEventDialog].show">
-    <Dialog :dialog="editEventDialog" :store="event.details"/>
-  </v-dialog>
+    <Dialog :dialog="editEventDialog" :store="stores.event.details" :params-name="eventParams"/>
+</v-dialog>
 <!--
 -->
 </template>

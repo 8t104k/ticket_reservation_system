@@ -36,7 +36,9 @@ export const useDialogStore = defineStore('dialog',{
     state: () => ({
         dialogs: {
             newEvent: {show: false},
-            editEvent: {show: false}
+            editEvent: {show: false},
+            newReserve: {show: false},
+            editReserve: {show: false},
         }
     }),
     actions: {

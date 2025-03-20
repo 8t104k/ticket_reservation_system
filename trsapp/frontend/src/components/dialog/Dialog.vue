@@ -1,14 +1,18 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
-import { dialogTypes } from '../../composables/useDialog';
-import { eventParams } from '../../composables/useParams.js';
+import { useDialogActions } from '../../composables/useDialog';
+import { params } from '../../composables/useParams.js';
 
-const props = defineProps(['dialog','store'])
-const currentDialog = dialogTypes[props.dialog] || {};
+const props = defineProps(['dialog','store','paramsName'])
+const { dialogConfig, handleSubmit } = useDialogActions();
+const onSubmit = (formData) => handleSubmit(props.dialog, formData);
+
+const currentDialog = dialogConfig[props.dialog] || {};
+
 
 //入力するパラメータ
 const currentParams = Object.fromEntries(
-  currentDialog.params.map(value => [value, eventParams[value]])
+  currentDialog.fields.map(value => [value, params[currentDialog.paramsKey][value]])
 );
 
 // フォームの値を管理するためのオブジェクト
@@ -41,7 +45,7 @@ for (const key in currentParams) {
     class="mb-8"
     size="large"
     block type="submit"
-    @click="currentDialog.submit(formValues)"
+    @click="onSubmit(formValues)"
     >登録する</v-btn>
 </v-card>
 

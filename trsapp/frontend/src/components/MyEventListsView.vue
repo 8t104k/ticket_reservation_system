@@ -11,6 +11,10 @@ const eventStore = useEventStore();
 const dialogStore = useDialogStore();
 const loading = ref(true);
 
+//ダイアログ
+const newEvent = "newEvent"
+const eventParams = "eventParams"
+
 //マウント時の処理
 onMounted(async() => {
     loading.value = true;
@@ -112,7 +116,7 @@ async function toEventDetail(eventToken){
     <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
     <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
   </Transition>-->
-  <v-dialog v-model="dialogStore.dialogs['newEvent'].show">
-    <Dialog dialog="newEvent" />
+  <v-dialog v-model="dialogStore.dialogs[newEvent].show">
+    <Dialog dialog=newEvent :params-name="eventParams"/>
   </v-dialog>
 </template>

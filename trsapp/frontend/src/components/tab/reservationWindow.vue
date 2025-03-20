@@ -1,11 +1,30 @@
 <script setup>
+import { ref, reactive } from 'vue';
 import { useFormatters } from '../../composables/useFormatters';
-import { reservationParams } from '../../composables/useParams';
+import { params } from '../../composables/useParams';
+import { useDialogStore } from '../../stores/uiSetting';
+import { useEventStore } from '../../stores/event';
+import { useReservationStore } from '../../stores/reservations';
+import Dialog from '../dialog/Dialog.vue';
+
+
+const stores = {
+    event: useEventStore(),
+    reservation: useReservationStore(),
+    dialog: useDialogStore(),
+}
 const format = useFormatters();
-
 const props = defineProps(['reservations']);
+const newReserve = "newReserve"
+const editReserve = "editReserve"
+const filters = reactive({
+    sortBy: "",
+    sameDay: "",
+})
 
-const headers = Object.entries(reservationParams).map(([key, value]) => {
+const search = ref('')
+
+const headers = Object.entries(params.reservationParams).map(([key, value]) => {
   return {
     key: key,
     title: value.label,
@@ -108,7 +127,7 @@ function getReservations(){
     <v-card-actions>
         <v-btn
         color="success"
-        @click="openReservationDialog"
+        @click="stores.dialog.showDialog(newReserve)"
         >
         <v-icon left>mdi-plus</v-icon>
         新規予約
@@ -125,4 +144,8 @@ function getReservations(){
         </v-btn>
     </v-card-actions>
 </v-card>
+
+<v-dialog v-model="stores.dialog.dialogs[newReserve].show">
+    <Dialog :dialog="newReserve" />
+</v-dialog>
 </template>

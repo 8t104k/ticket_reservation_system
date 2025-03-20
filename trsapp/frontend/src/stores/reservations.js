@@ -15,7 +15,7 @@ export const useReservationStore = defineStore('reservation',{
                 const {data} = await supabase.auth.getSession()
                 const authToken = data.session.access_token
                 //イベントデータを取得
-                const response = await apiClient(authToken).get(ENDPOINTS.RESERVATIONS.INDEX(eventToken))
+                const response = await apiClient(authToken).get(ENDPOINTS.RESERVATIONS.BASE(eventToken))
                 //ストアに保存
                 this.all = response.data
                 return response.data
@@ -24,29 +24,14 @@ export const useReservationStore = defineStore('reservation',{
                 throw err
             };            
         },
-
-        async getEventDetails(eventToken){
-            try{
-                //認証情報取得
-                const {data} = await supabase.auth.getSession()
-                const authToken = data.session.access_token
-                //イベントデータを取得
-                const response = await apiClient(authToken).get(ENDPOINTS.RESERVATIONS.DETAIL(eventToken))
-                //ストアに保存
-                this.details = response.data
-            } catch(err){
-                console.log('getEventDetailsエラー')
-                throw err
-            };
-        },
-        async createEvent(eventParams){
+        async createReservation(eventToken,formData){
             try{
                 console.log("create start")
                 //認証情報取得
                 const {data} = await supabase.auth.getSession()
                 const authToken = data.session.access_token
                 //イベントデータを作成
-                const response = await apiClient(authToken).post(ENDPOINTS.RESERVATIONS.BASE,eventParams)
+                const response = await apiClient(authToken).post(ENDPOINTS.RESERVATIONS.BASE(eventToken),formData)
                 //ストアに保存
                 this.details = response.data
                 return this.details
