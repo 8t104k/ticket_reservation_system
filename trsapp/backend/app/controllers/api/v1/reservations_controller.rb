@@ -9,8 +9,8 @@ module Api
         @event = Event.find_by!(token: params[:event_token])
         @reservation = @event.reservations.build(event_id: @event.id)
         @reservation.customer_info = {} if @reservation.customer_info.nil?
-        @rsv_records = @event.reservations.all
-        render json: @rsv_records
+        @reservations = @event.reservations.all
+        render json: @reservations
       end
       def show
 
