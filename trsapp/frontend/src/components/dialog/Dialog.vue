@@ -7,11 +7,9 @@ const props = defineProps(['dialog','store'])
 const currentDialog = dialogTypes[props.dialog] || {};
 
 //入力するパラメータ
-const currentParams = {};
-// 初期値の設定
-for (const value of currentDialog.params) {
-    currentParams[value] = eventParams[value];
-}
+const currentParams = Object.fromEntries(
+  currentDialog.params.map(value => [value, eventParams[value]])
+);
 
 // フォームの値を管理するためのオブジェクト
 const formValues = reactive({});
@@ -38,7 +36,6 @@ for (const key in currentParams) {
         >
     </v-text-field>
     </v-form>
-    <div>{{ currentParams }}</div>
     <v-btn
     color="primary"
     class="mb-8"
