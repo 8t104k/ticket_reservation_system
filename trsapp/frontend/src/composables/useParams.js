@@ -26,5 +26,24 @@ export const eventParams = {
 }
 
 export const reservationParams = {
-
+    reservation_name:{
+        label:"予約名",
+        type: "text",
+        validators:  []
+        },
+    price: {
+        label:"価格",
+        type: "number",
+        validators: []
+        },
+    status: {
+        label:"ステータス",
+        type: "text",
+        validators: []
+        },
+    reserved_at: {
+        label:"予約日時",
+        type: "datetime",
+        validators: []
+        },
 }

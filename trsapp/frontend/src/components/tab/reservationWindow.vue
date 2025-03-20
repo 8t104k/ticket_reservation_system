@@ -1,8 +1,18 @@
 <script setup>
 import { useFormatters } from '../../composables/useFormatters';
+import { reservationParams } from '../../composables/useParams';
 const format = useFormatters();
 
 const props = defineProps(['reservations']);
+
+const headers = Object.entries(reservationParams).map(([key, value]) => {
+  return {
+    key: key,
+    title: value.label,
+    align: 'start',
+    sortable: true
+  }
+})
 
 function getReservations(){
 
@@ -71,6 +81,9 @@ function getReservations(){
         :items="reservations"
         :search="search"
         :items-per-page="10"
+        :header-props="{
+        class: 'bg-secondary',
+        }"
         :footer-props="{
             'items-per-page-options': [5, 10, 15, 20],
             'items-per-page-text': '表示件数'

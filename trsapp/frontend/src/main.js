@@ -31,8 +31,8 @@ const vuetify = createVuetify({
           success: '#4CAF50',    // グリーン
           warning: '#FFC107',    // アンバー
           error: '#F57C00',      // オレンジ 700 (ダーク)
-          background: '#F5F5F5', // グレー 100
-          surface: '#FFFFFF'     // 白
+          background: '#fffffe', // グレー 100
+          surface: '#eff0f3'     // 白
         }
       },
       dark: {

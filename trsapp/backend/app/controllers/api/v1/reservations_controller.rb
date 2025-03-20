@@ -1,6 +1,7 @@
 module Api
   module V1
     class Api::V1::ReservationsController < ApplicationController
+      
       def new
         
       end
