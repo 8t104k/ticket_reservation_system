@@ -2,6 +2,8 @@
 import { useFormatters } from '../../composables/useFormatters';
 const format = useFormatters();
 
+const props = defineProps(['reservations']);
+
 function getReservations(){
 
 }

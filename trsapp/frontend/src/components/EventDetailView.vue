@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import router from '../router';
 import { useFormatters } from '../composables/useFormatters';
 import { useEventStore } from '../stores/event';
+import { useReservationStore } from '../stores/reservations';
 import { useUiStore, useDialogStore } from '../stores/uiSetting';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
@@ -10,6 +11,10 @@ import collaboratorsWindow from './tab/collaboratorsWindow.vue';
 import Dialog from './dialog/Dialog.vue';
 
 const event = useEventStore();
+const stores = {
+    event: useEventStore(),
+    reservation: useReservationStore(),
+}
 const dialogStore = useDialogStore();
 const format = useFormatters();
 const ui = useUiStore();
@@ -21,6 +26,7 @@ onMounted(async() => {
     loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
+        await stores.reservation.getReservations(route.params.token);
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
@@ -129,7 +135,7 @@ const editEventDialog = "editEvent"
             <v-window v-model="activeTab">
                 <!-- 予約一覧タブ -->
                 <v-window-item value="1">
-                    <reservationWindow />
+                    <reservationWindow :reservations="stores.reservation.all"/>
                 </v-window-item>
 
                 <!-- 共演者一覧タブ -->

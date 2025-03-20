@@ -1,6 +1,6 @@
 import { useEventStore } from '../stores/event';
 import { useDialogStore } from '../stores/uiSetting';
-import { eventParams } from './useParams';
+import { eventParams } from './useParams.js';
 import router from '../router';
 
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { dialogTypes } from '../../composables/useDialog';
-import { eventParams } from '../../composables/useParams';
+import { eventParams } from '../../composables/useParams.js';
 
 const props = defineProps(['dialog','store'])
 const currentDialog = dialogTypes[props.dialog] || {};
