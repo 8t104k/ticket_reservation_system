@@ -20,7 +20,7 @@ class ApplicationController < ActionController::API
         true
       )
       payload = decoded[0]
-      @current_connection = AuthConnection&.find_by(user_id: payload["sub"])
+      #@current_connection = AuthConnection&.find_by(user_id: payload["sub"])
       @current_user = Profile.find_by(user_id: payload["sub"])
 
 #      if @current_user.nil? && retries < max_retries
@@ -29,10 +29,10 @@ class ApplicationController < ActionController::API
 #        retry
 #      end
 
-      if @current_connection.nil?
-        @current_connection = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
-        @current_connection.save
-      end
+#      if @current_connection.nil?
+#        @current_connection = AuthConnection.new(user_id: payload["sub"], last_verified_at: Time.current)
+#        @current_connection.save
+#      end
     end
     
   rescue JWT::DecodeError, StandardError => e

@@ -1,21 +1,37 @@
 module Api
   module V1
     class Api::V1::ReservationsController < ApplicationController
-      
-      def new
-        
+      before_action :set_event
+      def create
+        Reservation.transaction do
+          # 予約の作成
+          @reservation = @event.reservations.new(reservation_params)
+          @reservation.reserved_at = Time.now
+          @reservation.save!
+          render json: @reservation
+        rescue => e
+            Rails.logger.error("予約作成エラー: #{e.message}")
+            render json: { error: "予約作成中にエラーが発生しました" }, status: :internal_server_error
+        end
       end
+
       def index
         puts "reservation: #{params[:event_token]}"
-        @event = Event.find_by!(token: params[:event_token])
-        @reservation = @event.reservations.build(event_id: @event.id)
-        @reservation.customer_info = {} if @reservation.customer_info.nil?
         @reservations = @event.reservations.all
         render json: @reservations
       end
       def show
 
       end
+
+      private
+      def reservation_params
+        params.require(:reservation).permit(:reservation_name, :price, :status)
+      end
+      def set_event
+        @event = Event.find_by!(token: params[:event_token])
+      end
+
     end
   end
 end

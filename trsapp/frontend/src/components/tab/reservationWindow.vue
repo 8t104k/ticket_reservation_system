@@ -78,7 +78,7 @@ function getReservations(){
     <template v-else>
         <v-data-table
         :headers="headers"
-        :items="reservations"
+        :items="props.reservations"
         :search="search"
         :items-per-page="10"
         :header-props="{
