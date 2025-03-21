@@ -1,6 +1,5 @@
 class Reservation < ApplicationRecord
   include ActiveModel::Serializers::JSON
-  include Generatetoken
 
   belongs_to :event
 
