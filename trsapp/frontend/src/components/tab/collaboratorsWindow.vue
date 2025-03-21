@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUpdated } from 'vue';
 import { useFormatters } from '../../composables/useFormatters';
 import { useCollaboratorStore } from '../../stores/collaborator';
 
@@ -7,6 +7,15 @@ const format = useFormatters();
 const collaboratorStore = useCollaboratorStore();
 const props = defineProps(["collaborators"])
 const search = ref('')
+
+onMounted(() => {
+  console.log('collaboratorsWindow mounted');
+});
+
+onUpdated(() => {
+  console.log('collaboratorsWindow updated');
+});
+
 
 </script>
 <template>

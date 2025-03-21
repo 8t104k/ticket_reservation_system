@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import router from '../router';
 import { useFormatters } from '../composables/useFormatters';
 import { useEventStore } from '../stores/event';
@@ -11,18 +11,6 @@ import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
 import Dialog from './dialog/Dialog.vue';
 
-//const event = useEventStore();
-const stores = {
-    event: useEventStore(),
-    reservation: useReservationStore(),
-    dialog: useDialogStore(),
-    collaborator: useCollaboratorStore(),
-}
-const dialogStore = useDialogStore();
-const format = useFormatters();
-const ui = useUiStore();
-const route = useRoute();
-const loading = ref(true);
 
 //マウント時の処理
 onMounted(async() => {
@@ -38,10 +26,25 @@ onMounted(async() => {
     }
 })
 
+const stores = {
+    event: useEventStore(),
+    reservation: useReservationStore(),
+    dialog: useDialogStore(),
+    collaborator: useCollaboratorStore(),
+}
+const format = useFormatters();
+const ui = useUiStore();
+const route = useRoute();
+const loading = ref(true);
 const backList = () => {router.push({name:'events'})}
+
+//たぶまわり
 const activeTab = ref('1')
-const search = ref('')
-const collaboratorSearch = ref('')
+//タブを移動した時に一番上まで戻ってしまうので、見ていた場所に戻す
+const scrollToPosition = () => {
+    const y =window.scrollY
+    setTimeout(()=>{window.scrollTo({top: y,behavior: 'smooth'})},1)
+}
 
 //ダイアログ周り
 const editEventDialog = "editEvent"
@@ -49,16 +52,16 @@ const eventParams = "eventParams"
 
 </script>
 <template>
-<v-card>
-    <!--カードヘッダー-->
     <v-btn 
     class="d-flex align-top"
     prepend-icon="mdi-arrow-left-circle"
     color="primary"
-    variant="tonal"
+    variant="text"
     @click="backList"
     small
     >一覧に戻る</v-btn>
+    <v-card>
+    <!--カードヘッダー-->
     <v-card-title class="d-flex justify-space-between">
         イベント情報
         <v-btn
@@ -128,6 +131,7 @@ const eventParams = "eventParams"
                 bg-color="secondary"
                 dark
                 fixed-tabs
+                @update:model-value="scrollToPosition"
                 >
                     <v-tab value="1">
                         <v-icon>mdi-ticket</v-icon>
@@ -139,15 +143,19 @@ const eventParams = "eventParams"
                     </v-tab>
             </v-tabs>
             <!--タブウィンドウ-->
-            <v-window v-model="activeTab">
+            <v-window v-model="activeTab" :touch="false">
                 <!-- 予約一覧タブ -->
-                <v-window-item value="1">
-                    <reservationWindow :reservations="stores.reservation.all"/>
+                <v-window-item value="1" eager>
+                    <keep-alive>
+                        <reservationWindow :reservations="stores.reservation.all"/>
+                    </keep-alive>
                 </v-window-item>
 
                 <!-- 共演者一覧タブ -->
-                <v-window-item value="2">
-                    <collaboratorsWindow :collaborators="stores.collaborator.all"/>
+                <v-window-item value="2" eager>
+                    <keep-alive>
+                        <collaboratorsWindow :collaborators="stores.collaborator.all"/>                    
+                    </keep-alive>
                 </v-window-item>
                 </v-window>
     </v-card>
