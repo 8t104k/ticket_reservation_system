@@ -7,7 +7,8 @@ module Api
           # 予約の作成
           @reservation = @event.reservations.new(reservation_params)
           @reservation.reserved_at = Time.now
-          @reservation.collaborator_id = @event.collaborators.find_by(profile_id: @current_user.id)
+          puts "collaborators hit : #{@event.collaborators.find_by(profile_id: @current_user.id).id}"
+          @reservation.collaborator_id = @event.collaborators.find_by(profile_id: @current_user.id).id
           @reservation.reserved!
           @reservation.save!
           render json: @reservation
