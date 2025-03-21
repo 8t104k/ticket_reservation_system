@@ -7,7 +7,7 @@ export const useApi = async(apiFunction,store = null,storefield = "", params = {
         const {data} = await supabase.auth.getSession()
         //セッションの存在確認
         if (!data.session){
-            throw new error("セッションがありません")
+            throw new Error("セッションがありません")
         }
         const authToken = data.session.access_token
         //データを取得

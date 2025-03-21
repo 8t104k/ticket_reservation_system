@@ -145,7 +145,7 @@ function getReservations(){
     </v-card-actions>
 </v-card>
 
-<v-dialog v-model="stores.dialog.dialogs[newReserve].show">
+<v-dialog v-model="stores.dialog.all[newReserve].show">
     <Dialog :dialog="newReserve" />
 </v-dialog>
 </template>

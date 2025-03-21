@@ -34,7 +34,7 @@ export const useUiStore = defineStore('ui',{
 
 export const useDialogStore = defineStore('dialog',{
     state: () => ({
-        dialogs: {
+        all: {
             newEvent: {show: false},
             editEvent: {show: false},
             newReserve: {show: false},

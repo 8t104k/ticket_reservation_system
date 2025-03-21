@@ -4,6 +4,7 @@ import router from '../router';
 import { useFormatters } from '../composables/useFormatters';
 import { useEventStore } from '../stores/event';
 import { useReservationStore } from '../stores/reservations';
+import { useCollaboratorStore } from '../stores/collaborator';
 import { useUiStore, useDialogStore } from '../stores/uiSetting';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
@@ -15,6 +16,7 @@ const stores = {
     event: useEventStore(),
     reservation: useReservationStore(),
     dialog: useDialogStore(),
+    collaborator: useCollaboratorStore(),
 }
 const dialogStore = useDialogStore();
 const format = useFormatters();
@@ -28,6 +30,7 @@ onMounted(async() => {
     try {
         await stores.event.getEventDetails(route.params.token);
         await stores.reservation.getReservations(route.params.token);
+        await stores.collaborator.getCollaborators(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
@@ -61,7 +64,7 @@ const eventParams = "eventParams"
         <v-btn
             color="primary"
             small
-            @click="dialogStore.showDialog(editEventDialog)"
+            @click="stores.dialog.showDialog(editEventDialog)"
             >
             <v-icon left>mdi-pencil</v-icon>編集
         </v-btn>
@@ -144,7 +147,7 @@ const eventParams = "eventParams"
 
                 <!-- 共演者一覧タブ -->
                 <v-window-item value="2">
-                    <collaboratorsWindow />
+                    <collaboratorsWindow :collaborators="stores.collaborator.all"/>
                 </v-window-item>
                 </v-window>
     </v-card>
@@ -152,7 +155,7 @@ const eventParams = "eventParams"
     </div>
 </v-card>
 
-<v-dialog v-model="dialogStore.dialogs[editEventDialog].show">
+<v-dialog v-model="stores.dialog.all[editEventDialog].show">
     <Dialog :dialog="editEventDialog" :store="stores.event.details" :params-name="eventParams"/>
 </v-dialog>
 <!--

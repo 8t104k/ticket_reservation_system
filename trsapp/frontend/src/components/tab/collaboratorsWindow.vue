@@ -1,12 +1,19 @@
 <script setup>
+import { ref } from 'vue';
 import { useFormatters } from '../../composables/useFormatters';
+import { useCollaboratorStore } from '../../stores/collaborator';
+
 const format = useFormatters();
+const collaboratorStore = useCollaboratorStore();
+const props = defineProps(["collaborators"])
+const search = ref('')
+
 </script>
 <template>
 <v-card flat>
     <v-card-title>
         <v-text-field
-        v-model="collaboratorSearch"
+        v-model="search"
         append-icon="mdi-magnify"
         label="検索"
         single-line
@@ -20,7 +27,7 @@ const format = useFormatters();
     </v-card-title>
 
     <!-- 共演者データのローディング/エラー表示 -->
-    <div v-if="loadingCollaborators" class="text-center pa-4">
+    <div v-if="collaboratorStore.loading" class="text-center pa-4">
         <v-progress-circular indeterminate color="primary"></v-progress-circular>
         <div class="mt-2">共演者データを読み込み中...</div>
     </div>
@@ -32,23 +39,26 @@ const format = useFormatters();
 
     <v-list v-else two-line>
         <v-list-item
-        v-for="(person, index) in filteredCollaborators"
+        v-for="(person, index) in collaboratorStore.all"
         :key="index"
-        >
-        <v-list-item-avatar>
-            <v-avatar color="primary">
-            <span class="white--text">{{ person.name ? person.name.charAt(0) : '?' }}</span>
-            </v-avatar>
-        </v-list-item-avatar>
-        <v-list-item-content>
-            <v-list-item-title>{{ person.name }}</v-list-item-title>
-            <v-list-item-subtitle>{{ person.role || '役割なし' }}</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-            <v-btn icon>
-            <v-icon color="grey lighten-1">mdi-information</v-icon>
-            </v-btn>
-        </v-list-item-action>
+            >
+            <template v-slot:prepend>
+                <v-avatar icon="mdi-penguin"></v-avatar>
+            </template>
+            <div class="d-flex align-center justify-space-between">
+                <v-row no-gutters class="ma-2">
+                    <v-col cols="12" sm="5">
+                        <v-list-title>{{ person.display_name }}</v-list-title>
+                    </v-col>
+                    <v-col>
+                        <v-list-item-subtitle>{{ person.role || '役割なし' }}</v-list-item-subtitle>
+                    </v-col>
+                </v-row>
+                <v-list-item-action>
+                    <v-btn color="error" size="small">削除</v-btn>
+                </v-list-item-action>
+            </div>
+            <v-divider></v-divider>
         </v-list-item>
     </v-list>
 </v-card>
