@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_19_122211) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_21_075211) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -91,13 +91,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_19_122211) do
     t.bigint "event_id", null: false
     t.string "reservation_name"
     t.decimal "price"
-    t.string "status"
     t.jsonb "customer_info"
     t.datetime "reserved_at"
-    t.string "token"
-    t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "collaborator_id"
+    t.integer "status"
+    t.index ["collaborator_id"], name: "index_reservations_on_collaborator_id"
     t.index ["event_id"], name: "index_reservations_on_event_id"
   end
 
@@ -105,5 +105,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_19_122211) do
   add_foreign_key "collaborators", "profiles"
   add_foreign_key "profiles", "auth.users", name: "profiles_user_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "profiles_v1", "auth.users", column: "id", name: "profiels_id_fkey", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "reservations", "collaborators"
   add_foreign_key "reservations", "events"
 end
