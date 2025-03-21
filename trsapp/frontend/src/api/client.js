@@ -38,8 +38,8 @@ export const ENDPOINTS = {
   RESERVATIONS: {
     BASE: (token) => `/events/${token}/reservations`,
   },
-  USERS: {
-    DETAIL: (token) => `/users/${username}`
+  COLLABORATORS: {
+    BASE: (token) => `/events/${token}/collaborators`,
   },
 }
   
