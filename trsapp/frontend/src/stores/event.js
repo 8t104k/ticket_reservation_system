@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
-import router from '../router';
-import { apiClient, ENDPOINTS } from '../api/client';
-import { useApi } from './api';
-import { supabase } from '../lib/supabase';
+import { ENDPOINTS } from '../api/client';
+import { apiService } from './api';
 
 export const useEventStore = defineStore('event',{
     state: () => ({
@@ -10,30 +8,21 @@ export const useEventStore = defineStore('event',{
         details: null
     }),
     actions: {
-        async getMyEvents(){
-            const callApi = (authToken) => apiClient(authToken).get(ENDPOINTS.EVENTS.BASE)
-            try{
-                return await useApi(callApi,{store: this, field: "all"})
-            }catch(err){ throw err }
-        },
-        async getEventDetails(eventToken){
-            const callApi = (authToken) => apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
-            try{
-                return await useApi(callApi,{store: this, field: "details"})
-            }catch(err){ throw err }
-        },
-        async createEvent(eventParams){
-            const callApi = (authToken) => apiClient(authToken).post(ENDPOINTS.EVENTS.BASE,eventParams)
-            try{
-                return await useApi(callApi,{store: this, field: "details"})
-            }catch(err){ throw err }
-        },
-        async updateEvent(eventToken,eventParams){
-            const callApi = (authToken) => apiClient(authToken).patch(ENDPOINTS.EVENTS.UPDATE(eventToken),eventParams)
-            try{
-                return await useApi(callApi,{store: this, field: "details"})
-            }catch(err){ throw err }
-        }
+        async getMyEvents() {
+            return apiService.call(ENDPOINTS.EVENTS.BASE, 'get', null, this, 'all');
+          },
+          
+          async getEventDetails(eventToken) {
+            return apiService.call(ENDPOINTS.EVENTS.DETAIL(eventToken), 'get', null, this, 'details');
+          },
+          
+          async createEvent(eventParams) {
+            return apiService.call(ENDPOINTS.EVENTS.BASE, 'post', eventParams, this, 'details');
+          },
+          
+          async updateEvent(eventToken, eventParams) {
+            return apiService.call(ENDPOINTS.EVENTS.UPDATE(eventToken), 'patch', eventParams, this, 'details');
+          }
     }
 
 })
