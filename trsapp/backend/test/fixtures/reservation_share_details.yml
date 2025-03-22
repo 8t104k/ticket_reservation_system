@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  reservation_shares: one
+  token: MyString
+  font_info: 
+  color_info: 
+  background_img: MyString
+
+two:
+  reservation_shares: two
+  token: MyString
+  font_info: 
+  color_info: 
+  background_img: MyString

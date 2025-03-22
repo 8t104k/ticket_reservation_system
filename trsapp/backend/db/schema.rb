@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_21_075211) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_22_155120) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -87,6 +87,32 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_21_075211) do
     t.unique_constraint ["username"], name: "users_username_key"
   end
 
+  create_table "reservation_share_details", force: :cascade do |t|
+    t.bigint "reservation_shares_id", null: false
+    t.string "token"
+    t.jsonb "font_info", default: {"size"=>"16px", "family"=>"Roboto", "weight"=>400}
+    t.jsonb "color_info", default: {"text"=>"#303030", "primary"=>"#FF9800", "secondary"=>"#FFCC80", "background"=>"#F5F5F5"}
+    t.string "background_img"
+    t.jsonb "extracted_colors"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reservation_shares_id"], name: "index_reservation_share_details_on_reservation_shares_id"
+    t.index ["token"], name: "index_reservation_share_details_on_token", unique: true
+  end
+
+  create_table "reservation_shares", force: :cascade do |t|
+    t.bigint "event_id", null: false
+    t.bigint "collaborator_id", null: false
+    t.string "token"
+    t.datetime "expires_at"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collaborator_id"], name: "index_reservation_shares_on_collaborator_id"
+    t.index ["event_id"], name: "index_reservation_shares_on_event_id"
+    t.index ["token"], name: "index_reservation_shares_on_token", unique: true
+  end
+
   create_table "reservations", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.string "reservation_name"
@@ -104,7 +130,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_21_075211) do
   add_foreign_key "collaborators", "events"
   add_foreign_key "collaborators", "profiles"
   add_foreign_key "profiles", "auth.users", name: "profiles_user_id_fkey", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "profiles_v1", "auth.users", column: "id", name: "profiels_id_fkey", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "reservation_share_details", "reservation_shares", column: "reservation_shares_id"
+  add_foreign_key "reservation_shares", "collaborators"
+  add_foreign_key "reservation_shares", "events"
   add_foreign_key "reservations", "collaborators"
   add_foreign_key "reservations", "events"
 end
