@@ -44,10 +44,10 @@ export const useDialogStore = defineStore('dialog',{
     actions: {
         showDialog(key){
             console.log(key)
-            this.dialogs[key].show = true;
+            this.all[key].show = true;
         },
         clearDialog(key){
-            this.dialogs[key].show = false;
+            this.all[key].show = false;
         }
     }
 }

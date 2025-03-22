@@ -1,74 +1,38 @@
 import { defineStore } from 'pinia'
 import router from '../router';
 import { apiClient, ENDPOINTS } from '../api/client';
+import { useApi } from './api';
 import { supabase } from '../lib/supabase';
 
 export const useEventStore = defineStore('event',{
     state: () => ({
-        myEvents: null,
+        all: null,
         details: null
     }),
     actions: {
         async getMyEvents(){
+            const callApi = (authToken) => apiClient(authToken).get(ENDPOINTS.EVENTS.BASE)
             try{
-                //認証情報取得
-                const {data} = await supabase.auth.getSession()
-                const authToken = data.session.access_token
-                //イベントデータを取得
-                const response = await apiClient(authToken).get(ENDPOINTS.EVENTS.BASE)
-                //ストアに保存
-                this.myEvents = response.data
-            } catch(err){
-                console.log('参加イベント取得エラー')
-                throw err
-            };            
+                return await useApi(callApi,{store: this, field: "all"})
+            }catch(err){ throw err }
         },
-
         async getEventDetails(eventToken){
+            const callApi = (authToken) => apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
             try{
-                //認証情報取得
-                const {data} = await supabase.auth.getSession()
-                const authToken = data.session.access_token
-                //イベントデータを取得
-                const response = await apiClient(authToken).get(ENDPOINTS.EVENTS.DETAIL(eventToken))
-                //ストアに保存
-                this.details = response.data
-            } catch(err){
-                console.log('getEventDetailsエラー')
-                throw err
-            };
+                return await useApi(callApi,{store: this, field: "details"})
+            }catch(err){ throw err }
         },
         async createEvent(eventParams){
+            const callApi = (authToken) => apiClient(authToken).post(ENDPOINTS.EVENTS.BASE,eventParams)
             try{
-                console.log("create start")
-                //認証情報取得
-                const {data} = await supabase.auth.getSession()
-                const authToken = data.session.access_token
-                //イベントデータを作成
-                const response = await apiClient(authToken).post(ENDPOINTS.EVENTS.BASE,eventParams)
-                //ストアに保存
-                this.details = response.data
-                return this.details
-            } catch(err){
-                console.log('createEventエラー')
-                throw err
-            };
+                return await useApi(callApi,{store: this, field: "details"})
+            }catch(err){ throw err }
         },
         async updateEvent(eventToken,eventParams){
+            const callApi = (authToken) => apiClient(authToken).patch(ENDPOINTS.EVENTS.UPDATE(eventToken),eventParams)
             try{
-                console.log("update start")
-                //認証情報取得
-                const {data} = await supabase.auth.getSession()
-                const authToken = data.session.access_token
-                //イベントデータを作成
-                const response = await apiClient(authToken).patch(ENDPOINTS.EVENTS.UPDATE(eventToken),eventParams)
-                //ストアに保存
-                this.details = response.data
-                return this.details
-            } catch(err){
-                console.log('getEventDetailsエラー')
-                throw err
-            };
+                return await useApi(callApi,{store: this, field: "details"})
+            }catch(err){ throw err }
         }
     }
 

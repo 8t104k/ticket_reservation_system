@@ -11,12 +11,8 @@ export const useCollaboratorStore = defineStore('collaborator',{
     }),
     actions: {
         async getCollaborators(eventToken){
-            await useApi(
-                (authToken,params) => apiClient(authToken).get(ENDPOINTS.COLLABORATORS.BASE(params.eventToken)),
-                this,
-                "all",
-                {eventToken}
-            )
+            const callApi = (authToken) => apiClient(authToken).get(ENDPOINTS.COLLABORATORS.BASE(eventToken))
+            await useApi(callApi,{store: this, field: "all"})
         },
     }
 

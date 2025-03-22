@@ -9,6 +9,7 @@ import Dialog from './dialog/Dialog.vue';
 const format = useFormatters();
 const eventStore = useEventStore();
 const dialogStore = useDialogStore();
+const uiStore = useUiStore();
 const loading = ref(true);
 
 //ダイアログ
@@ -21,7 +22,7 @@ onMounted(async() => {
     try {
         await eventStore.getMyEvents();
     } catch(error){
-        ui.showMessage('イベント情報の取得に失敗しました😣','error')
+      uiStore.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
         loading.value = false;
     }
@@ -74,7 +75,7 @@ async function toEventDetail(eventToken){
       <!--イベント表示カード-->
       <v-list class="mb-4 px-2">
           <v-list-item 
-          v-for="(event, i) in eventStore.myEvents"
+          v-for="(event, i) in eventStore.all"
           :key="i"
           hover
           class="my-2"
