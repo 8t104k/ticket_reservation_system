@@ -17,12 +17,14 @@ Rails.application.routes.draw do
           
         end
       end
-
       resources :events, param: :token do
-        resources :reservations, param: :token
-        resources :collaborators
-        resources :reservation_shares, param: :token
+        resources :reservations, param: :token, shallow: true
+        resources :collaborators, shallow: true
+        resources :reservation_shares, param: :token, shallow: true do
+          resource :details, param: :token, only: [:show, :update], controller: 'reservation_share_details', shallow: true
+        end
       end
+      get "invite/:detail_token", to: "reservation_share_details#show"
     end
   end
   

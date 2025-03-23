@@ -1,5 +1,5 @@
 class Api::V1::ReservationSharesController < ApplicationController
-  before_action :set_event
+  before_action :set_event, only: %i[create index]
 
   def create
     ReservationShare.transaction do
@@ -20,6 +20,9 @@ class Api::V1::ReservationSharesController < ApplicationController
     @reservation_share = @event.reservation_share
     render json: @reservation_share
   end
+
+
+  
 
   private
   def set_event
