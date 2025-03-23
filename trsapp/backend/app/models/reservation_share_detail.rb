@@ -5,7 +5,7 @@ class ReservationShareDetail < ApplicationRecord
   belongs_to :reservation_share
   
   def as_json(_options = {})
-    json = super(only: [:id, :token, :font_info, :color_palet, :background_img])
+    json = super(only: [:id, :token, :font_info, :color_info, :background_img, :extracted_colors])
     add_event_attributes(json)
     json
   end

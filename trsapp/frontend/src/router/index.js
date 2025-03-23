@@ -3,12 +3,13 @@ import { supabase } from '../lib/supabase'
 import EventDetailView from '../components/EventDetailView.vue'
 import MyEventListsView from '../components/MyEventListsView.vue'
 import LoginPage from '../components/UserLoginView.vue'
+import ReservationShareView from '../components/ReservationShareView.vue'
 
 import UserRegister from '../components/UserRegisterView.vue'
 import MailConfirm from '../components/MailConfirm.vue'
 
 // 認証が不要なパスのリスト
-const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirmation']
+const publicPaths = ['/login', '/signup', '/forgot-password', '/about','/confirmation',]
 
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
     meta: {transition: 'r-slide'},
     props: true
   },
+  {
+    path: '/invite/:detail_token',
+    name: 'Invitation',
+    component: ReservationShareView
+  }
 ]
 
 const router = createRouter({
