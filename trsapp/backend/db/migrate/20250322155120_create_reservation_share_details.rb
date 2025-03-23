@@ -1,7 +1,7 @@
 class CreateReservationShareDetails < ActiveRecord::Migration[7.1]
   def change
     create_table :reservation_share_details do |t|
-      t.references :reservation_shares, null: false, foreign_key: true
+      t.references :reservation_share, null: false, foreign_key: true
       t.string :token
       t.jsonb :font_info, default: {
         family: 'Roboto',

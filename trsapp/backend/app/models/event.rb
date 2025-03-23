@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   has_many :reservations, primary_key: :id, foreign_key: :event_id
   has_many :collaborators
   has_many :profiles, through: :collaborators
+  has_many :reservation_shares
 
   enum status: {
     draft: 10,

@@ -1,3 +1,4 @@
 class ReservationShareDetail < ApplicationRecord
-  belongs_to :reservation_shares
+  include Generatetoken
+  belongs_to :reservation_share
 end
