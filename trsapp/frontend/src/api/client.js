@@ -46,6 +46,9 @@ export const ENDPOINTS = {
   COLLABORATORS: {
     BASE: (token) => `/events/${token}/collaborators`,
   },
+  RESERVATIONSHARES: {
+    BASE: (token) => `/events/${token}/reservation_share`,
+  },
   INVITATION: {
     BASE: (details_token) => `/invite/${details_token}`
   }

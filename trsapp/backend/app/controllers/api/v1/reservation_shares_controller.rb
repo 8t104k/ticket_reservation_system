@@ -29,7 +29,11 @@ class Api::V1::ReservationSharesController < ApplicationController
 
   def show
     @reservation_share = @event.reservation_share
-    render json: @reservation_share
+    if @reservation_share
+      render json: @reservation_share
+    else
+      render json: nil
+    end
   end
 
   private

@@ -1,10 +1,11 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive,computed } from 'vue';
 import { useFormatters } from '../../composables/useFormatters';
-import { params } from '../../composables/useParams';
 import { useDialogStore } from '../../stores/uiSetting';
 import { useEventStore } from '../../stores/event';
 import { useReservationStore } from '../../stores/reservations';
+import { useReservationShareStore } from '../../stores/reservationShares';
+import { useUiStore } from '../../stores/uiSetting';
 import Dialog from '../dialog/Dialog.vue';
 
 
@@ -12,32 +13,52 @@ const stores = {
     event: useEventStore(),
     reservation: useReservationStore(),
     dialog: useDialogStore(),
+    reservationShare: useReservationShareStore(),
+    ui: useUiStore(),
 }
 const format = useFormatters();
 const props = defineProps(['reservations']);
 const newReserve = "newReserve"
-const editReserve = "editReserve"
 const filters = reactive({
     sortBy: "",
     sameDay: "",
 })
 
+const copyShareUrlToClipboard = () => {
+    if (stores.reservationShare.details?.token) {
+        navigator.clipboard.writeText(stores.reservationShare?.details.token);
+        stores.ui.showMessage("Copy☀️","success")
+    }
+}
+
 const search = ref('')
 
-const headers = Object.entries(params.reservationParams).map(([key, value]) => {
-  return {
-    key: key,
-    title: value.label,
-    align: 'start',
-    sortable: true
-  }
-})
+const headers = [
+    {title: "予約名", key: "reservation_name", value: "reservation_name", align: "start"},
+    {title: "価格", key: "price", value: "price", align: "start"},
+]
 
-function getReservations(){
-
-}
 </script>
 <template>
+<!--予約招待-->
+<v-row v-if="stores.reservationShare.details?.token" no-gutters class="align-center my-2" >
+    <v-col class="text-body-2" cols="3">
+        <p class="align-center">予約受付URL</p>
+    </v-col>
+    <v-col>
+        <v-text-field
+            density="compact"
+            variant="outlined"
+            hide-details
+            single-line
+            append-icon="mdi-content-copy"
+            @click:append="copyShareUrlToClipboard"
+        >{{ stores.reservationShare.details?.token }}</v-text-field>
+    </v-col>
+</v-row>
+<div v-else class="ma-2">
+    <v-btn>予約受付用のURLを発行する</v-btn>
+</div>
 <v-card flat>
     <v-card-title>
         <!--検索まわり-->
@@ -109,9 +130,12 @@ function getReservations(){
         }"
         @click:row="openReservationDetail"
         class="elevation-1"
+        density="compact"
+        hover
         >
-        <template v-slot:item.reserved_at="{ item }">
-            {{ format.formatDate(item.reserved_at) }}
+        <!-- カスタムセルテンプレート -->
+        <template v-slot:item.price="{ item }">
+            ¥ {{ Math.floor(item.price).toLocaleString() }}
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small class="mr-2" @click.stop="editReservation(item)">

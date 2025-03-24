@@ -6,6 +6,7 @@ import { useEventStore } from '../stores/event';
 import { useReservationStore } from '../stores/reservations';
 import { useCollaboratorStore } from '../stores/collaborator';
 import { useUiStore, useDialogStore } from '../stores/uiSetting';
+import { useReservationShareStore } from '../stores/reservationShares';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
@@ -18,7 +19,8 @@ onMounted(async() => {
     try {
         await stores.event.getEventDetails(route.params.token);
         await stores.reservation.getReservations(route.params.token);
-        await stores.collaborator.getCollaborators(route.params.token)
+        await stores.collaborator.getCollaborators(route.params.token);
+        await stores.reservationShare.getReservationShare(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
@@ -31,6 +33,7 @@ const stores = {
     reservation: useReservationStore(),
     dialog: useDialogStore(),
     collaborator: useCollaboratorStore(),
+    reservationShare: useReservationShareStore(),
 }
 const format = useFormatters();
 const ui = useUiStore();
@@ -138,6 +141,7 @@ const eventParams = "eventParams"
             v-model="activeTab"
             @update:model-value="scrollToPosition"
             align-tabs="start"
+            color="primary"
             >
                 <v-tab value="1">
                     <v-icon>mdi-ticket</v-icon>
