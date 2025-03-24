@@ -6,6 +6,7 @@ import { useEventStore } from '../../stores/event';
 import { useReservationStore } from '../../stores/reservations';
 import { useReservationShareStore } from '../../stores/reservationShares';
 import { useUiStore } from '../../stores/uiSetting';
+import { useRoute } from 'vue-router'
 import Dialog from '../dialog/Dialog.vue';
 
 
@@ -18,6 +19,7 @@ const stores = {
 }
 const format = useFormatters();
 const props = defineProps(['reservations']);
+const route = useRoute()
 const newReserve = "newReserve"
 const filters = reactive({
     sortBy: "",
@@ -29,6 +31,10 @@ const copyShareUrlToClipboard = () => {
         navigator.clipboard.writeText(stores.reservationShare?.details.token);
         stores.ui.showMessage("Copy☀️","success")
     }
+}
+
+const createShareUrl = () => {
+    stores.reservationShare.createReservationShare(route.params.token)
 }
 
 const search = ref('')
@@ -57,7 +63,10 @@ const headers = [
     </v-col>
 </v-row>
 <div v-else class="ma-2">
-    <v-btn>予約受付用のURLを発行する</v-btn>
+    <v-btn
+        @click="createShareUrl"
+        color="secondary"
+    >予約受付用のURLを発行する</v-btn>
 </div>
 <v-card flat>
     <v-card-title>
