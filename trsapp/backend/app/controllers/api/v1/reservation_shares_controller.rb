@@ -1,5 +1,5 @@
 class Api::V1::ReservationSharesController < ApplicationController
-  before_action :set_event, only: %i[create index]
+  before_action :set_event, only: %i[create show]
 
   def create
     # 発行済みチェック
@@ -27,9 +27,9 @@ class Api::V1::ReservationSharesController < ApplicationController
     end
   end
 
-  def index
-    @reservation_shares = @event.reservation_shares
-    render json: @reservation_shares
+  def show
+    @reservation_share = @event.reservation_share
+    render json: @reservation_share
   end
 
   private

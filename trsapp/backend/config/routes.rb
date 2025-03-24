@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :events, param: :token do
         resources :reservations, param: :token, shallow: true
         resources :collaborators, shallow: true
-        resources :reservation_shares, param: :token do
+        resource :reservation_share, param: :token do
           resources :details, param: :token, controller: 'reservation_share_details'
         end
       end
