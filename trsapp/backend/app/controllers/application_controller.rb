@@ -6,9 +6,9 @@ class ApplicationController < ActionController::API
 
   def authenticate_supabase_token
     
+
     header = request.headers['Authorization']&.split(' ')&.last
     raise StandardError, '認証ヘッダーがありません' if header.nil?
-
     #retries = 0
     #max_retries = 3
 

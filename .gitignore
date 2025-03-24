@@ -69,3 +69,6 @@ yarn-debug.log*
 /storage/*
 !/storage/.keep
 /public/uploads
+
+package-lock.json
+package.json

@@ -4,7 +4,7 @@ class ReservationShare < ApplicationRecord
 
   belongs_to :event
   belongs_to :collaborator
-  has_many :reservation_share_detail, dependent: :destroy
+  has_many :reservation_share_details, dependent: :destroy
   enum status: {
     draft: "draft",
     open: "open",
