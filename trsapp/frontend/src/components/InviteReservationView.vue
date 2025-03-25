@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { apiService } from '../stores/api';
 import { ENDPOINTS } from '../api/client';
 import { useRoute } from 'vue-router'
+import { supabase } from '../lib/supabase';
 
 const route = useRoute();
 const themeData = ref(null);
@@ -11,15 +12,25 @@ const themeData = ref(null);
 const fetchData = async () => {
     try{
         themeData.value = await apiService.call(ENDPOINTS.INVITATION.BASE(route.params.detail_token));
-        console.log("読み込み完了",themeData.value)
+        return themeData.value;
     }catch(error){
         console.log(error)
     }finally{
     }
 };
+
+
 // マウント時に実行
 fetchData();
-
+const getBgUrl = () => {
+    const backgroundPath = themeData.value?.background_img
+    if(!backgroundPath){
+        return "";
+    }
+    const { data } = supabase.storage.from('event-backgrounds').getPublicUrl(backgroundPath);
+    return data.publicUrl
+}
+console.log(getBgUrl())
 const cssVars = computed(() => {
     if (!themeData.value) return {}
     
@@ -31,16 +42,15 @@ const cssVars = computed(() => {
         '--font-family': themeData.value.font_info?.family || 'Roboto',
         '--font-size': themeData.value.font_info?.size || '16px',
         '--font-weight': themeData.value.font_info?.weight || 400,
-        '--bg-img': `url('${themeData.value.background_img}')`
+        '--bg-img': `url('${getBgUrl()}')`
     }
 })
-
 
 
 </script>
 <template>
 <div  v-if="themeData">
-    <div class="contents" :style="cssVars">
+    <div class="contents" :style="cssVars" transition="slide-y-reverse-transition">
         <h1>{{ themeData.event_name }}</h1>
         <p>{{ themeData.event_date }}</p>
         <p>{{ themeData }}</p>
@@ -58,6 +68,11 @@ const cssVars = computed(() => {
     background-image: var(--bg-img);
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center center;
+    padding: 2rem 0;
+    margin: 0 calc(50% - 50vw);
+    width: 100vw;
+    height: 100vw;
 }
 h1 {
     color: var(--primary-color);

@@ -8,13 +8,14 @@ import { useUiStore } from './stores/uiSetting';
 
 const route = useRoute();
 const transitionType = computed(() => route.meta.transition || 'slide')
+const showHeader = computed(() => route.meta.showHeader !== false)
 
 </script>
 
 <template>
   <v-app>
     <!-- ヘッダー -->
-    <v-app-bar app color="primary" dark>
+    <v-app-bar v-if="showHeader" app color="primary" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>イベント管理</v-toolbar-title>
       <v-btn icon>
@@ -28,7 +29,7 @@ const transitionType = computed(() => route.meta.transition || 'slide')
 
     <!-- メイン -->
     <v-main>
-      <v-container fluid>
+      <v-container fluid class="pa-0">
         <!--
           <Transition :name="transitionType" mode="out-in">
             <router-view />

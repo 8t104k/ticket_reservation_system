@@ -19,6 +19,7 @@ class Api::V1::ReservationSharesController < ApplicationController
       @reservation_share.save!
 
       @rs_detail = @reservation_share.reservation_share_details.new
+      @rs_detail = "test_bg.webp"
       @rs_detail.save!
       render json: @reservation_share, status: :created
     rescue => e
@@ -28,9 +29,9 @@ class Api::V1::ReservationSharesController < ApplicationController
   end
 
   def show
-    @reservation_share = @event.reservation_share
-    if @reservation_share
-      render json: @reservation_share
+    @reservation_share_detail = ReservationShareDetail.find_by(reservation_share_id: @event.reservation_share.id)
+    if @reservation_share_detail
+      render json: @reservation_share_detail
     else
       render json: nil
     end

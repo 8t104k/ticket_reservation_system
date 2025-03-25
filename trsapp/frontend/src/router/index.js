@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import EventDetailView from '../components/EventDetailView.vue'
 import MyEventListsView from '../components/MyEventListsView.vue'
 import LoginPage from '../components/UserLoginView.vue'
-import ReservationShareView from '../components/ReservationShareView.vue'
+import ReservationShareView from '../components/InviteReservationView.vue'
 
 import UserRegister from '../components/UserRegisterView.vue'
 import MailConfirm from '../components/MailConfirm.vue'
@@ -15,7 +15,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: LoginPage
+    component: LoginPage,
+    meta: {showHeader: true}
   },
   {
     path: '/login',
@@ -49,7 +50,8 @@ const routes = [
   {
     path: '/invite/:detail_token',
     name: 'Invitation',
-    component: ReservationShareView
+    component: ReservationShareView,
+    meta: {showHeader: false}
   }
 ]
 
