@@ -57,7 +57,7 @@ const eventParams = "eventParams"
 
 <template>
     <v-btn 
-    class="d-flex align-top"
+    class="d-flex align-top mt-4"
     prepend-icon="mdi-arrow-left-circle"
     color="primary"
     variant="text"
@@ -66,7 +66,7 @@ const eventParams = "eventParams"
     >一覧に戻る</v-btn>
 
 
-    <v-card class="my-4">
+    <v-card class="ma-4">
         <!--カードヘッダー-->
         <v-card-title class="d-flex justify-space-between">
             イベント情報
@@ -136,7 +136,7 @@ const eventParams = "eventParams"
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
     </div>
 
-    <div v-else-if="stores.event.details">
+    <div v-else-if="stores.event.details" class="ma-4">
         <v-tabs
             v-model="activeTab"
             @update:model-value="scrollToPosition"

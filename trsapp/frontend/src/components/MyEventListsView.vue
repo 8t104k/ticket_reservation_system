@@ -36,7 +36,7 @@ async function toEventDetail(eventToken){
 </script>
 
 <template>
-<v-row>
+<v-row class="ma-4">
   <v-col cols="12" md="2">
     <v-row>
         <v-col cols="6" md="12">
@@ -73,7 +73,7 @@ async function toEventDetail(eventToken){
       </div>
 
       <!--イベント表示カード-->
-      <v-list class="mb-4 px-2">
+      <v-list class="mb-4 px-2" >
           <v-list-item 
           v-for="(event, i) in eventStore.all"
           :key="i"
@@ -81,6 +81,9 @@ async function toEventDetail(eventToken){
           class="my-2"
           variant="outlined"
           rounded="xl"
+          color="secondary"
+          ripple
+          
           @click="toEventDetail(event.token)"
           >
           <div class="d-flex align-center justify-space-between">
