@@ -1,12 +1,17 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 import { apiService } from '../stores/api';
 import { ENDPOINTS } from '../api/client';
 import { useRoute } from 'vue-router'
 import { supabase } from '../lib/supabase';
+import { useGSAP } from '../composables/useGSAP';
 
 const route = useRoute();
 const themeData = ref(null);
+const animationReady = ref(false);
+
+// GSAPのロード状態を管理
+const { isGsapLoaded, loadGSAP } = useGSAP()
 
 // 非同期関数を定義
 const fetchData = async () => {
@@ -14,14 +19,64 @@ const fetchData = async () => {
         themeData.value = await apiService.call(ENDPOINTS.INVITATION.BASE(route.params.detail_token));
         return themeData.value;
     }catch(error){
-        console.log(error)
-    }finally{
+        console.error('データ取得エラー:', error);
+        return null;
     }
 };
 
+// GSAPアニメーションを設定する関数
+const setupAnimation = () => {
+    if (!window.gsap) {
+        console.error('GSAPがロードされていません');
+        return;
+    }
 
-// マウント時に実行
-fetchData();
+    const fadeInFromBottom = {
+      y: 100,
+      opacity: 0,
+      duration: 0.8,
+      scrollTrigger: {
+        trigger: ".event-container",
+        scrub: true,
+        //start: "top center",
+        end: "+=500",
+        toggleActions: "restart pause reverse pause",
+        markers: true
+      },
+    }
+    
+    gsap.registerPlugin("ScrollTrigger")
+    gsap.from(".event-container",{
+      y: -100,
+      opacity: 0,
+      duration: 3,
+      ease: 'power1.in',
+      scrollTrigger: {
+        trigger: ".event-container",
+        scrub: true,
+        start: "top 80%",
+        end: "top 20%",
+        toggleActions: "restart pause reverse pause",
+        markers: true
+      },
+    })
+    //gsap.from(".org-group",fadeInFromBottom)
+};
+
+onMounted(async() => {
+    await fetchData();
+    
+    try {
+        const gsap = await loadGSAP();
+        if (themeData.value && gsap) {
+            await nextTick();
+            setupAnimation();
+        }
+    } catch (error) {
+        console.error('GSAPロードエラー:', error);
+    }
+});
+
 const getBgUrl = () => {
     const backgroundPath = themeData.value?.background_img
     if(!backgroundPath){
@@ -30,7 +85,7 @@ const getBgUrl = () => {
     const { data } = supabase.storage.from('event-backgrounds').getPublicUrl(backgroundPath);
     return data.publicUrl
 }
-console.log(getBgUrl())
+
 const cssVars = computed(() => {
     if (!themeData.value) return {}
     
@@ -46,35 +101,184 @@ const cssVars = computed(() => {
     }
 })
 
+//テスト用
+const groups = [
+  {group_name: "バンドA",description: "東京出身です。"},
+  {group_name: "BBB",description: "北海道出身です。"},
+  {group_name: "Cトリオ",description: "関西出身です。"},
+]
 
+const desserts = [
+          {
+            name: 'Frozen Yogurt',
+            calories: 159,
+          },
+          {
+            name: 'Ice cream sandwich',
+            calories: 237,
+          },
+          {
+            name: 'Eclair',
+            calories: 262,
+          },
+          {
+            name: 'Cupcake',
+            calories: 305,
+          },
+          {
+            name: 'Gingerbread',
+            calories: 356,
+          }]
 </script>
+
 <template>
-<div  v-if="themeData">
-    <div class="contents" :style="cssVars" transition="slide-y-reverse-transition">
-        <h1>{{ themeData.event_name }}</h1>
-        <p>{{ themeData.event_date }}</p>
-        <p>{{ themeData }}</p>
-        <p>{{ themeData.background_img }}</p>
+  <div v-if="themeData">
+    <div class="contents" :style="cssVars">
+      <div class="space"></div>
+      <div class="container-wrapper">
+        <v-card class="event-container ma-4 pa-4">
+          <h1 class="title ma-4">{{ themeData.event_name }}</h1>
+          <div class="event-details d-flex justify-space-evenly align-center">
+            <h2 class="event-date">Date:<br>{{ themeData.event_date }}</h2>
+            <div class="event-time ma-2">
+              <h3>open: 18:00</h3>
+              <h3>start: 19:00</h3>
+              <h3>close: 22:00</h3>
+            </div>
+          </div>
+          <div class="other-groups">
+            <h2 class="artist ma-2">出演バンド</h2>
+            <div class="group-section ma-4" v-for="group in groups">
+              <v-row>
+                <v-col cols="12" class="text-h4">{{ group.group_name }}</v-col>
+                <v-col cols="12" sm="6" class="group-img pa-0"></v-col>
+                <v-col cols="12" sm="6" class="text-subtitle-1">{{ group.description }}</v-col>
+              </v-row>
+            </div>
+          </div>
+          <!-- タイムテーブル -->
+          <div>
+            <h2>タイムテーブル</h2>
+            <v-table>
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Calories</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in desserts"
+                  :key="item.name"
+                >
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.calories }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+          </div>
+          
+          <!-- チケット代 -->
+          <div>
+            <h2>チケット</h2>
+          </div>
+          <!-- チケットフォーム -->
+          <div>
+            <v-form>
+              <v-text-field>名前：</v-text-field>
+              <v-btn>apply</v-btn>
+            </v-form>
+          </div>
+        </v-card>
+      </div>
     </div>
-</div>
+  </div>
 </template>
+
 <style>
-.contents {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: var(--font-family);
-    font-size: var(--font-size);
-    font-weight: var(--font-weight);
-    background-image: var(--bg-img);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    padding: 2rem 0;
-    margin: 0 calc(50% - 50vw);
-    width: 100vw;
-    height: 100vw;
+
+
+
+.contents * {
+  color: var(--text-color);
+  font-family: var(--font-family);
 }
-h1 {
+
+.contents {
+  font-weight: var(--font-weight);
+  font-size: var(--font-size);
+  background-color: var(--bg-color);
+  background-image: var(--bg-img);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  padding: 0;
+  margin: 0 calc(50% - 50vw);
+  width: auto;
+  height: 600vh;
+  overflow: hidden;
+}
+
+.container-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.event-container {
+    max-width: 800px;
+    width: auto;
+    height: auto;
+    background-color: rgba(var(--bg-color-rgb, 255, 255, 255), 0.85);
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    text-align: center;
+}
+
+.space {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.5;
+}
+
+.title {
     color: var(--primary-color);
+    position: relative;
+    font-size: 2.5rem;
+}
+
+.event-date {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+}
+
+.event-details {
+  font-size: 1.2rem;
+}
+
+.org-group {
+  margin: auto;
+}
+
+.artist {
+  text-align: left;
+  
+}
+
+.group-section {
+  display: flex;
+}
+
+.group-description {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.group-img {
+  height: 20vw;
+  aspect-ratio: 1;
+  background-color: black;
 }
 </style>

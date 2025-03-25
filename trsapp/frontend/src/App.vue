@@ -30,16 +30,14 @@ const showHeader = computed(() => route.meta.showHeader !== false)
     <!-- メイン -->
     <v-main>
       <v-container fluid class="pa-0">
+        <router-view />
         <!--
-          <Transition :name="transitionType" mode="out-in">
-            <router-view />
-            </Transition>
-          -->
           <router-view v-slot="{ Component, route }">
             <Transition :name="transitionType">
               <component :is="Component" :key="route.fullPath" />
             </Transition>
           </router-view>
+          -->
       </v-container>
     </v-main>
 
