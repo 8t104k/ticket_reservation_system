@@ -1,28 +1,26 @@
-require 'zlib'
 class Api::V1::ProfilesController < ApplicationController
-  def show_http
-    uri = URI.parse("#{ENV["SUPABASE_URL"]}/rest/v1/profiles?username=eq.#{params[:username]}&select=*")
-    request = Net::HTTP::Get.new(uri)
-    request["apikey"] = ENV["SUPABASE_SERVICE_ROLE_KEY"]
-    request["Authorization"] = "Bearer #{ENV["SUPABASE_SERVICE_ROLE_KEY"]}"
-    request["Content-Type"] = "application/json; charset=UTF-8"
-    request["Accept"] = "application/json; charset=UTF-8"
-
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      http.request(request)
-    end
-    read_response = Zlib::GzipReader.new(StringIO.new(response.body)).read
-    render json: read_response
-
-  end
+  before_action :set_profile, only: [:show, :update]
   def show
-    # puts Profile.find_by_username(username: params[:username])
-    @profile = Profile.find_by_username(username: params[:username])
-    render json: @profile
+    unless @profile
+      return render json: { error: "ユーザーが見つかりません" }, status: :not_found
+    end
+    render json: @profile.as_details_json
+  end
+
+  def update
+    Profile.transaction do
+      @profile.update(profile_params)
+      render json: @profile.as_details_json
+    end
   end
   
-  def index
-    @profiles = Profile.all
-    render json: @profiles
+
+  private
+  def set_profile
+    @profile = Profile.find_by(username: params[:username])
+  end
+
+  def profile_params
+    params.require(:profile).permit(:email, :display_name, :avatar_url)
   end
 end
