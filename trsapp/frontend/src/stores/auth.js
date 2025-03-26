@@ -30,8 +30,13 @@ export const useAuthStore = defineStore('auth',{
                 }
                 console.log("サインアップ実行", request_data)
                 const {data, error} = await supabase.auth.signUp(request_data);
-                this.session = data.session
-
+                //this.session = data.session
+                this.session = {
+                  id: data.user.id,
+                  email: data.user.email,
+                  is_anonymous: data.user.is_anonymous,
+                  username: data.user.user_metadata.username
+                }
                 if(error) throw error;
                 //新規登録成功
                 //リダイレクト
@@ -53,7 +58,13 @@ export const useAuthStore = defineStore('auth',{
                 if(error) throw error;
                 
                 //セッションに追加
-                this.session = data.session;
+                //this.session = data.session;
+                this.session = {
+                  id: data.user.id,
+                  email: data.user.email,
+                  is_anonymous: data.user.is_anonymous,
+                  username: data.user.user_metadata.username
+                }
                 //イベントページに遷移
                 router.replace({name: "events"});
 
