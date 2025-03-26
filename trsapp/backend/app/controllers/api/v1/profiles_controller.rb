@@ -10,7 +10,7 @@ class Api::V1::ProfilesController < ApplicationController
   def update
     Profile.transaction do
       @profile.update(profile_params)
-      render json: @profile.as_details_json
+      render json: @profile .as_details_json
     end
   end
   
