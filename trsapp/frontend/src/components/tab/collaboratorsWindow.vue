@@ -40,7 +40,7 @@ onMounted(async() => {
           <div class="mt-2">共演者データを読み込み中...</div>
       </div>
 
-      <v-alert v-else-if="collaboratorsError" type="error" class="ma-4">
+      <v-alert v-else-if="collaborator.error" type="error" class="ma-4">
           読み込みに失敗しました！
           <v-btn text color="error" @click="collaborator.getCollaborators(route.params.token)">再読み込み</v-btn>
       </v-alert>
@@ -56,7 +56,7 @@ onMounted(async() => {
               <div class="d-flex align-center justify-space-between">
                   <v-row no-gutters class="ma-2">
                       <v-col cols="12" sm="5">
-                          <v-list-title>{{ person.display_name }}</v-list-title>
+                          <v-list-item-title>{{ person.display_name }}</v-list-item-title>
                       </v-col>
                       <v-col>
                           <v-list-item-subtitle>{{ person.role || '役割なし' }}</v-list-item-subtitle>

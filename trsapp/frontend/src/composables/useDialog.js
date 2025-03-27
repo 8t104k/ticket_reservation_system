@@ -3,8 +3,6 @@ import router from '../router';
 import { useRoute } from 'vue-router'
 import { useStores } from '../stores/index.js';
 
-const route = useRoute();
-
 export const useDialogActions = () => {
   const { event, reservation } = useStores();
   

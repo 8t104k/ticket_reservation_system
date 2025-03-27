@@ -44,6 +44,10 @@ const headers = [
     {title: "価格", key: "price", value: "price", align: "start"},
 ]
 
+const openReservationDetail = () => {
+  //作成中
+}
+
 </script>
 <template>
 <div v-if="loading">
@@ -119,12 +123,12 @@ const headers = [
       </v-card-title>
 
       <!-- 予約データのローディング/エラー表示 -->
-      <div v-if="loadingReservations" class="text-center pa-4">
+      <div v-if="reservation.loading" class="text-center pa-4">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
           <div class="mt-2">予約データを読み込み中...</div>
       </div>
 
-      <v-alert v-else-if="reservationsError" type="error" class="ma-4">
+      <v-alert v-else-if="reservation.error" type="error" class="ma-4">
           予約情報が読み込めませんでした！
           <v-btn text color="error" @click="reservation.getReservations(route.params.token)">再読み込み</v-btn>
       </v-alert>

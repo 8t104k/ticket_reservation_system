@@ -9,17 +9,14 @@ import Dialog from './dialog/Dialog.vue';
 import { useStores } from '../stores';
 
 //storeの設定
-const { event,reservationShare, ui, dialog } = useStores()
+const { event, ui, dialog } = useStores()
 
 //マウント時の処理
 onMounted(async() => {
-    loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
-    }finally{
-        loading.value = false;
     }
 })
 
@@ -67,7 +64,7 @@ const eventParams = "eventParams"
         </v-card-title>
     
         <!-- 全体 -->
-        <div v-if="loading">
+        <div v-if="event.loading">
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
         </div>
         <div v-else-if="event.details">
@@ -150,9 +147,6 @@ const eventParams = "eventParams"
           </keep-alive>
         </v-window-item>
       </v-window>
-    <div v-if="loading">
-        <v-progress-circular color="primary" indeterminate></v-progress-circular>
-    </div>
 
     <v-dialog v-model="dialog.all[editEventDialog].show">
         <Dialog :dialog="editEventDialog" :store="event.details" :params-name="eventParams"/>
