@@ -9,12 +9,17 @@ export const useProfileStore = defineStore('profile',{
       error: false
   }),
   actions: {
-      async getProfile(username) {
-          return apiService.call(ENDPOINTS.PROFILE.DETAIL(username), "get", null, this, "details");
-      },
-      async updateProfile(username, forms) {
-          return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
-      }
+    async getProfile(username) {
+      return apiService.call(ENDPOINTS.PROFILE.DETAIL(username), "get", null, this, "details");
+    },
+    async updateProfile(username, forms) {
+      return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
+    },
+    async passwordReset(username, forms) {
+      return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
+    },
+    async changeEmail(username, forms) {
+      return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
+    },
   }
-
 })

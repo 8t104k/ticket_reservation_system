@@ -26,7 +26,7 @@ export const apiClient = (token = null) => {
 
 //エンドポイント定義
 export const ENDPOINTS = {
-  PROFILE: {
+  EVENT: {
     BASE: '/events',
     DETAIL: (token) => `/events/${token}`,
     UPDATE: (token) => `/events/${token}`,
