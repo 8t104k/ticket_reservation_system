@@ -10,14 +10,16 @@ class Api::V1::ProfilesController < ApplicationController
   def update
     Profile.transaction do
       @profile.update(profile_params)
-      render json: @profile .as_details_json
+      render json: @profile.as_details_json
     end
   end
   
 
   private
   def set_profile
-    @profile = Profile.find_by(username: params[:username])
+    with_auth_context(@current_user.user_id) do
+      @profile = Profile.find_by(username: params[:username])
+    end
   end
 
   def profile_params
