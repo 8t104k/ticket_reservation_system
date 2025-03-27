@@ -2,25 +2,23 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import router from '../router';
 import { useFormatters } from '../composables/useFormatters';
-import { useEventStore } from '../stores/event';
-import { useReservationStore } from '../stores/reservations';
-import { useCollaboratorStore } from '../stores/collaborator';
-import { useUiStore, useDialogStore } from '../stores/uiSetting';
-import { useReservationShareStore } from '../stores/reservationShares';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
 import Dialog from './dialog/Dialog.vue';
+import { useStores } from '../stores';
 
+//storeの設定
+const { event, reservation, collaborator,reservationShare, ui, dialog } = useStores()
 
 //マウント時の処理
 onMounted(async() => {
     loading.value = true;
     try {
-        await stores.event.getEventDetails(route.params.token);
-        await stores.reservation.getReservations(route.params.token);
-        await stores.collaborator.getCollaborators(route.params.token);
-        await stores.reservationShare.getReservationShare(route.params.token)
+        await event.getEventDetails(route.params.token);
+        await reservation.getReservations(route.params.token);
+        await collaborator.getCollaborators(route.params.token);
+        await reservationShare.getReservationShare(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
@@ -28,15 +26,7 @@ onMounted(async() => {
     }
 })
 
-const stores = {
-    event: useEventStore(),
-    reservation: useReservationStore(),
-    dialog: useDialogStore(),
-    collaborator: useCollaboratorStore(),
-    reservationShare: useReservationShareStore(),
-}
 const format = useFormatters();
-const ui = useUiStore();
 const route = useRoute();
 const loading = ref(true);
 const backList = () => {router.push({name:'events'})}
@@ -73,7 +63,7 @@ const eventParams = "eventParams"
             <v-btn
                 color="primary"
                 small
-                @click="stores.dialog.showDialog(editEventDialog)"
+                @click="dialog.showDialog(editEventDialog)"
                 >
                 <v-icon left>mdi-pencil</v-icon>編集
             </v-btn>
@@ -83,19 +73,19 @@ const eventParams = "eventParams"
         <div v-if="loading">
             <v-progress-circular color="primary" indeterminate></v-progress-circular>
         </div>
-        <div v-else-if="stores.event.details">
+        <div v-else-if="event.details">
             <v-card-text>
                 <!--イベント情報-->
                 <v-row class="mb-4">
                     <v-col cols="12" class="d-flex justify-space-evenly align-center">
-                        <div class="text-h6 text-md-h4 font-weight-bold">{{ stores.event.details.event_name }}</div>
+                        <div class="text-h6 text-md-h4 font-weight-bold">{{ event.details.event_name }}</div>
                         <div>
                             <v-chip
-                            :color="format.getStatusColor(stores.event.details.status)"
+                            :color="format.getStatusColor(event.details.status)"
                             text-color="white"
                             small
                             >
-                                {{ format.getStatusText(stores.event.details.status) }}
+                                {{ format.getStatusText(event.details.status) }}
                             </v-chip>
                         </div>
                     </v-col>
@@ -104,7 +94,7 @@ const eventParams = "eventParams"
                         <div class="text-subtitle-1 font-weight-bold">開催日</div>
                         <div>
                             <v-icon small class="mr-1">mdi-calendar</v-icon>
-                            {{ stores.event.details.event_date }}
+                            {{ event.details.event_date }}
                         </div>
                     </v-col>
 
@@ -112,7 +102,7 @@ const eventParams = "eventParams"
                         <div class="text-subtitle-1 font-weight-bold">開始時刻</div>
                         <div>
                             <v-icon small class="mr-1">mdi-clock-time-five</v-icon>
-                            {{ stores.event.details.event_date }}
+                            {{ event.details.event_date }}
                         </div>
                     </v-col>
                     <v-col cols="6" md="2">
@@ -123,7 +113,7 @@ const eventParams = "eventParams"
                         <div class="text-subtitle-1 font-weight-bold">場所</div>
                         <div>
                             <v-icon small class="mr-1">mdi-map-marker</v-icon>
-                            {{ stores.event.details.location || '-' }}
+                            {{ event.details.location || '-' }}
                         </div>
                     </v-col>
                 </v-row>
@@ -136,7 +126,7 @@ const eventParams = "eventParams"
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
     </div>
 
-    <div v-else-if="stores.event.details" class="ma-4">
+    <div v-else-if="event.details" class="ma-4">
         <v-tabs
             v-model="activeTab"
             @update:model-value="scrollToPosition"
@@ -158,27 +148,27 @@ const eventParams = "eventParams"
             <!-- 予約一覧タブ -->
             <v-window-item value="1" eager>
                 <keep-alive>
-                    <reservationWindow :reservations="stores.reservation.all"/>
+                    <reservationWindow :reservations="reservation.all"/>
                 </keep-alive>
             </v-window-item>
     
             <!-- 共演者一覧タブ -->
             <v-window-item value="2" eager>
                 <keep-alive>
-                    <collaboratorsWindow :collaborators="stores.collaborator.all"/>                    
+                    <collaboratorsWindow :collaborators="collaborator.all"/>                    
                 </keep-alive>
             </v-window-item>
             </v-window>
 
     </div>
-    <v-card v-else-if="stores.event.details" class="my-4">
+    <v-card v-else-if="event.details" class="my-4">
         <!-- タブ切り替え -->
         <v-card-text>
         </v-card-text>
     </v-card>
 
-    <v-dialog v-model="stores.dialog.all[editEventDialog].show">
-        <Dialog :dialog="editEventDialog" :store="stores.event.details" :params-name="eventParams"/>
+    <v-dialog v-model="dialog.all[editEventDialog].show">
+        <Dialog :dialog="editEventDialog" :store="event.details" :params-name="eventParams"/>
     </v-dialog>
 <!--
 -->

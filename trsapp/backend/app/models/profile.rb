@@ -4,7 +4,7 @@ class Profile < ApplicationRecord
   has_many :events, through: :collaborators
 
   def as_details_json
-    attributes #.except("user_id")
+    attributes.except("user_id")
   end
 
   def attribute_names_for_serialization
