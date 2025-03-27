@@ -1,24 +1,25 @@
 <script setup>
 import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStores } from '../stores'
 import { useAuthStore } from '../stores/auth'
 import { useUiStore } from '../stores/uiSetting'
 import router from '../router'
-const route = useRoute()
-const ui = useUiStore()
 
+
+const {auth, ui} = useStores();
 const email = ref()
 const password = ref()
 const visible = ref(false)
 const loading = ref(false)
 const isLogin = ref(true)
 
-const authStore = useAuthStore();
+
 const handleSubmit = async()=> {
     loading.value = true
     try {
         //ログイン処理
-        await authStore.login(email.value,password.value)
+        await auth.login(email.value,password.value)
         console.log('login success')
         ui.showMessage('ログインしました！','success')
         await router.push({name: 'events'})
@@ -77,7 +78,7 @@ class="mx-auto pa-12 pb-8"
         color="primary"
         class="mb-8"
         size="large"
-        @click="authStore.logout()"
+        @click="auth.logout()"
         :loading="loading">
         ログアウト
     </v-btn>
