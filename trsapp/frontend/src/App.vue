@@ -3,12 +3,12 @@ import { computed } from 'vue';
 import GlobalSnackbar from './components/GlobalSnackbar.vue';
 import router from './router';
 import { useRoute } from 'vue-router'
-import { useEventStore } from './stores/event';
-import { useUiStore } from './stores/uiSetting';
+import { useStores } from './stores';
 
 const route = useRoute();
 const transitionType = computed(() => route.meta.transition || 'slide')
 const showHeader = computed(() => route.meta.showHeader !== false)
+const {event, ui} = useStores();
 
 </script>
 

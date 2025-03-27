@@ -2,8 +2,6 @@
 import { ref, computed, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStores } from '../stores'
-import { useAuthStore } from '../stores/auth'
-import { useUiStore } from '../stores/uiSetting'
 import router from '../router'
 
 

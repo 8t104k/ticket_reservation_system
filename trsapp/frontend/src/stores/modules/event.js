@@ -5,7 +5,8 @@ import { apiService } from '../api';
 export const useEventStore = defineStore('event',{
     state: () => ({
         all: null,
-        details: null
+        details: null,
+        loading: false
     }),
     actions: {
         async getMyEvents() {

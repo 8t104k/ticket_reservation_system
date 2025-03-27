@@ -9,15 +9,13 @@ import Dialog from './dialog/Dialog.vue';
 import { useStores } from '../stores';
 
 //storeの設定
-const { event, reservation, collaborator,reservationShare, ui, dialog } = useStores()
+const { event,reservationShare, ui, dialog } = useStores()
 
 //マウント時の処理
 onMounted(async() => {
     loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
-        await reservation.getReservations(route.params.token);
-        await collaborator.getCollaborators(route.params.token);
         await reservationShare.getReservationShare(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
@@ -122,50 +120,40 @@ const eventParams = "eventParams"
     </v-card>
     <v-divider></v-divider>
     <!--付随情報-->
+    <v-tabs
+        v-model="activeTab"
+        @update:model-value="scrollToPosition"
+        align-tabs="start"
+        color="primary"
+        >
+            <v-tab value="1">
+                <v-icon>mdi-ticket</v-icon>
+                <span>予約一覧</span>
+            </v-tab>
+            <v-tab value="2">
+                <v-icon>mdi-account-group</v-icon>
+                <span>共演者一覧</span>
+            </v-tab>
+    </v-tabs>
+    <!--タブウィンドウ-->
+    <v-window v-model="activeTab" :touch="false">
+        <!-- 予約一覧タブ -->
+        <v-window-item value="1" eager>
+            <keep-alive>
+              <reservationWindow />
+            </keep-alive>
+        </v-window-item>
+
+        <!-- 共演者一覧タブ -->
+        <v-window-item value="2" eager>
+          <keep-alive>
+            <collaboratorsWindow/>                    
+          </keep-alive>
+        </v-window-item>
+      </v-window>
     <div v-if="loading">
         <v-progress-circular color="primary" indeterminate></v-progress-circular>
     </div>
-
-    <div v-else-if="event.details" class="ma-4">
-        <v-tabs
-            v-model="activeTab"
-            @update:model-value="scrollToPosition"
-            align-tabs="start"
-            color="primary"
-            >
-                <v-tab value="1">
-                    <v-icon>mdi-ticket</v-icon>
-                    <span>予約一覧</span>
-                </v-tab>
-                <v-tab value="2">
-                    <v-icon>mdi-account-group</v-icon>
-                    <span>共演者一覧</span>
-                </v-tab>
-        </v-tabs>
-    
-        <!--タブウィンドウ-->
-        <v-window v-model="activeTab" :touch="false">
-            <!-- 予約一覧タブ -->
-            <v-window-item value="1" eager>
-                <keep-alive>
-                    <reservationWindow :reservations="reservation.all"/>
-                </keep-alive>
-            </v-window-item>
-    
-            <!-- 共演者一覧タブ -->
-            <v-window-item value="2" eager>
-                <keep-alive>
-                    <collaboratorsWindow :collaborators="collaborator.all"/>                    
-                </keep-alive>
-            </v-window-item>
-            </v-window>
-
-    </div>
-    <v-card v-else-if="event.details" class="my-4">
-        <!-- タブ切り替え -->
-        <v-card-text>
-        </v-card-text>
-    </v-card>
 
     <v-dialog v-model="dialog.all[editEventDialog].show">
         <Dialog :dialog="editEventDialog" :store="event.details" :params-name="eventParams"/>
