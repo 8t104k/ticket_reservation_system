@@ -5,7 +5,8 @@ import { apiService } from '../api';
 export const useReservationShareStore = defineStore('reservationShare',{
     state: () => ({
         details: null,
-        loading: false
+        loading: false,
+        error: false,
     }),
     actions: {
         async getReservationShare(eventToken){

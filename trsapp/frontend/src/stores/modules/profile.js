@@ -6,7 +6,7 @@ export const useProfileStore = defineStore('profile',{
   state: () => ({
       details: null,
       loading: true,
-      error: false
+      error: false,
   }),
   actions: {
     async getProfile(username) {

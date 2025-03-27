@@ -6,7 +6,8 @@ export const useEventStore = defineStore('event',{
     state: () => ({
         all: null,
         details: null,
-        loading: false
+        loading: false,
+        error: false,
     }),
     actions: {
         async getMyEvents() {

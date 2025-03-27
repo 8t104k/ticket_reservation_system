@@ -7,6 +7,7 @@ export const useCollaboratorStore = defineStore('collaborator',{
         all: null,
         details: null,
         loading: false,
+        error: false,
     }),
     actions: {
         async getCollaborators(eventToken){

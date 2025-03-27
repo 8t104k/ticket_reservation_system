@@ -55,9 +55,11 @@ export const apiService = {
       return response.data
   } catch (error) {
     console.log(error,"api callエラー")
+    if (store){store.$patch({ ["error"]: true})}
     throw error
   }finally{
     if (store){store.$patch({ ["loading"]: false})}
+    if (store){store.$patch({ ["error"]: false})}
   }
 }
 }

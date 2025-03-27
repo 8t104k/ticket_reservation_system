@@ -6,7 +6,8 @@ export const useReservationStore = defineStore('reservation',{
     state: () => ({
         all: null,
         details: null,
-        loading: false
+        loading: false,
+        error: false,
     }),
     actions: {
         async getReservations(eventToken){

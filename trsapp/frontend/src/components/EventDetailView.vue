@@ -16,7 +16,6 @@ onMounted(async() => {
     loading.value = true;
     try {
         await event.getEventDetails(route.params.token);
-        await reservationShare.getReservationShare(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{

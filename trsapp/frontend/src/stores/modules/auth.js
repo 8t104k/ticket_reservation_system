@@ -9,7 +9,8 @@ export const useAuthStore = defineStore('auth',{
     
     state:() =>({
         //
-        session: null
+        session: null,
+        error: false
     }),
     actions: {
 
