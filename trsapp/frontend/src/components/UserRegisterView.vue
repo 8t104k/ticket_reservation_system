@@ -1,11 +1,9 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
 import { useValidationRules } from '../composables/useValidationRules'
-import { useAuthStore } from '../stores/auth'
-const route = useRoute()
-const {emailRules,passwordRules,confirmPasswordRules,passwordRef} = useValidationRules()
+import { useAuthStore } from '../stores'
 
+const {emailRules,passwordRules,confirmPasswordRules,passwordRef} = useValidationRules()
 const email = ref('')
 const username = ref('')
 const confirmPassword = ref('')
