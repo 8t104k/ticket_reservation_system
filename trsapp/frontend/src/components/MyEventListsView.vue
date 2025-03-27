@@ -1,15 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useEventStore } from '../stores/event';
-import { useUiStore, useDialogStore } from '../stores/uiSetting';
+import { useStores } from '../stores';
 import { useFormatters } from '../composables/useFormatters';
 import router from '../router';
 import Dialog from './dialog/Dialog.vue';
 
+const {event, ui, dialog} = useStores();
 const format = useFormatters();
-const eventStore = useEventStore();
-const dialogStore = useDialogStore();
-const uiStore = useUiStore();
 const loading = ref(true);
 
 //ダイアログ
@@ -20,9 +17,9 @@ const eventParams = "eventParams"
 onMounted(async() => {
     loading.value = true;
     try {
-        await eventStore.getMyEvents();
+        await event.getMyEvents();
     } catch(error){
-      uiStore.showMessage('イベント情報の取得に失敗しました😣','error')
+      ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }finally{
         loading.value = false;
     }
@@ -30,7 +27,7 @@ onMounted(async() => {
 
 async function toEventDetail(eventToken){
   router.push({name: 'EventDetail', params: {token: eventToken}})
-  await eventStore.getEventDetails(eventToken);
+  await event.getEventDetails(eventToken);
 }
 
 </script>
@@ -66,7 +63,7 @@ async function toEventDetail(eventToken){
           prepend-icon="mdi-plus-thick"
           variant="tonal"
           color="primary"
-          @click="dialogStore.showDialog('newEvent')"
+          @click="dialog.showDialog('newEvent')"
           >
             イベント作成
           </v-btn>
@@ -75,7 +72,7 @@ async function toEventDetail(eventToken){
       <!--イベント表示カード-->
       <v-list class="mb-4 px-2" >
           <v-list-item 
-          v-for="(event, i) in eventStore.all"
+          v-for="(e, i) in event.all"
           :key="i"
           hover
           class="my-2"
@@ -84,22 +81,22 @@ async function toEventDetail(eventToken){
           color="secondary"
           ripple
           
-          @click="toEventDetail(event.token)"
+          @click="toEventDetail(e.token)"
           >
           <div class="d-flex align-center justify-space-between">
             <div class="ma-2 overflow-x-hidden">
-                <div class="d-flex align-center text-truncate font-weight-bold">{{ event.event_name }}</div>
-                <div class="d-flex align-center">{{ format.formatDate(event.event_date) }}</div>
+                <div class="d-flex align-center text-truncate font-weight-bold">{{ e.event_name }}</div>
+                <div class="d-flex align-center">{{ format.formatDate(e.event_date) }}</div>
             </div>
             <div class="ma-4">
                 <v-chip
-                    :color="format.getStatusColor(event.status)"
+                    :color="format.getStatusColor(e.status)"
                     size="small"
                     variant="elevated"
                     class="font-weight-bold"
                     
                 >
-                    {{ format.getStatusText(event.status) }}
+                    {{ format.getStatusText(e.status) }}
                 </v-chip>
           </div>
             </div>
@@ -120,7 +117,7 @@ async function toEventDetail(eventToken){
     <EventList v-if="childComponent.component=='list'" @toDashboard="changeComp"></EventList>
     <EventDetail v-else-if="childComponent.component=='detail'" @toDashboard="changeComp"></EventDetail>
   </Transition>-->
-  <v-dialog v-model="dialogStore.all[newEvent].show">
+  <v-dialog v-model="dialog.all[newEvent].show">
     <Dialog dialog=newEvent :params-name="eventParams"/>
   </v-dialog>
 </template>
