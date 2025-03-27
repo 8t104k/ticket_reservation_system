@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import GlobalSnackbar from './components/GlobalSnackbar.vue';
 import router from './router';
 import { useRoute } from 'vue-router'
@@ -11,8 +11,12 @@ const showHeader = computed(() => route.meta.showHeader !== false)
 const { auth } = useStores();
 
 const toMypage = () => {
-  router.push({name: "Mypage"},{params: auth.username})
+  router.push({name: "Mypage", params: {username: auth.session.username}})
 }
+
+onMounted(async() => {
+  if(!auth.session){ await auth.getSession() }
+})
 
 </script>
 

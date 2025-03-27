@@ -85,6 +85,21 @@ export const useAuthStore = defineStore('auth',{
                 useUiStore().showMessage("ログアウトに失敗しました","error")
                 throw error
             }
+        },
+        async getSession(){
+          try {
+            const {data, error} = await supabase.auth.getUser();
+            if(error) throw error;
+            this.session = {
+              id: data.user.id,
+              email: data.user.email,
+              is_anonymous: data.user.is_anonymous,
+              username: data.user.user_metadata.username
+            }
+          }catch(error){
+            console.log(error)
+            throw error
+          }
         }
     }
 });
