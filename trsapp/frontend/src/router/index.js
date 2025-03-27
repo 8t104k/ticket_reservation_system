@@ -4,6 +4,7 @@ import EventDetailView from '../components/EventDetailView.vue'
 import MyEventListsView from '../components/MyEventListsView.vue'
 import LoginPage from '../components/UserLoginView.vue'
 import ReservationShareView from '../components/InviteReservationView.vue'
+import UserProfile from '../components/UserProfile.vue'
 
 import UserRegister from '../components/UserRegisterView.vue'
 import MailConfirm from '../components/MailConfirm.vue'
@@ -52,6 +53,11 @@ const routes = [
     name: 'Invitation',
     component: ReservationShareView,
     meta: {showHeader: false}
+  },
+  {
+    path: '/mypage/:username',
+    name: 'Mypage',
+    component: UserProfile,
   }
 ]
 

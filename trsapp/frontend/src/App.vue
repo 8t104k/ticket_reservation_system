@@ -8,7 +8,11 @@ import { useStores } from './stores';
 const route = useRoute();
 const transitionType = computed(() => route.meta.transition || 'slide')
 const showHeader = computed(() => route.meta.showHeader !== false)
-const {event, ui} = useStores();
+const { auth } = useStores();
+
+const toMypage = () => {
+  router.push({name: "Mypage"},{params: auth.username})
+}
 
 </script>
 
@@ -18,7 +22,9 @@ const {event, ui} = useStores();
     <v-app-bar v-if="showHeader" app color="primary" dark>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>イベント管理</v-toolbar-title>
-      <v-btn icon>
+      <v-btn icon
+      @click="toMypage"
+      >
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <v-btn icon>

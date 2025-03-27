@@ -5,21 +5,22 @@ import { apiService } from '../api';
 export const useProfileStore = defineStore('profile',{
   state: () => ({
       details: null,
-      loading: false,
+      loading: true,
       error: false
   }),
   actions: {
     async getProfile(username) {
-      return apiService.call(ENDPOINTS.PROFILE.DETAIL(username), "get", null, this, "details");
+      console.log("getProfile")
+      return apiService.call(ENDPOINTS.PROFILE.BASE(username), "get", null, this, "details");
     },
     async updateProfile(username, forms) {
       return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
     },
     async passwordReset(username, forms) {
-      return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
+      //return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
     },
     async changeEmail(username, forms) {
-      return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
+      //return apiService.call(ENDPOINTS.PROFILE.UPDATE(username), "patch", forms, this, "details");
     },
   }
 })

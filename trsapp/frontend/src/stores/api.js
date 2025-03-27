@@ -38,6 +38,7 @@ export const apiService = {
   },
   //API呼び出し
   async call(endpoint,method = "get",params=null,store=null,field=null){
+    console.log(endpoint,method,params,store,field)
     if (store){store.$patch({ ["loading"]: true})}
     try {
       const authToken = await this.getAuthToken();
