@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_22_155120) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_28_012914) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -62,6 +62,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_22_155120) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_events_on_token", unique: true
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "group_name", null: false
+    t.bigint "owner_id"
+    t.string "token"
+    t.string "img_name"
+    t.uuid "img_object_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_name"], name: "index_groups_on_group_name"
+    t.index ["owner_id"], name: "index_groups_on_owner_id"
+    t.index ["token"], name: "index_groups_on_token", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -129,6 +142,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_22_155120) do
 
   add_foreign_key "collaborators", "events"
   add_foreign_key "collaborators", "profiles"
+  add_foreign_key "groups", "profiles", column: "owner_id"
   add_foreign_key "profiles", "auth.users", name: "profiles_user_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "reservation_share_details", "reservation_shares"
   add_foreign_key "reservation_shares", "collaborators"
