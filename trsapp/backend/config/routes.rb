@@ -14,7 +14,8 @@ Rails.application.routes.draw do
       resources :profiles, param: :username, only: %i[show update destroy]
       resources :events, param: :token do
         resources :reservations, param: :token, shallow: true
-        resources :collaborators, shallow: true
+        resources :collaborators
+        get "current_clbr", to: "collaborators#show_current_clbr"
         resource :reservation_share, param: :token do
           resources :details, param: :token, controller: 'reservation_share_details'
         end

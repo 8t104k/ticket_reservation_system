@@ -38,6 +38,7 @@ export const ENDPOINTS = {
   },
   COLLABORATORS: {
     BASE: (token) => `/events/${token}/collaborators`,
+    CURRENCLBR: (token) => `/events/${token}/current_clbr`,
   },
   RESERVATIONSHARES: {
     BASE: (token) => `/events/${token}/reservation_share`,

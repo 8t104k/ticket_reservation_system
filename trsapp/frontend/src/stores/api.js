@@ -37,9 +37,10 @@ export const apiService = {
     }
   },
   //API呼び出し
-  async call(endpoint,method = "get",params=null,store=null,field=null){
-    console.log(endpoint,method,params,store,field)
-    if (store){store.$patch({ ["loading"]: true})}
+  async call(endpoint,method = "get",params=null,store=null,fields=null){
+    if (store){
+      store.$patch({ loading: true, error: false})
+    }
     try {
       const authToken = await this.getAuthToken();
       const client = apiClient(authToken);
@@ -51,15 +52,24 @@ export const apiService = {
         delete: () => client.delete(endpoint)
       }
       const response = await apiMethods[method]();
-      if (store){store.$patch({ [field]: response.data})}
-      return response.data
-  } catch (error) {
-    console.log(error,"api callエラー")
-    if (store){store.$patch({ ["error"]: true})}
-    throw error
-  }finally{
-    if (store){store.$patch({ ["loading"]: false})}
-    if (store){store.$patch({ ["error"]: false})}
+
+      if (store && fields){
+        const fieldArray = Array.isArray(fields) ? fields : [fields];
+        const updates = {};
+
+        fieldArray.forEach(field => {
+          updates[field] = response.data;
+        });
+        store.$patch(updates)
+      };
+      return response.data;
+
+    } catch (error) {
+      console.log("api callエラー",error)
+      if (store){store.$patch({ error: true})}
+      throw error
+    }finally{
+      if (store){store.$patch({ loading: false})}
+    }
   }
-}
 }

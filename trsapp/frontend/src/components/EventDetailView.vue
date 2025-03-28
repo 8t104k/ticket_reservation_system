@@ -9,12 +9,13 @@ import Dialog from './dialog/Dialog.vue';
 import { useStores } from '../stores';
 
 //storeの設定
-const { event, ui, dialog } = useStores()
+const { event, ui, dialog, collaborator } = useStores()
 
 //マウント時の処理
 onMounted(async() => {
     try {
         await event.getEventDetails(route.params.token);
+        await collaborator.getCurrentClbr(route.params.token)
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }
