@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_28_012914) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_28_091237) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -50,7 +50,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_28_012914) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id"
+    t.bigint "group_id"
     t.index ["event_id"], name: "index_collaborators_on_event_id"
+    t.index ["group_id"], name: "index_collaborators_on_group_id"
     t.index ["profile_id"], name: "index_collaborators_on_profile_id"
   end
 
@@ -75,6 +77,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_28_012914) do
     t.index ["group_name"], name: "index_groups_on_group_name"
     t.index ["owner_id"], name: "index_groups_on_owner_id"
     t.index ["token"], name: "index_groups_on_token", unique: true
+  end
+
+  create_table "groups_profiles", force: :cascade do |t|
+    t.bigint "group_id", null: false
+    t.bigint "profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id", "profile_id"], name: "index_groups_profiles_on_group_id_and_profile_id", unique: true
+    t.index ["group_id"], name: "index_groups_profiles_on_group_id"
+    t.index ["profile_id"], name: "index_groups_profiles_on_profile_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -141,8 +153,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_28_012914) do
   end
 
   add_foreign_key "collaborators", "events"
+  add_foreign_key "collaborators", "groups"
   add_foreign_key "collaborators", "profiles"
   add_foreign_key "groups", "profiles", column: "owner_id"
+  add_foreign_key "groups_profiles", "groups"
+  add_foreign_key "groups_profiles", "profiles"
   add_foreign_key "profiles", "auth.users", name: "profiles_user_id_fkey", on_update: :cascade, on_delete: :cascade
   add_foreign_key "reservation_share_details", "reservation_shares"
   add_foreign_key "reservation_shares", "collaborators"

@@ -2,6 +2,7 @@ class Profile < ApplicationRecord
   include ActiveModel::Serializers::JSON
   has_many :collaborators
   has_many :events, through: :collaborators
+  has_and_belongs_to_many :groups
 
   def as_details_json
     attributes.except("user_id")
