@@ -54,12 +54,13 @@ onMounted(async() => {
                   <v-avatar icon="mdi-penguin"></v-avatar>
               </template>
               <div class="d-flex align-center justify-space-between">
-                  <v-row no-gutters class="ma-2">
-                      <v-col cols="12" sm="5">
-                          <v-list-item-title>{{ person.display_name }}</v-list-item-title>
+                  <v-row no-gutters class="ma-2 align-center">
+                      <v-col cols="5">
+                          <v-list-item-title>{{ person.profile.display_name }}</v-list-item-title>
+                          <v-list-item-subtitle>{{ person.role || '役割なし' }}</v-list-item-subtitle>
                       </v-col>
                       <v-col>
-                          <v-list-item-subtitle>{{ person.role || '役割なし' }}</v-list-item-subtitle>
+                        <v-list-item>{{ person.group?.group_name || '-' }}</v-list-item>
                       </v-col>
                   </v-row>
                   <v-list-item-action>
