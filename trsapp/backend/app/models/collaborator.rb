@@ -16,4 +16,7 @@ class Collaborator < ApplicationRecord
     pending: "pnd",
     inviting: "inv"
   }
+  def attribute_names_for_serialization
+    %i[id role access_status]
+  end
 end
