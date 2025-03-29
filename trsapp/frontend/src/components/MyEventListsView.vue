@@ -27,7 +27,7 @@ onMounted(async() => {
 
 async function toEventDetail(eventToken){
   router.push({name: 'EventDetail', params: {token: eventToken}})
-  await event.getEventDetails(eventToken);
+  //await event.getEventDetails(eventToken);
 }
 
 </script>
