@@ -10,12 +10,17 @@ import { useStores } from '../stores';
 
 //storeの設定
 const { event, ui, dialog, collaborator } = useStores()
-
+// ルーターから渡される token を受け取る
+const props = defineProps({
+  token: String  
+})
 //マウント時の処理
 onMounted(async() => {
     try {
-        await event.getEventDetails(route.params.token);
-        await collaborator.getCurrentClbr(route.params.token)
+      await Promise.all([
+            event.getEventDetails(route.params.token),
+            collaborator.getCurrentClbr(route.params.token)
+        ]);
     } catch(error){
         ui.showMessage('イベント情報の取得に失敗しました😣','error')
     }
