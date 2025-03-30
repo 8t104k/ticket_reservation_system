@@ -37,11 +37,11 @@ gem "rack-cors"
 
 # 追加
 gem "jwt"
-gem "faraday"
-gem 'flexirest'
+# gem "faraday"
+# gem 'flexirest'
 gem 'rest-client'
 gem 'dotenv-rails'
-gem 'active_model_serializers'
+gem 'rack-attack'
 
 
 group :development, :test do
