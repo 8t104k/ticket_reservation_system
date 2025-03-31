@@ -33,3 +33,5 @@
 /config/master.key
 config/certs/*
 api-request
+
+/app/controllers/api/v1/old
