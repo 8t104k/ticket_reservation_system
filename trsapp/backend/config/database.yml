@@ -83,6 +83,8 @@ test:
 #
 production:
   <<: *default
-  database: trsapp_production
-  username: trsapp
-  password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+  database: <%= ENV.fetch("SUPABASE_DB_NAME") { "postgres" } %>
+  sslmode: require
+  # database: trsapp_production
+  # username: trsapp
+  # password: <%= ENV["APP_DATABASE_PASSWORD"] %>
