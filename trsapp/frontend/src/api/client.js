@@ -1,9 +1,15 @@
 // api/client.js - Axiosインスタンス設定
 import axios from 'axios'
 
-export const API_BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://production-api.com/api/v1'
-  : 'http://localhost:3000/api/v1'
+//export const API_BASE_URL = process.env.NODE_ENV === 'production'
+//  ? 'https://production-api.com/api/v1'
+//  : 'http://localhost:3000/api/v1'
+
+export const API_BASE_URL ={
+  production:'https://production-api.com/api/v1',
+  staging:'https://trsapp-stg.onrender.com/api/v1',
+  development: 'http://localhost:3000/api/v1'
+}[process.env.NODE_ENV];
 
 export const API_TIMEOUT = 30000 // 30秒
 
