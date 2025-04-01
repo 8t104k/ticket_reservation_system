@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:stg": "vite build --outDir dist-stg && pagecrypt dist-stg/index.html dist-stg/index.html $PASSWORD",
+    "build:stg": "vite build --outDir dist-stg && pagecrypt dist-stg/index.html dist-stg/index.html $STAGING_PASSWORD",
     "preview": "vite preview --host"
   },
   "vite": {
