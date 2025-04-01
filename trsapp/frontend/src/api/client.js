@@ -5,11 +5,13 @@ import axios from 'axios'
 //  ? 'https://production-api.com/api/v1'
 //  : 'http://localhost:3000/api/v1'
 
-export const API_BASE_URL ={
-  production:'https://production-api.com/api/v1',
-  staging:'https://trsapp-stg.onrender.com/api/v1',
-  development: 'http://localhost:3000/api/v1'
-}[process.env.NODE_ENV];
+//export const API_BASE_URL ={
+//  production:'https://production-api.com/api/v1',
+//  staging:'https://trsapp-stg.onrender.com/api/v1',
+//  development: 'http://localhost:3000/api/v1'
+//}[import.meta.env.MODE];
+
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 
 export const API_TIMEOUT = 30000 // 30秒
 
