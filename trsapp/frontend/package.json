@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:stg": "vite build --outDir dist-stg && pagecrypt dist-stg/index.html dist-stg/index.html $PASSWORD",
+    "preview": "vite preview --host"
   },
   "vite": {
     "server": {
@@ -20,6 +21,7 @@
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.7.9",
+    "pagecrypt": "^6.1.1",
     "pinia": "^3.0.1",
     "vite-plugin-vuetify": "^2.1.0",
     "vue": "^3.5.13",
