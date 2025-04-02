@@ -17,7 +17,7 @@ class Api::V1::ProfilesController < ApplicationController
 
   private
   def set_profile
-    with_auth_context(@current_user.user_id) do
+    ContextService.with_auth_transaction(@current_user.user_id) do
       @profile = Profile.find_by(username: params[:username])
     end
   end

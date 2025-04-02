@@ -1,5 +1,5 @@
 class ContextService
-  def self.with_auth_context(user_id = nil)
+  def self.with_auth_transaction(user_id = nil)
     ActiveRecord::Base.transaction do
       conn = ActiveRecord::Base.connection
       conn.execute("SET LOCAL role = 'authenticated'")
