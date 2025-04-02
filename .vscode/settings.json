@@ -5,6 +5,7 @@
       "Gsap",
       "materialdesignicons",
       "supabase",
+      "urlsafe",
       "Vuelidate",
       "Vuetify"
     ]

@@ -1,3 +1,4 @@
+# app/services/auth/auth_service.rb
 class AuthService
   JWT_SECRET = ENV['SUPABASE_JWT_SECRET']
   class AuthError < StandardError; end

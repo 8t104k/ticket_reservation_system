@@ -10,7 +10,7 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def create
-    @event = Event.create_with_owner(event_params, @current_user)
+    @event = CreateEvent.call(event_params,@current_user.user_id)
     render json: @event
   rescue => e
     Rails.logger.error("イベント作成エラー: #{e.message}")

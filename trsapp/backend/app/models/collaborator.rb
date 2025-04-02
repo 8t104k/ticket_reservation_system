@@ -2,7 +2,7 @@ class Collaborator < ApplicationRecord
   belongs_to :event
   belongs_to :profile
   has_one :reservation_share
-  belongs_to :group
+  belongs_to :group, optional: true
 
   enum role: {
     organizer: "org",
