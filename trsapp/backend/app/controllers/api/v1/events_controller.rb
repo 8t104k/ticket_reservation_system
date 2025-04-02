@@ -21,23 +21,11 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def create
-    Event.transaction do
-      # イベントの作成
-      @event = Event.new(event_params)
-      @event.draft!
-      @event.save!
-      # コラボレーターも作成
-      @collaborators = @event.collaborators.build({
-        role: "organizer",
-        access_status: "active",
-        profile_id: @current_user.user_id
-      })
-      @collaborators.save!
-    end
+    @event = Event.create_with_owner(event_params, @current_user)
     render json: @event
-    rescue => e
-        Rails.logger.error("イベント作成エラー: #{e.message}")
-        render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
+  rescue => e
+    Rails.logger.error("イベント作成エラー: #{e.message}")
+    render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
   end
 
   def edit
