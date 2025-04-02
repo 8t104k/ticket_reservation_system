@@ -1,22 +1,11 @@
 class Api::V1::EventsController < ApplicationController
   before_action :set_event, only: [:show, :update]
+
   def index
-    if @current_user.nil?
-      render json: { error: "認証が必要です" }, status: :unauthorized
-    else
-      begin
-        puts @current_user
-        @events = @current_user.events
-        render json: @events
-      rescue => e
-        Rails.logger.error("イベント取得エラー: #{e.message}")
-        render json: { error: "イベント取得中にエラーが発生しました" }, status: :internal_server_error
-      end
-    end
+    render json: @current_user.events
   end
 
   def show
-    # @event = Event.find_by!(token: params[:token])
     render json: @event
   end
 
