@@ -13,4 +13,11 @@ class Event < ApplicationRecord
   }
 
   scope :recent, -> { order(id: :desc) }
+
+  def self.create_event(params)
+    event = Event.new(params)
+    event.draft!
+    event.save!
+    event
+  end
 end
