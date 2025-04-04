@@ -19,4 +19,14 @@ class Collaborator < ApplicationRecord
   def attribute_names_for_serialization
     %i[id role access_status]
   end
+
+  def self.add(event,profile,role: :member, access_status: :pending)
+    event.collaborators.create!(
+      profile_id: profile.id,
+      role: role,
+      access_status: access_status
+      )
+  rescue ActiveRecord::RecordInvalid => e
+    raise StandardError, "collaboratorの追加に失敗: #{e.message}"
+  end
 end

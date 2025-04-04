@@ -11,5 +11,10 @@ class ContextService
 
       yield
     end
+  rescue => e
+    Rails.logger.error("Auth transaction error: #{e.message}")
+    Rails.logger.error(e.backtrace.join("\n"))
+    
+    raise e
   end
 end

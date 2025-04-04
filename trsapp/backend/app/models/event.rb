@@ -1,9 +1,11 @@
 class Event < ApplicationRecord
   include Generatetoken
-  has_many :reservations, primary_key: :id, foreign_key: :event_id
-  has_many :collaborators
+  has_many :reservations, dependent: :destroy
+  has_many :collaborators, dependent: :destroy
   has_many :profiles, through: :collaborators
-  has_one :reservation_share
+  has_one :reservation_share, dependent: :destroy
+
+  before_create :set_draft_status
 
   enum status: {
     draft: 10,
@@ -14,10 +16,10 @@ class Event < ApplicationRecord
 
   scope :recent, -> { order(id: :desc) }
 
-  def self.create_event(params)
-    event = Event.new(params)
-    event.draft!
-    event.save!
-    event
+  private
+
+  def set_draft_status
+    draft!
   end
+
 end

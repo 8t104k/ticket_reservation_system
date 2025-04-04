@@ -1,5 +1,5 @@
 class Api::V1::EventsController < ApplicationController
-  before_action :set_event, only: [:show, :update]
+  before_action :set_event, only: [:show, :update, :destroy]
 
   def index
     render json: @current_user.events
@@ -10,10 +10,9 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def create
-    @event = EventService::Create.call(event_params,@current_user.user_id)
+    @event = EventService::Create.call(event_params,@current_user)
     render json: @event
   rescue => e
-    Rails.logger.error("イベント作成エラー: #{e.message}")
     render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
   end
 
@@ -23,17 +22,17 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def update
-    Event.transaction do
-      @event.update(event_params)
-      render json: @event
-    end
+    EventService::Update.call(@event,event_params,@current_user)
+    render json: @event
     rescue => e
-      Rails.logger.error("イベント更新エラー: #{e.message}")
       render json: { error: "イベント更新中にエラーが発生しました" }, status: :internal_server_error
   end
 
   def destroy
-    
+    EventService::Destroy.call(@event,@current_user)
+    render json: { success: "イベントの削除が完了しました" }, status: :success
+    rescue => e
+      render json: { error: "イベント削除中にエラーが発生しました" }, status: :internal_server_error
   end
 
   private

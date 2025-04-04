@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
   def authenticate_user
     user_id = AuthService.verify_and_extract_user_id(request)
     @current_user = Profile.find_by!(user_id: user_id)
-  rescue AuthService::AuthError => e
+  rescue => e
     render json: { error: e.message }, status: :unauthorized
   end
 end
