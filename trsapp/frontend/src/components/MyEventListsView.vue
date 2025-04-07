@@ -70,7 +70,10 @@ async function toEventDetail(eventToken){
       </div>
 
       <!--イベント表示カード-->
-      <v-list class="mb-4 px-2" >
+      <v-list v-if="event.loading">
+        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+      </v-list>
+      <v-list v-else class="mb-4 px-2" >
           <v-list-item 
           v-for="(e, i) in event.all"
           :key="i"
