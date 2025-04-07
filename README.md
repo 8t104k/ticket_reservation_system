@@ -140,7 +140,7 @@ erDiagram
 
 # ユースケース
 
-[無題](Readme%201c45f23057f280289248dfee7c4010d9/%E7%84%A1%E9%A1%8C%201ce5f23057f280b09028ee5cd2be7307.csv)
+[Notion](https://www.notion.so/1ce5f23057f280b09028ee5cd2be7307?v=1ce5f23057f280529287000c3ed5e5de&pvs=4)
 
 # こだわったところ
 
