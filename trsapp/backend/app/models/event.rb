@@ -5,7 +5,7 @@ class Event < ApplicationRecord
   has_many :profiles, through: :collaborators
   has_one :reservation_share, dependent: :destroy
 
-  before_create :set_draft_status
+  after_create :set_draft_status
 
   enum status: {
     draft: 10,
@@ -19,7 +19,7 @@ class Event < ApplicationRecord
   private
 
   def set_draft_status
-    draft!
+    self.draft!
   end
 
 end

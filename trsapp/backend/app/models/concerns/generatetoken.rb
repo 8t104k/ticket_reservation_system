@@ -12,6 +12,8 @@ module Generatetoken
   private
 
   def generate_token
+    return if self.token.present?
+
     self.token = loop do
       random_token = SecureRandom.urlsafe_base64(8)
       break random_token unless self.class.exists?(token: random_token)

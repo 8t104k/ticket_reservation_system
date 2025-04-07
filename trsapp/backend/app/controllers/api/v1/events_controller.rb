@@ -17,7 +17,7 @@ class Api::V1::EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.find_by!(token: params[:token])
+    @event = Event.find_by(token: params[:token])
     render json: @event
   end
 
@@ -30,6 +30,7 @@ class Api::V1::EventsController < ApplicationController
 
   def destroy
     EventService::Destroy.call(@event,@current_user)
+    puts "削除処理終了"
     render json: { success: "イベントの削除が完了しました" }, status: :success
     rescue => e
       render json: { error: "イベント削除中にエラーが発生しました" }, status: :internal_server_error
@@ -40,6 +41,9 @@ class Api::V1::EventsController < ApplicationController
     params.require(:event).permit(:event_name, :event_date, :status, :location)
   end
   def set_event
-    @event = Event.find_by!(token: params[:token])
+    @event = Event.find_by(token: params[:token])
+    unless @event
+      render json: { error: "イベントがありません" }
+    end
   end
 end

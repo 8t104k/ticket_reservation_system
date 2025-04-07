@@ -43,16 +43,13 @@ module EventService
     
     def call
       ContextService.with_auth_transaction(@profile.user_id) do
-        begin
-          @event.destroy
-          return true
-        rescue => e
-          Rails.logger.error("イベント削除エラー: #{e.message}")
-          raise e 
-        end
-      rescue => e
-        Rails.logger.error("イベント削除エラー: #{e.message}")
+        puts "削除開始"
+        @event.destroy
       end
+      puts "トランザクション終了"
+    rescue => e
+      puts "エラー発生: #{e.message}"
+      false
     end
   end
 end
