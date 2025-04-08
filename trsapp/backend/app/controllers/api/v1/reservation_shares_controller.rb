@@ -1,5 +1,5 @@
 class Api::V1::ReservationSharesController < ApplicationController
-  before_action :set_event, only: %i[create show]
+  before_action :set_event, only: %i[create]
 
   def create
     # 発行済みチェック
@@ -29,12 +29,8 @@ class Api::V1::ReservationSharesController < ApplicationController
   end
 
   def show
-    @reservation_share_detail = ReservationShareDetail.find_by(reservation_share_id: @event.reservation_share.id)
-    if @reservation_share_detail
-      render json: @reservation_share_detail
-    else
-      render json: nil
-    end
+    @share_page = ReservationShare.includes(:event).find_by(token: params[:token])
+    render json: @share_page
   end
 
   private
