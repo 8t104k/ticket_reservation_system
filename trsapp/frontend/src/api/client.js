@@ -52,7 +52,7 @@ export const ENDPOINTS = {
     BASE: (token) => `/events/${token}/reservation_share`,
   },
   INVITATION: {
-    BASE: (details_token) => `/invite/${details_token}`
+    BASE: (rs_token) => `/invite/${rs_token}`
   },
   PROFILE: {
     BASE:  (username) => `/profiles/${username}`

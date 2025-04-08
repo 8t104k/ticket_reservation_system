@@ -20,7 +20,7 @@ Rails.application.routes.draw do
           resources :details, param: :token, controller: 'reservation_share_details'
         end
       end
-      get "invite/:token", to: "reservation_shares#show"
+      get "invite/:token", to: "reservation_shares#invite"
     end
   end
   

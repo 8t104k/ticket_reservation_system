@@ -139,6 +139,7 @@ const eventParams = "eventParams"
     </v-tabs>
     <!--タブウィンドウ-->
     <v-window v-model="activeTab" :touch="false">
+      <v-card class="ma-4">
         <!-- 予約一覧タブ -->
         <v-window-item value="1" eager>
             <keep-alive>
@@ -152,6 +153,7 @@ const eventParams = "eventParams"
             <collaboratorsWindow/>                    
           </keep-alive>
         </v-window-item>
+      </v-card>
       </v-window>
 
     <v-dialog v-model="dialog.all[editEventDialog].show">

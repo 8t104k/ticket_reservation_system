@@ -20,6 +20,11 @@ onMounted(async() => {
 })
 
 const route = useRoute()
+const url = computed(() => {
+  if (reservationShare.details?.token) {
+    return `${window.location.origin}/invite/${reservationShare.details?.token}`
+    }
+})
 const newReserve = "newReserve"
 const filters = reactive({
     sortBy: "",
@@ -28,7 +33,7 @@ const filters = reactive({
 
 const copyShareUrlToClipboard = () => {
     if (reservationShare.details?.token) {
-        navigator.clipboard.writeText(reservationShare?.details.token);
+        navigator.clipboard.writeText(url.value);
         ui.showMessage("Copy☀️","success")
     }
 }
@@ -64,11 +69,12 @@ const openReservationDetail = () => {
           <v-text-field
               density="compact"
               variant="outlined"
+              v-model="url"
               hide-details
               single-line
               append-icon="mdi-content-copy"
               @click:append="copyShareUrlToClipboard"
-          >{{ reservationShare.details?.token }}</v-text-field>
+          ></v-text-field>
       </v-col>
   </v-row>
   <div v-else class="ma-2">
