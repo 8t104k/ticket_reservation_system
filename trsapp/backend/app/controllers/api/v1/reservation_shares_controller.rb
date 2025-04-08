@@ -16,11 +16,10 @@ class Api::V1::ReservationSharesController < ApplicationController
 
       @reservation_share.collaborator_id = collaborator.id
       @reservation_share.draft!
+      @reservation_share.background_img = "test_bg.webp"
+      @reservation_share.font_info = {"size"=>"16px", "family"=>"Roboto", "weight"=>400}
+      @reservation_share.color_info = {"text"=>"#303030", "primary"=>"#FF9800", "secondary"=>"#FFCC80", "background"=>"#F5F5F5"}
       @reservation_share.save!
-
-      @rs_detail = @reservation_share.reservation_share_details.new
-      @rs_detail = "test_bg.webp"
-      @rs_detail.save!
       render json: @reservation_share, status: :created
     rescue => e
       Rails.logger.error("予約シェア作成エラー: #{e.message}")
