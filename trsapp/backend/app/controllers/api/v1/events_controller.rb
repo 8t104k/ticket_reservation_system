@@ -13,7 +13,7 @@ class Api::V1::EventsController < ApplicationController
     @event = EventService::Create.call(event_params,@current_user)
     render json: @event
   rescue => e
-    render json: { error: "イベント作成中にエラーが発生しました" }, status: :internal_server_error
+    render json: { error: "イベント作成中にエラーが発生しました：#{e.message}" }, status: :internal_server_error
   end
 
   def edit
@@ -24,16 +24,16 @@ class Api::V1::EventsController < ApplicationController
   def update
     EventService::Update.call(@event,event_params,@current_user)
     render json: @event
-    rescue => e
-      render json: { error: "イベント更新中にエラーが発生しました" }, status: :internal_server_error
+  rescue => e
+      render json: { error: "イベント更新中にエラーが発生しました：#{e.message}" }, status: :internal_server_error
   end
 
   def destroy
     EventService::Destroy.call(@event,@current_user)
     puts "削除処理終了"
     render json: { success: "イベントの削除が完了しました" }, status: :success
-    rescue => e
-      render json: { error: "イベント削除中にエラーが発生しました" }, status: :internal_server_error
+  rescue => e
+      render json: { error: "イベント削除中にエラーが発生しました：#{e.message}" }, status: :internal_server_error
   end
 
   private

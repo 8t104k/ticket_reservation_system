@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_28_102112) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_08_144414) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -63,6 +63,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_28_102112) do
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "open_time"
+    t.datetime "start_time"
+    t.datetime "close_time"
+    t.text "location"
     t.index ["token"], name: "index_events_on_token", unique: true
   end
 
@@ -133,6 +137,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_28_102112) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "font_info"
+    t.jsonb "color_info"
+    t.text "background_img"
+    t.jsonb "extracted_colors"
     t.index ["collaborator_id"], name: "index_reservation_shares_on_collaborator_id"
     t.index ["event_id"], name: "index_reservation_shares_on_event_id"
     t.index ["token"], name: "index_reservation_shares_on_token", unique: true
