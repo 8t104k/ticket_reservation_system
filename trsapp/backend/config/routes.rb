@@ -16,10 +16,9 @@ Rails.application.routes.draw do
         resources :reservations, param: :token, shallow: true
         resources :collaborators
         get "current_clbr", to: "collaborators#show_current_clbr"
-        resource :reservation_share, param: :token do
-          resources :details, param: :token, controller: 'reservation_share_details'
-        end
+        resource :reservation_share, param: :token
       end
+      resources :groups, params: :token
       get "invite/:token", to: "reservation_shares#invite"
     end
   end
