@@ -1,5 +1,6 @@
 class Api::V1::ReservationSharesController < ApplicationController
   before_action :set_event, only: %i[create show]
+  skip_before_action :authenticate_user, only: %i[invite]
 
   def create
     # 発行済みチェック
@@ -33,7 +34,9 @@ class Api::V1::ReservationSharesController < ApplicationController
   end
 
   def invite
-    @share_page = ReservationShare.includes(:event).find_by(token: params[:token])
+    @reservation_share = ReservationShare.joins(:event).select("reservation_shares.*, events.*").find_by(token: params[:token])
+    @all_collaborators = @reservation_share.event.collaborators.includes(:group).joins(:profile).select("collaborators.*, profiles.display_name")
+    @share_page = @reservation_share.as_json_for_invitation.merge(collaborators: @all_collaborators.as_json(include: :group, methods: [:display_name])) 
     render json: @share_page
   end
 

@@ -42,9 +42,9 @@ module EventService
     end
     
     def call
+      @event.destroy
       ContextService.with_auth_transaction(@profile.user_id) do
         puts "削除開始"
-        @event.destroy
       end
       puts "トランザクション終了"
     rescue => e

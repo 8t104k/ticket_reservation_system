@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_08_144414) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_09_104526) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -51,6 +51,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_08_144414) do
     t.datetime "updated_at", null: false
     t.bigint "profile_id"
     t.bigint "group_id"
+    t.integer "position"
+    t.index ["event_id", "position"], name: "index_collaborators_on_event_id_and_position", unique: true
     t.index ["event_id"], name: "index_collaborators_on_event_id"
     t.index ["group_id"], name: "index_collaborators_on_group_id"
     t.index ["profile_id"], name: "index_collaborators_on_profile_id"
