@@ -15,6 +15,12 @@ class Api::V1::GroupsController < ApplicationController
     render json: "グループの作成に失敗：#{e.message}"
   end
 
+  def update
+    @group = Group.find_by(token: params[:token])
+    @group.update_all(group_params)
+    render json: @group
+  end
+
   def destroy
 
   end
