@@ -11,13 +11,13 @@ export const useReservationStore = defineStore('reservation',{
     }),
     actions: {
         async getReservations(eventToken){
-            return apiService.call(ENDPOINTS.RESERVATIONS.BASE(eventToken),"get",null,this,"all")
+            return apiService.call(ENDPOINTS.RESERVATION.BASE(eventToken),"get",null,this,"all")
         },
         async createReservation(eventToken,formData){
-            return apiService.call(ENDPOINTS.RESERVATIONS.BASE(eventToken),"post",formData,this,"details")
+            return apiService.call(ENDPOINTS.RESERVATION.BASE(eventToken),"post",formData,this,"details")
         },
         async updateReservation(eventToken,formData){
-            return apiService.call(ENDPOINTS.RESERVATIONS.BASE(eventToken),"patch",formData,this,"details")
+            return apiService.call(ENDPOINTS.RESERVATION.BASE(eventToken),"patch",formData,this,"details")
         }
     }
 

@@ -1,16 +1,19 @@
 <script setup>
+const imgUrl = "invalidUrl"
 </script>
 <template>
   <v-row class="ma-2 pa-2">
     <v-col cols="12" sm="6" class="pa-2">
       <v-img
       class="mx-auto"
+      min-height="200"
       height="auto"
       max-width="500"
-      src="https://bad.src/not/valid"
+      cover
+      :src="imgUrl || ''"
       >
-        <template v-slot:placeholder>
-          <div class="d-flex align-center justify-center fill-height border-md rounded-xl">
+        <template v-slot:error>
+          <div class="d-flex align-center justify-center fill-height border rounded-xl">
             <v-icon
             icon="mdi-image"
             size="large"
@@ -45,4 +48,5 @@
       </div>
     </v-col>
   </v-row>
+
 </template>

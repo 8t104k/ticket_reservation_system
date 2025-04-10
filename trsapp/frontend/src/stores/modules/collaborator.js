@@ -12,10 +12,10 @@ export const useCollaboratorStore = defineStore('collaborator',{
   }),
   actions: {
     async getCollaborators(eventToken){
-      return apiService.call(ENDPOINTS.COLLABORATORS.BASE(eventToken), "get", null, this, "all")
+      return apiService.call(ENDPOINTS.COLLABORATOR.BASE(eventToken), "get", null, this, "all")
     },
     async getCurrentClbr(eventToken){
-      return apiService.call(ENDPOINTS.COLLABORATORS.CURRENCLBR(eventToken), "get", null, this, "current")
+      return apiService.call(ENDPOINTS.COLLABORATOR.CURRENCLBR(eventToken), "get", null, this, "current")
     }
   }
 })

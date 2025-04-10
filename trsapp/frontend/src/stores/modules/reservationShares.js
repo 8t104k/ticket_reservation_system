@@ -10,10 +10,10 @@ export const useReservationShareStore = defineStore('reservationShare',{
     }),
     actions: {
         async getReservationShare(eventToken){
-            return apiService.call(ENDPOINTS.RESERVATIONSHARES.BASE(eventToken),"get",null,this,"details")
+            return apiService.call(ENDPOINTS.RESERVATIONSHARE.BASE(eventToken),"get",null,this,"details")
         },
         async createReservationShare(eventToken){
-            return apiService.call(ENDPOINTS.RESERVATIONSHARES.BASE(eventToken),"post",null,this,"details")
+            return apiService.call(ENDPOINTS.RESERVATIONSHARE.BASE(eventToken),"post",null,this,"details")
         },
     }
 

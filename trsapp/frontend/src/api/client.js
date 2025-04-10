@@ -41,14 +41,14 @@ export const ENDPOINTS = {
     COLLABORATORS: (token) => `/events/${token}/collaborators`,
     EXPORT: (token, format) => `/events/${token}/export?format=${format}`
   },
-  RESERVATIONS: {
+  RESERVATION: {
     BASE: (token) => `/events/${token}/reservations`,
   },
-  COLLABORATORS: {
+  COLLABORATOR: {
     BASE: (token) => `/events/${token}/collaborators`,
     CURRENCLBR: (token) => `/events/${token}/current_clbr`,
   },
-  RESERVATIONSHARES: {
+  RESERVATIONSHARE: {
     BASE: (token) => `/events/${token}/reservation_share`,
   },
   INVITATION: {
@@ -56,6 +56,10 @@ export const ENDPOINTS = {
   },
   PROFILE: {
     BASE:  (username) => `/profiles/${username}`
+  },
+  GROUP: {
+    BASE: () => `/groups/`,
+    DETAILS: (token) => `/groups/${token}`,
   }
 }
   
