@@ -5,6 +5,7 @@ import { useFormatters } from '../composables/useFormatters';
 import { useRoute } from 'vue-router'
 import reservationWindow from './tab/reservationWindow.vue';
 import collaboratorsWindow from './tab/collaboratorsWindow.vue';
+import groupWindow from './tab/groupWindow.vue';
 import Dialog from './dialog/Dialog.vue';
 import { useStores } from '../stores';
 
@@ -36,7 +37,8 @@ const activeTab = ref('1')
 //タブを移動した時に一番上まで戻ってしまうので、見ていた場所に戻す
 const scrollToPosition = () => {
     const y =window.scrollY
-    setTimeout(()=>{window.scrollTo({top: y,behavior: 'smooth'})},1)
+    setTimeout(()=>{window.scrollTo({top: y,behavior: 'smooth'})},0.5)
+    //console.log("move",y)
 }
 
 //ダイアログ周り
@@ -136,10 +138,14 @@ const eventParams = "eventParams"
                 <v-icon>mdi-account-group</v-icon>
                 <span>共演者一覧</span>
             </v-tab>
-    </v-tabs>
+            <v-tab value="3">
+                <v-icon>mdi-account-group</v-icon>
+                <span>グループ編集</span>
+            </v-tab>
+          </v-tabs>
     <!--タブウィンドウ-->
     <v-window v-model="activeTab" :touch="false">
-      <v-card class="ma-4">
+      <v-card class="ma-4" min-height="80vh">
         <!-- 予約一覧タブ -->
         <v-window-item value="1" eager>
             <keep-alive>
@@ -151,6 +157,13 @@ const eventParams = "eventParams"
         <v-window-item value="2" eager>
           <keep-alive>
             <collaboratorsWindow/>                    
+          </keep-alive>
+        </v-window-item>
+
+        <!-- グループ編集タブ -->
+        <v-window-item value="3" eager>
+          <keep-alive>
+            <groupWindow/>                    
           </keep-alive>
         </v-window-item>
       </v-card>

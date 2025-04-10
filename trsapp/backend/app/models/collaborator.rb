@@ -14,6 +14,7 @@ class Collaborator < ApplicationRecord
     active: "act",
     inactive: "ina",
     pending: "pnd",
+    applying: "apl",
     inviting: "inv"
   }
   def attribute_names_for_serialization

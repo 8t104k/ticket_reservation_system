@@ -77,6 +77,13 @@ onMounted(async() => {
     }
 });
 
+const formatTime = (dataTime) => {
+  return new Date(dataTime).toLocaleString('ja-JP',{
+    hour: 'numeric', 
+    minute: 'numeric'
+  })
+}
+
 const getBgUrl = () => {
     const backgroundPath = themeData.value?.background_img
     if(!backgroundPath){
@@ -141,18 +148,18 @@ const desserts = [
           <div class="event-details d-flex justify-space-evenly align-center">
             <h2 class="event-date">Date:<br>{{ themeData.event_date }}</h2>
             <div class="event-time ma-2">
-              <h3>open: 18:00</h3>
-              <h3>start: 19:00</h3>
-              <h3>close: 22:00</h3>
+              <h3>open: {{ formatTime(themeData.open_time) }}</h3>
+              <h3>start: {{ formatTime(themeData.start_time) }}</h3>
+              <h3>close: {{ formatTime(themeData.close_time) }}</h3>
             </div>
           </div>
           <div class="other-groups">
             <h2 class="artist ma-2">出演バンド</h2>
-            <div class="group-section ma-4" v-for="group in groups">
+            <div class="group-section ma-4" v-for="clb in themeData.collaborators">
               <v-row>
-                <v-col cols="12" class="text-h4">{{ group.group_name }}</v-col>
+                <v-col cols="12" class="text-h4">{{ clb.group?.group_name || clb.display_name }}</v-col>
                 <v-col cols="12" sm="6" class="group-img pa-0"></v-col>
-                <v-col cols="12" sm="6" class="text-subtitle-1">{{ group.description }}</v-col>
+                <v-col cols="12" sm="6" class="text-subtitle-1">{{ clb.group?.description || "description" }}</v-col>
               </v-row>
             </div>
           </div>
@@ -212,10 +219,11 @@ const desserts = [
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
+  background-attachment: fixed;
   padding: 0;
   margin: 0 calc(50% - 50vw);
   width: auto;
-  height: 600vh;
+  /* height: 600vh; */
   overflow: hidden;
 }
 
