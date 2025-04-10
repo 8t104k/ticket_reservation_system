@@ -22,7 +22,9 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def destroy
-
+    @group = Group.find_by(token: params[:token])
+    @group.destroy
+    render json: {success: "グループの削除に成功しました"}
   end
 
   private
