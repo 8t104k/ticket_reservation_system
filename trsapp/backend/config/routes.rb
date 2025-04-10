@@ -17,8 +17,9 @@ Rails.application.routes.draw do
         resources :collaborators
         get "current_clbr", to: "collaborators#show_current_clbr"
         resource :reservation_share, param: :token
+        get "group", to: "groups#show_setting_group"
       end
-      resources :groups, params: :token
+      resources :groups, param: :token
       get "invite/:token", to: "reservation_shares#invite"
     end
   end

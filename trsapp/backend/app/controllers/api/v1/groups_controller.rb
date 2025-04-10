@@ -1,7 +1,26 @@
 class Api::V1::GroupsController < ApplicationController
+  before_action :set_group
+
   def index
     render json: @current_user.groups.all
   end
+
+  def show
+    render json: @group
+  end
+
+  def show_setting_group
+    @event = Event.includes(collaborators: :group).find_by!(token: params[:event_token])
+    @clb = @event.collaborators.find_by!(profile_id: @current_user.id)
+    @group = @clb.group
+    
+    if @group.nil?
+      render json: { error: "グループが設定されていません" }, status: :not_found
+    else
+      render json: @group
+    end
+  end
+  
 
   def create
     Group.transaction do
@@ -16,13 +35,11 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def update
-    @group = Group.find_by(token: params[:token])
     @group.update_all(group_params)
     render json: @group
   end
 
   def destroy
-    @group = Group.find_by(token: params[:token])
     @group.destroy
     render json: {success: "グループの削除に成功しました"}
   end
@@ -30,5 +47,9 @@ class Api::V1::GroupsController < ApplicationController
   private
   def group_params
     params.require(:group).permit(:group_name,:img_url)
+  end
+
+  def set_group
+    @group = Group.find_by(token: params[:token])
   end
 end
