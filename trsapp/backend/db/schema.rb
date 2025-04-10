@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_09_104526) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_10_135527) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -80,6 +80,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_09_104526) do
     t.uuid "img_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
     t.index ["group_name"], name: "index_groups_on_group_name"
     t.index ["owner_id"], name: "index_groups_on_owner_id"
     t.index ["token"], name: "index_groups_on_token", unique: true
