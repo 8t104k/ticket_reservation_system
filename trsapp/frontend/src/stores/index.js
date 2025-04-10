@@ -5,6 +5,7 @@ import { useUiStore,useDialogStore } from './modules/uiSetting'
 import { useCollaboratorStore } from "./modules/collaborator"
 import { useReservationShareStore } from "./modules/reservationShares"
 import { useProfileStore } from "./modules/profile"
+import { useGroupStore } from "./modules/group"
 
 export {
   useAuthStore,
@@ -15,6 +16,7 @@ export {
   useCollaboratorStore,
   useReservationShareStore,
   useProfileStore,
+  useGroupStore,
 }
 
 export const stores = {
@@ -26,6 +28,7 @@ export const stores = {
   collaborator: useCollaboratorStore,
   reservationShare: useReservationShareStore,
   profile: useProfileStore,
+  group: useGroupStore,
 }
 
 export function useStores() {

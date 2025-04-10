@@ -38,6 +38,7 @@ export const apiService = {
   },
   //API呼び出し
   async call(endpoint,method = "get",params=null,store=null,fields=null){
+    //console.log(endpoint,method,params,store,fields)
     if (store){
       store.$patch({ loading: true, error: false})
     }
