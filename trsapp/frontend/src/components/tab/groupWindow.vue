@@ -1,29 +1,43 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { storeToRefs } from 'pinia'
+import { onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router'
 import { useStores } from '../../stores';
 
 const { group, ui } = useStores();
-const { details } = storeToRefs(group);
 const route = useRoute()
-const group_name = ref('')
+const params = reactive({
+  group: {
+    group_name: null,
+    description: null
+  }
+});
 
 onMounted(async() => {
     try {
       await group.getEventGroup(route.params.token);
+      params["group"].group_name = group.details.group_name
+      params["group"].description = group.details.description
     } catch(error){
       ui.showMessage('グループ情報の取得に失敗しました😣','error')
     }
   })
 
+  const saveDetails = async (params) => {
+    try{
+      await group.updateGroup(group.details.token,params)
+      ui.showMessage('グループ情報を変更しました⭐️','success')
+    }catch{
+      ui.showMessage('グループ情報の更新に失敗しました😣','error')
+    }
+  }
+
 const imgUrl = "invalidUrl"
 </script>
 <template>
-  <div v-if="group.loading">
+  <div v-if="!group.details">
     <v-progress-circular color="primary" indeterminate></v-progress-circular>
   </div>
-  <div v-else-if="group.details">
+  <div v-else>
 
     <v-row class="ma-2 pa-2">
       <v-col cols="12" sm="6" class="pa-2">
@@ -59,22 +73,23 @@ const imgUrl = "invalidUrl"
       <v-col class="pa-2">
         <div class="d-flex text-h6">バンド名</div>
         <v-text-field
-        v-model="details.group_name"
+        v-model="params.group.group_name"
         ></v-text-field>
         <div class="d-flex text-h6">紹介文</div>
         <v-textarea
-        v-model="details.description"
+        v-model="params.group.description"
         rounded="lg"
         hint="予約受付画面に表示する紹介文です。"
         ></v-textarea>
         <div class="d-flex justify-end">
           <v-btn
+          :loading="group.loading"
           prepend-icon="mdi-content-save"
+          @click="saveDetails(params),load"
           >変更を保存</v-btn>
         </div>
       </v-col>
     </v-row>
   </div>
-
 
 </template>

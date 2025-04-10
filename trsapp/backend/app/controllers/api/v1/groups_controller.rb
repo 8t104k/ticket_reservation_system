@@ -35,7 +35,7 @@ class Api::V1::GroupsController < ApplicationController
   end
 
   def update
-    @group.update_all(group_params)
+    @group.update(group_params)
     render json: @group
   end
 
@@ -46,7 +46,7 @@ class Api::V1::GroupsController < ApplicationController
 
   private
   def group_params
-    params.require(:group).permit(:group_name,:img_url)
+    params.require(:group).permit(:group_name,:img_url,:description)
   end
 
   def set_group
