@@ -1,10 +1,13 @@
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router'
 import { useStores } from '../../stores';
+import { useStorage } from '../../composables/useStorage';
 
 const { group, ui } = useStores();
-const route = useRoute()
+const route = useRoute();
+const { upload } = useStorage;
+const file = ref('');
 const params = reactive({
   group: {
     group_name: null,
@@ -60,15 +63,16 @@ const imgUrl = "invalidUrl"
             </div>
           </template>
         </v-img>
-        <v-btn
-        class="ma-2"
-        small
-        variant="tonal"
-        @click=""
-        >
-        <v-icon left>mdi-cloud-upload-outline</v-icon>
-          画像をアップロード
-        </v-btn>
+        <v-file-input
+        v-model="file"
+        class="pa-2"
+        clearable
+        label="画像をアップロード"
+        variant="solo-filled"
+        :prepend-icon="null"
+        prepend-inner-icon="mdi-cloud-upload-outline"
+        @update:modelValue="upload('groups', group.details.token, file, group)"
+        ></v-file-input>
       </v-col>
       <v-col class="pa-2">
         <div class="d-flex text-h6">バンド名</div>
@@ -91,5 +95,7 @@ const imgUrl = "invalidUrl"
       </v-col>
     </v-row>
   </div>
+
+  <div>file:{{ file }}</div>
 
 </template>
