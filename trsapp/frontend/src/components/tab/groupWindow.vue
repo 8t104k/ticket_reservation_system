@@ -6,8 +6,9 @@ import { useStorage } from '../../composables/useStorage';
 
 const { group, ui } = useStores();
 const route = useRoute();
-const { upload } = useStorage;
+const { upload, getUrl } = useStorage;
 const file = ref('');
+const imgUrl = ref('invalid')
 const params = reactive({
   group: {
     group_name: null,
@@ -20,6 +21,7 @@ onMounted(async() => {
       await group.getEventGroup(route.params.token);
       params["group"].group_name = group.details.group_name
       params["group"].description = group.details.description
+      imgUrl.value = await getUrl('groups',group.details.img_url)
     } catch(error){
       ui.showMessage('グループ情報の取得に失敗しました😣','error')
     }
@@ -34,7 +36,7 @@ onMounted(async() => {
     }
   }
 
-const imgUrl = "invalidUrl"
+
 </script>
 <template>
   <div v-if="!group.details">
@@ -43,14 +45,13 @@ const imgUrl = "invalidUrl"
   <div v-else>
 
     <v-row class="ma-2 pa-2">
-      <v-col cols="12" sm="6" class="pa-2">
+      <v-col cols="12" sm="6" class="pa-4">
         <v-img
-        class="mx-auto"
+        class="mx-auto border rounded-xl"
         min-height="200"
         height="auto"
         max-width="500"
-        cover
-        :src="imgUrl || ''"
+        :src="imgUrl"
         >
           <template v-slot:error>
             <div class="d-flex align-center justify-center fill-height border rounded-xl">
@@ -63,18 +64,22 @@ const imgUrl = "invalidUrl"
             </div>
           </template>
         </v-img>
-        <v-file-input
-        v-model="file"
-        class="pa-2"
-        clearable
-        label="画像をアップロード"
-        variant="solo-filled"
-        :prepend-icon="null"
-        prepend-inner-icon="mdi-cloud-upload-outline"
-        @update:modelValue="upload('groups', group.details.token, file, group)"
-        ></v-file-input>
+
+        <div class="d-flex justify-center">
+          <v-file-input
+          v-model="file"
+          class="pa-2"
+          max-width="250px"
+          clearable
+          label="画像をアップロード"
+          variant="solo-filled"
+          :prepend-icon="null"
+          prepend-inner-icon="mdi-cloud-upload-outline"
+          @update:modelValue="upload('groups', group.details.token, file, group)"
+          ></v-file-input>
+        </div>
       </v-col>
-      <v-col class="pa-2">
+      <v-col class="pa-4">
         <div class="d-flex text-h6">バンド名</div>
         <v-text-field
         v-model="params.group.group_name"
@@ -83,10 +88,11 @@ const imgUrl = "invalidUrl"
         <v-textarea
         v-model="params.group.description"
         rounded="lg"
-        hint="予約受付画面に表示する紹介文です。"
+        hint="予約受付画面に表示されます。（空欄でもOK）"
         ></v-textarea>
         <div class="d-flex justify-end">
           <v-btn
+          class="ma-4"
           :loading="group.loading"
           prepend-icon="mdi-content-save"
           @click="saveDetails(params),load"
@@ -95,7 +101,5 @@ const imgUrl = "invalidUrl"
       </v-col>
     </v-row>
   </div>
-
-  <div>file:{{ file }}</div>
 
 </template>

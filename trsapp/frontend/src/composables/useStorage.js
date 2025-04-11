@@ -22,7 +22,7 @@ export const useStorage = {
       if (error){throw error}
       
       //テーブルの更新
-      const params = {img_url: data.fullPath}
+      const params = {img_url: data.path}
       console.log(params)
       await supabase.from('groups').update(params).eq('token',token);
 
@@ -33,5 +33,21 @@ export const useStorage = {
     }catch(err){
       console.log(err)
     }
+  },
+
+  async getUrl(bucket,imgPath){
+    console.log("GetUrl",bucket,imgPath)
+    if(!imgPath){
+        return "";
+    }
+    try{
+      const { data, error } = supabase.storage.from(bucket).getPublicUrl(imgPath);
+      if(error) throw error
+      console.log(data)
+      return data.publicUrl
+    }catch(er){
+      console.log(er)
+    }
+
   }
 }
