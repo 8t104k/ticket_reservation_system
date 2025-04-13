@@ -37,10 +37,12 @@ export const apiService = {
     }
   },
   //API呼び出し
-  async call(endpoint,method = "get",params=null,store=null,fields=null){
+  async call(endpoint,method = "get",params=null,store=null,fields=null,loading=true){
     //console.log(endpoint,method,params,store,fields)
-    if (store){
+    if (store&&loading){
       store.$patch({ loading: true, error: false})
+    } if (store&&!loading) {
+      store.$patch({ error: false})
     }
     try {
       const authToken = await this.getAuthToken();
@@ -70,7 +72,7 @@ export const apiService = {
       if (store){store.$patch({ error: true})}
       throw error
     }finally{
-      if (store){store.$patch({ loading: false})}
+      if (store&&loading){store.$patch({ loading: false})}
     }
   }
 }

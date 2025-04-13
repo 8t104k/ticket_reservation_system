@@ -16,6 +16,7 @@ const params = reactive({
   }
 });
 
+
 onMounted(async() => {
     try {
       await group.getEventGroup(route.params.token);
@@ -27,21 +28,32 @@ onMounted(async() => {
     }
   })
 
+  const groupEditLoad = ref(false)
   const saveDetails = async (params) => {
+    groupEditLoad.value = true;
     try{
       await group.updateGroup(group.details.token,params)
       ui.showMessage('グループ情報を変更しました⭐️','success')
     }catch{
       ui.showMessage('グループ情報の更新に失敗しました😣','error')
+    }finally{
+      groupEditLoad.value = false;
     }
   }
 
 
 </script>
 <template>
-  <div v-if="!group.details">
+  <!-- 読み込み中 -->
+  <div v-if="group.loading">
     <v-progress-circular color="primary" indeterminate></v-progress-circular>
   </div>
+
+  <!-- 読み込み中 -->
+  <div v-else-if="!group.details">
+
+  </div>
+
   <div v-else>
 
     <v-row class="ma-2 pa-2">
@@ -93,7 +105,7 @@ onMounted(async() => {
         <div class="d-flex justify-end">
           <v-btn
           class="ma-4"
-          :loading="group.loading"
+          :loading="groupEditLoad"
           prepend-icon="mdi-content-save"
           @click="saveDetails(params),load"
           >変更を保存</v-btn>
