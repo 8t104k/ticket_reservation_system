@@ -16,6 +16,7 @@ Rails.application.routes.draw do
         resources :reservations, param: :token, shallow: true
         resources :collaborators
         get "current_clbr", to: "collaborators#show_current_clbr"
+        patch "update_group", to: "collaborators#update_group"
         resource :reservation_share, param: :token
         get "group", to: "groups#show_setting_group"
       end
