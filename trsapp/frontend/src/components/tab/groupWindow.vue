@@ -16,6 +16,16 @@ const params = reactive({
   }
 });
 
+//テスト用
+const items =   [{
+    token: "P9muB0lfapk",
+    group_name: "Bバンド",
+  },
+  {
+    token: "KNv5e0jbms8",
+    group_name: "バンドBB",
+  }]
+
 
 onMounted(async() => {
     try {
@@ -49,13 +59,34 @@ onMounted(async() => {
     <v-progress-circular color="primary" indeterminate></v-progress-circular>
   </div>
 
-  <!-- 読み込み中 -->
+  <!-- グループ未設定 -->
   <div v-else-if="!group.details">
 
   </div>
-
+  <!-- 詳細表示 -->
   <div v-else>
-
+    <div class="d-flex justify-end">
+      <v-btn
+      class="ma-4"
+      color="primary"
+      prepend-icon="mdi-swap-horizontal"
+      >グループ変更
+      <v-menu activator="parent">
+        <v-list slim>
+          <v-list-item
+            v-for="(item, index) in items"
+            :key="index"
+            :value="item"
+          >
+            <v-list-item-title>{{ item.group_name }} に設定</v-list-item-title>
+          </v-list-item>
+          <v-list-item class="bg-grey" prepend-icon="mdi-minus-box-outline">
+            <v-list-item-title>現在のグループ設定を削除</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-btn>
+    </div>
     <v-row class="ma-2 pa-2">
       <v-col cols="12" sm="6" class="pa-4">
         <v-img

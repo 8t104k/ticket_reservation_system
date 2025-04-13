@@ -22,6 +22,9 @@ export const useGroupStore = defineStore('group',{
     async updateGroup(groupToken,groupParams){
       return apiService.call(ENDPOINTS.GROUP.DETAILS(groupToken), "patch", groupParams, this, "details",false)
     },
+    async changeGroup(groupToken,groupParams){
+      return apiService.call(ENDPOINTS.GROUP.DETAILS(groupToken), "patch", groupParams, this, "details",false)
+    },
     async uploadGroupImage(){
       
     }
