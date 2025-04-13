@@ -60,7 +60,8 @@ export const ENDPOINTS = {
   GROUP: {
     BASE: () => `/groups/`,
     DETAILS: (token) => `/groups/${token}`,
-    EVENT_GROUP: (event_token) => `/events/${event_token}/group`
+    EVENT_GROUP: (event_token) => `/events/${event_token}/group`,
+    CHANGE: (event_token) => `/events/${event_token}/update_group`
   }
 }
   

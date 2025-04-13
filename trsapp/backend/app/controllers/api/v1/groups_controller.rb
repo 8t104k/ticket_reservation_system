@@ -13,12 +13,7 @@ class Api::V1::GroupsController < ApplicationController
     @event = Event.includes(collaborators: :group).find_by!(token: params[:event_token])
     @clb = @event.collaborators.find_by!(profile_id: @current_user.id)
     @group = @clb.group
-    
-    if @group.nil?
-      render json: { error: "グループが設定されていません" }, status: :not_found
-    else
-      render json: @group
-    end
+    render json: @group
   end
   
 
