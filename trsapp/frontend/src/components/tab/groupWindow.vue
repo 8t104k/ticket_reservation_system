@@ -10,6 +10,12 @@ const route = useRoute();
 const { upload, getUrl } = useStorage;
 const file = ref('');
 const { details } = storeToRefs(group)
+const minHeight = 200;
+const maxWidth = 500;
+const lazyImgUrl = '';
+const loaderSize = 32;
+const iconSize = 'large';
+
 
 const imgUrl = ref('invalid')
 
@@ -26,8 +32,9 @@ const items =   [{
 
 onMounted(async() => {
     try {
+      await group.getAllGroups();
       await group.getEventGroup(route.params.token);
-      if (group?.details) imgUrl.value = await getUrl('groups',group.details.img_url)
+      if (group.details?.img_url) imgUrl.value = await getUrl('groups',group.details.img_url)
     } catch(error){
       ui.showMessage('グループ情報の取得に失敗しました😣','error')
     }
@@ -52,7 +59,8 @@ onMounted(async() => {
     //console.log(route.params.token,group_token)
     try {
       await group.changeGroup(route.params.token, group_token)
-      if (group?.details) imgUrl.value = await getUrl('groups',group.details.img_url)
+      if (group.details?.img_url) imgUrl.value = await getUrl('groups',group.details.img_url)
+      else imgUrl.value = 'invalid'
       ui.showMessage('グループ情報を変更しました⭐️','success')
     } catch(error){
       ui.showMessage('グループの変更に失敗しました😣','error')
@@ -87,9 +95,10 @@ onMounted(async() => {
       </v-menu>
     </v-btn>
   </div>
-  
+
   <!-- 詳細表示 -->
   <div v-else>
+    <!-- グループ変更ボタン -->
     <div class="d-flex justify-end">
       <v-btn
       class="ma-4"
@@ -116,27 +125,39 @@ onMounted(async() => {
       </v-menu>
     </v-btn>
     </div>
+    <!-- グループ画像 -->
     <v-row class="ma-2 pa-2">
       <v-col cols="12" sm="6" class="pa-4">
         <v-img
-        class="mx-auto border rounded-xl"
-        min-height="200"
-        height="auto"
-        max-width="500"
-        :src="imgUrl"
+          class="mx-auto border rounded-xl"
+          :min-height="minHeight"
+          height="auto"
+          :max-width="maxWidth"
+          :src="imgUrl"
+          :lazy-src="lazyImgUrl"
         >
+          <template v-slot:placeholder>
+            <div class="d-flex align-center justify-center fill-height">
+              <v-progress-circular
+                color="grey-lighten-4"
+                indeterminate
+                :size="loaderSize"
+              ></v-progress-circular>
+            </div>
+          </template>
           <template v-slot:error>
             <div class="d-flex align-center justify-center fill-height border rounded-xl">
               <v-icon
-              icon="mdi-image"
-              size="large"
-              color="grey-darken-2"
+                icon="mdi-image-off"
+                :size="iconSize"
+                color="grey-darken-2"
               ></v-icon>
-            <div class="text-subtitle-1 ml-2 text-grey-darken-2">画像がありません</div>
+              <div class="text-subtitle-1 ml-2 text-grey-darken-2">{{ errorText }}</div>
             </div>
           </template>
         </v-img>
 
+        <!-- アップロードボタン -->
         <div class="d-flex justify-center">
           <v-file-input
           v-model="file"
@@ -151,6 +172,8 @@ onMounted(async() => {
           ></v-file-input>
         </div>
       </v-col>
+
+      <!-- グループ詳細 -->
       <v-col class="pa-4">
         <div class="d-flex text-h6">バンド名</div>
         <v-text-field

@@ -2,7 +2,7 @@ class Api::V1::GroupsController < ApplicationController
   before_action :set_group
 
   def index
-    render json: @current_user.groups.all
+    render json: @current_user.groups.as_json
   end
 
   def show
