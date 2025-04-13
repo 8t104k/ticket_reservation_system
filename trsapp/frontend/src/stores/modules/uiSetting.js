@@ -39,6 +39,7 @@ export const useDialogStore = defineStore('dialog',{
             editEvent: {show: false},
             newReserve: {show: false},
             editReserve: {show: false},
+            newGroup: {show: false},
         }
     }),
     actions: {

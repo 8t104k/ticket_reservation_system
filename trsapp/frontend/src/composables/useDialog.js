@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { useStores } from '../stores/index.js';
 
 export const useDialogActions = () => {
-  const { event, reservation } = useStores();
+  const { event, reservation, group } = useStores();
   
   // ストアのアクション
   const storeActions = {
@@ -19,7 +19,14 @@ export const useDialogActions = () => {
       newReserve: {
           execute: formData => reservation.createReservation(event.details.token, formData),
           onSuccess: () => reservation.getReservations(event.details.token)
-      }
+      },
+      newGroup: {
+        execute: formData => group.createGroups(formData),
+        onSuccess: () => {
+          group.changeGroup(event.details.token,group.details.token);
+          group.getAllGroups();
+        }
+    },
   };
 
   // ダイアログ設定
@@ -40,6 +47,12 @@ export const useDialogActions = () => {
       title: "新規予約",
       paramsKey: "reservationParams",
       fields: ["reservation_name", "price", "status"]
+    },
+
+    newGroup: {
+      tittle: "新規グループ作成",
+      paramsKey: "groupParams",
+      fields: ["group_name", "description"]
     }
   };
 

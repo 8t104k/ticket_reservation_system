@@ -46,7 +46,19 @@ export const params = {
             type: "datetime",
             validators: []
             },
-    }
+    },
+    groupParams: {
+      group_name:{
+          label:"グループ名(バンド名)",
+          type: "text",
+          validators:  [validateRules.required]
+          },
+      description: {
+          label:"紹介文",
+          type: "text",
+          validators: []
+          },
+  },
 }
 
 export const eventParams = {

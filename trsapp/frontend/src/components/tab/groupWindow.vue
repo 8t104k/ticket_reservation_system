@@ -4,8 +4,9 @@ import { useRoute } from 'vue-router'
 import { useStores } from '../../stores';
 import { useStorage } from '../../composables/useStorage';
 import { storeToRefs } from 'pinia'
+import Dialog from '../dialog/Dialog.vue';
 
-const { group, ui } = useStores();
+const { group, ui, dialog} = useStores();
 const route = useRoute();
 const { upload, getUrl } = useStorage;
 const file = ref('');
@@ -15,6 +16,7 @@ const maxWidth = 500;
 const lazyImgUrl = '';
 const loaderSize = 32;
 const iconSize = 'large';
+const dialogType = 'newGroup'
 
 
 const imgUrl = ref('invalid')
@@ -85,7 +87,7 @@ onMounted(async() => {
       <v-menu activator="parent">
         <v-list slim>
           <v-list-item
-          v-for="(item, index) in items"
+          v-for="(item, index) in group.all"
           :key="index"
           :value="item"
           @click="handleChangeGroup(item.token)">
@@ -108,11 +110,17 @@ onMounted(async() => {
       <v-menu activator="parent">
         <v-list slim>
           <v-list-item
-          v-for="(item, index) in items"
+          v-for="(item, index) in group.all"
           :key="index"
           :value="item"
           @click="handleChangeGroup(item.token)">
             <v-list-item-title>{{ item.group_name }} に設定</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          prepend-icon="mdi-plus-box-outline"
+          @click="dialog.showDialog(dialogType)"
+          >
+            <v-list-item-title>新規グループを作成</v-list-item-title>
           </v-list-item>
           <v-list-item
           class="bg-grey"
@@ -197,4 +205,7 @@ onMounted(async() => {
     </v-row>
   </div>
 
+  <v-dialog v-model="dialog.all[dialogType].show">
+      <Dialog :dialog="dialogType" />
+  </v-dialog>
 </template>
