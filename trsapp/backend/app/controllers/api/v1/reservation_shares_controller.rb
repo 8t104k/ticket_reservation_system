@@ -35,8 +35,10 @@ class Api::V1::ReservationSharesController < ApplicationController
 
   def invite
     @reservation_share = ReservationShare.joins(:event).select("reservation_shares.*, events.*").find_by(token: params[:token])
-    @all_collaborators = @reservation_share.event.collaborators.includes(:group).joins(:profile).select("collaborators.*, profiles.display_name")
-    @share_page = @reservation_share.as_json_for_invitation.merge(collaborators: @all_collaborators.as_json(include: :group, methods: [:display_name])) 
+    @all_groups = @reservation_share.event.groups
+    @share_page = @reservation_share.as_json_for_invitation.merge(groups: @all_groups.as_json)
+    #@all_collaborators = @reservation_share.event.collaborators.includes(:group).joins(:profile).select("collaborators.*, profiles.display_name")
+    #@share_page = @reservation_share.as_json_for_invitation.merge(collaborators: @all_collaborators.as_json(include: :group, methods: [:display_name])) 
     render json: @share_page
   end
 

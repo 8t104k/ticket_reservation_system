@@ -3,6 +3,7 @@ class Event < ApplicationRecord
   has_many :reservations, dependent: :destroy
   has_many :collaborators, dependent: :destroy
   has_many :profiles, through: :collaborators
+  has_many :groups, through: :collaborators
   has_one :reservation_share, dependent: :destroy
 
   after_create :set_draft_status
