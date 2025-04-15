@@ -5,18 +5,30 @@ import { ENDPOINTS } from '../api/client';
 import { useRoute } from 'vue-router'
 import { supabase } from '../lib/supabase';
 import { useGSAP } from '../composables/useGSAP';
+import { useStorage } from '../composables/useStorage';
 
 const route = useRoute();
 const themeData = ref(null);
 const animationReady = ref(false);
+const { getUrl } = useStorage;
+const groupImage = ref('')
 
 // GSAPのロード状態を管理
 const { isGsapLoaded, loadGSAP } = useGSAP()
+
+const imgUrls = ref({})
+const loadImageUrls = async(groups) => {
+  for(const [i, g] of groups.entries()){
+    console.log(g,i,g.img_url)
+    imgUrls.value[i] = await getUrl('groups',g.img_url)
+  };
+}
 
 // 非同期関数を定義
 const fetchData = async () => {
     try{
         themeData.value = await apiService.call(ENDPOINTS.INVITATION.BASE(route.params.detail_token));
+        await loadImageUrls(themeData.value.groups);
         return themeData.value;
     }catch(error){
         console.error('データ取得エラー:', error);
@@ -65,7 +77,7 @@ const setupAnimation = () => {
 
 onMounted(async() => {
     await fetchData();
-    
+
     try {
         const gsap = await loadGSAP();
         if (themeData.value && gsap) {
@@ -85,13 +97,16 @@ const formatTime = (dataTime) => {
 }
 
 const getBgUrl = () => {
-    const backgroundPath = themeData.value?.background_img
-    if(!backgroundPath){
-        return "";
-    }
-    const { data } = supabase.storage.from('event-backgrounds').getPublicUrl(backgroundPath);
-    return data.publicUrl
+  const backgroundPath = themeData.value?.background_img
+  if(!backgroundPath){return ""}
+  const { data } = supabase.storage.from('event-backgrounds').getPublicUrl(backgroundPath);
+  return data.publicUrl
 }
+
+const getImageUrl = computed(() => {
+  if (themeData.value)
+  return (url) => {getUrl('groups',url)}
+})
 
 const cssVars = computed(() => {
     if (!themeData.value) return {}
@@ -108,12 +123,6 @@ const cssVars = computed(() => {
     }
 })
 
-//テスト用
-const groups = [
-  {group_name: "バンドA",description: "東京出身です。"},
-  {group_name: "BBB",description: "北海道出身です。"},
-  {group_name: "Cトリオ",description: "関西出身です。"},
-]
 
 const desserts = [
           {
@@ -153,13 +162,30 @@ const desserts = [
               <h3>close: {{ formatTime(themeData.close_time) }}</h3>
             </div>
           </div>
-          <div class="other-groups">
+          <div class="groups">
             <h2 class="artist ma-2">出演バンド</h2>
-            <div class="group-section ma-4" v-for="clb in themeData.collaborators">
-              <v-row>
-                <v-col cols="12" class="text-h4">{{ clb.group?.group_name || clb.display_name }}</v-col>
-                <v-col cols="12" sm="6" class="group-img pa-0"></v-col>
-                <v-col cols="12" sm="6" class="text-subtitle-1">{{ clb.group?.description || "description" }}</v-col>
+            <div class="ma-4"
+            v-for="(group, index) in themeData.groups">
+              <v-row class="justify-space-around">
+                <v-col cols="12" class="text-h4">{{ group.group_name || "group_name" }}</v-col>
+                <v-col v-if="imgUrls[index]" cols="12" sm="6" class="pa-0">
+                  <v-img
+                  :src="imgUrls[index]"
+                  >
+                  <template v-slot:placeholder>
+                    <div class="d-flex align-center justify-center fill-height">
+                      <v-progress-circular
+                        color="grey-lighten-4"
+                        indeterminate
+                        :size="loaderSize"
+                      ></v-progress-circular>
+                    </div>
+                  </template>
+                </v-img>
+                </v-col>
+                <v-col cols="12" sm="auto" class="text-subtitle-1">
+                  <p class="text-center">{{ group.description }}</p>
+                </v-col>
               </v-row>
             </div>
           </div>
@@ -275,18 +301,9 @@ const desserts = [
   
 }
 
-.group-section {
-  display: flex;
-}
-
 .group-description {
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.group-img {
-  height: 20vw;
-  aspect-ratio: 1;
-  background-color: black;
-}
 </style>
