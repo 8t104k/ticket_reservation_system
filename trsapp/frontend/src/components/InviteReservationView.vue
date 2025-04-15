@@ -59,15 +59,15 @@ const setupAnimation = () => {
     
     gsap.registerPlugin("ScrollTrigger")
     gsap.from(".event-container",{
-      y: -100,
+      y: 0,
       opacity: 0,
       duration: 3,
-      ease: 'power1.in',
+      ease: 'expo.out',
       scrollTrigger: {
         trigger: ".event-container",
         scrub: true,
-        start: "top 80%",
-        end: "top 20%",
+        start: "top 90%",
+        end: "top 50%",
         toggleActions: "restart pause reverse pause",
         markers: true
       },
@@ -102,11 +102,6 @@ const getBgUrl = () => {
   const { data } = supabase.storage.from('event-backgrounds').getPublicUrl(backgroundPath);
   return data.publicUrl
 }
-
-const getImageUrl = computed(() => {
-  if (themeData.value)
-  return (url) => {getUrl('groups',url)}
-})
 
 const cssVars = computed(() => {
     if (!themeData.value) return {}
